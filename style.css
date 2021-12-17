@@ -1,0 +1,60 @@
+body {
+  margin: 0px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Căn chỉnh theo chiều vuông góc với flex-direction */
+  justify-content: center;  /* Căn chỉnh theo chiều cùng chiều với flex-direction */
+}
+
+.container {
+  width: 360px;
+  display: flex;
+  min-height: 480px;
+  flex-direction: column;
+  background-color: black;
+}
+
+.result-panel {
+  height: 100px;
+}
+
+.row {
+  width: 100%;
+  height: 90px;
+  display: flex;
+}
+
+.button {
+  flex: 1;
+  padding: 0px;
+  display: flex;
+  font-size: 18px;
+  font-weight: bold;
+  border-width: 0px 1px 2px 1px;
+  border-color: black;
+  align-items: center; /* Căn chỉnh theo chiều vuông góc với flex-direction */
+  justify-content: center;  /* Căn chỉnh theo chiều cùng chiều với flex-direction */
+}
+
+.row > button.button:first-child {
+  border-left-width: 2px;
+}
+
+.row > button.button:last-child {
+  border-right-width: 2px;
+}
+
+.white-button {
+  color: black;
+  background-color: white;
+}
+
+.orange-button {
+  color: white;
+  background-color: orange;
+}
+
+.big-button {
+  flex: 3;
+}
