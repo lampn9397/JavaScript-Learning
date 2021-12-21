@@ -17,6 +17,7 @@ body {
 
 .result-panel {
   height: 100px;
+  color: white;
 }
 
 .row {
@@ -57,4 +58,9 @@ body {
 
 .big-button {
   flex: 3;
+}
+
+.grey-button {
+  color: white;
+  background-color: grey;
 }
