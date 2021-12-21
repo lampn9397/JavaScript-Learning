@@ -16,8 +16,14 @@ body {
 }
 
 .result-panel {
+  padding: 0px 6px;
   height: 100px;
+  display: flex;
   color: white;
+  font-size: 48px;
+  font-family: arial;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .row {
