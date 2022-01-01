@@ -18,6 +18,7 @@ body, .container {
 
 .item-container {
   display: flex;
+  min-width: 600px;
   max-width: 600px;
   max-height: 140px;
   margin-bottom: 16px;
@@ -57,6 +58,21 @@ body, .container {
   color: #A2A2A2;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical; 
+}
+
+.icon-style{
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+}
+
+.delete-button{
+  background-color: #D71228;
+  
+}
+
+.edit-button{
+  background-color: aqua;
 }
