@@ -18,7 +18,7 @@ function executeOperator(pNumber, cNumber, operator) {
 
   if (operator === '+') {
     result = pNumber + cNumber;
-  } else if (operator === '-') {
+  } else if (operator === '-') {//
     result = pNumber - cNumber;
   } else if (operator === 'x') {
     result = pNumber * cNumber;
