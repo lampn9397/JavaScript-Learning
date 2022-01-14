@@ -16,7 +16,14 @@ const schema = new mongoose.Schema({
   author: {
     type: String,
     required: true,
+  },
+  genre: {
+    type: String,
+    default: '',
   }
+}, {
+  timestamps: true,
+  versionKey: false,
 });
 
 export default mongoose.model('Song', schema);

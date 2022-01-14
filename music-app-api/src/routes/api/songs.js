@@ -1,7 +1,7 @@
 import express from 'express';
 
-import Song from '../models/Song';
-import { createResponse } from '../utils/helpers';
+import Song from '../../models/Song';
+import { createResponse } from '../../utils/helpers';
 
 const router = express.Router();
 
