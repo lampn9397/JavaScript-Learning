@@ -1,22 +1,32 @@
 import express from 'express';
 
 import Song from '../../models/Song';
+import SongList from '../../models/SongList';
+import SongCategory from '../../models/SongCategory';
+
 import { createResponse } from '../../utils/helpers';
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
+router.get('/list', async (req, res, next) => {
   try {
-    const { page = 1 } = req.query;
-
-    const songs = await Song.find({}).lean();
+    const songs = await SongList.find({}).populate({
+      path: 'songs',
+      model: Song,
+      populate: {
+        path: 'categories',
+        model: SongCategory,
+        select: 'id title'
+      }
+    });
 
     res.json(createResponse({
       ok: true,
       data: songs
     }));
   } catch (error) {
-    res.status(500).send(error);
+    console.log('error > ', error);
+    res.status(500).send({ ...error });
   }
 
 });

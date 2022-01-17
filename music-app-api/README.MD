@@ -1,0 +1,1 @@
+npx localtunnel --port 3001 --subdomain lampn
