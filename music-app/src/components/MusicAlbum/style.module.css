@@ -1,0 +1,17 @@
+.leftImage{
+    width: 152px;
+    height: 152px;
+    margin-right: 24px;
+    display: flex;
+}
+
+.ListAlbum{
+    width: 850px;
+    float: left;
+    overflow: hidden;
+}
+
+.titleStyle:hover {
+    color: #2daaed;
+    font-size: 16px;
+}
