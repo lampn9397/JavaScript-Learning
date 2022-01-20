@@ -8,10 +8,11 @@
     "server": "node ./dist-src/bin/www",
     "dev": "NODE_ENV=development npm-run-all build server",
     "prod": "NODE_ENV=production npm-run-all build server",
-    "transpile": "babel ./src --out-dir dist-src",
+    "transpile": "babel --quiet ./src --out-dir dist-src",
     "clean": "rimraf dist-src",
     "watch:dev": "nodemon",
-    "test": "jest"
+    "test": "jest",
+    "fake": "node ./dist-src/seeding"
   },
   "dependencies": {
     "@babel/cli": "^7.16.8",
@@ -19,6 +20,7 @@
     "@babel/preset-env": "^7.16.8",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^11.0.0",
     "express": "~4.16.1",
     "mongoose": "^6.1.6",
     "morgan": "~1.9.1",
@@ -45,5 +47,8 @@
   },
   "jest": {
     "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^5.5.3"
   }
 }
