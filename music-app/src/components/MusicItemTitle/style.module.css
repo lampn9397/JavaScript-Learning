@@ -1,0 +1,13 @@
+.ListAlbum{
+    width: 850px;
+
+}
+
+.wrapData{
+    display: flex;
+}
+
+.titleStyle {
+    color: #2daaed;
+    font-size: 30px;
+}

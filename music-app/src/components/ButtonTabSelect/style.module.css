@@ -1,0 +1,11 @@
+.ButtonTabSelect{
+    width: 100px;
+    margin-bottom: 20px;
+    height: 32px;
+    background: #e5e5e5;
+}
+
+.active, .ButtonTabSelect:hover {
+    background-color: #e74c3c;
+    color: white;
+  }
