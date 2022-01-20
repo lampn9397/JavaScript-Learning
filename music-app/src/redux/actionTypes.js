@@ -1,0 +1,4 @@
+
+export const GET_MUSICS = 'GET_MUSICS';
+export const GET_MUSICS_SUCCESS = 'GET_MUSICS_SUCCESS';
+export const GET_MUSICS_FAILED = 'GET_MUSICS_FAILED';
