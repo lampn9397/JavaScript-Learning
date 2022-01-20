@@ -1,6 +1,7 @@
 // import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
+import cors from 'cors';
 import path from 'path';
 import dotenv from 'dotenv';
 import logger from 'morgan';
@@ -13,7 +14,7 @@ dotenv.config();
 import indexRouter from './routes';
 import apiRouter from './routes/api';
 
-var app = express();
+const app = express();
 
 mongoose.connect(process.env.DB_URL);
 
@@ -23,6 +24,9 @@ mongoose.connection.on('error', (err) => {
   }
 });
 
+app.use(cors({
+  origin: '*'
+}))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

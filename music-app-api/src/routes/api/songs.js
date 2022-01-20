@@ -25,12 +25,36 @@ router.get('/list', async (req, res, next) => {
       results: songs
     }));
   } catch (error) {
-    res.status(500)
-      .json(createResponse({
-        ok: false,
-        message: 'Failed to get music list',
-        error
-      }));
+    res.status(500).json(createResponse({
+      ok: false,
+      message: 'Failed to get music list',
+      error
+    }));
+  }
+});
+
+router.get('/country', async (req, res, next) => {
+  try {
+    const songs = await SongList.find({}).populate({
+      path: 'songs',
+      model: Song,
+      populate: {
+        path: 'categories',
+        model: SongCategory,
+        select: 'id title'
+      }
+    });
+
+    res.json(createResponse({
+      ok: true,
+      results: songs
+    }));
+  } catch (error) {
+    res.status(500).json(createResponse({
+      ok: false,
+      message: 'Failed to get music by country',
+      error
+    }));
   }
 });
 
