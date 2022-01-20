@@ -11,7 +11,8 @@
     "transpile": "babel --quiet ./src --out-dir dist-src",
     "clean": "rimraf dist-src",
     "watch:dev": "nodemon",
-    "test": "jest"
+    "test": "jest",
+    "fake": "node ./dist-src/seeding"
   },
   "dependencies": {
     "@babel/cli": "^7.16.8",
