@@ -1,7 +1,7 @@
 export const defaultResponse = {
   ok: true,
   message: '',
-  data: null,
+  results: null,
 }
 
 export const responseStatus = {

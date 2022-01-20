@@ -22,7 +22,7 @@ router.get('/list', async (req, res, next) => {
 
     res.json(createResponse({
       ok: true,
-      data: songs
+      results: songs
     }));
   } catch (error) {
     console.log('error > ', error);
