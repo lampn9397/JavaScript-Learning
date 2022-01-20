@@ -25,10 +25,13 @@ router.get('/list', async (req, res, next) => {
       results: songs
     }));
   } catch (error) {
-    console.log('error > ', error);
-    res.status(500).send({ ...error });
+    res.status(500)
+      .json(createResponse({
+        ok: false,
+        message: 'Failed to get music list',
+        error
+      }));
   }
-
 });
 
 export default router;
