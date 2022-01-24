@@ -42,7 +42,10 @@ router.get('/rank', async (req, res, next) => {
           from: 'songs',
           localField: '_id',
           foreignField: 'songs_locations',
-          as: 'songs'
+          as: 'songs',
+          pipeline: [{
+            $sort: { views: -1 }
+          }]
         }
       }
     ]);
