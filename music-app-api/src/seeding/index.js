@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import song from './song';
 import songCategory from './songCategory';
 import songList from './songList';
+import songLocation from './songLocation';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ const startSeeding = async () => {
   await mongoose.connection.dropDatabase();
 
   await songCategory();
+  await songLocation();
   await song();
   await songList();
 

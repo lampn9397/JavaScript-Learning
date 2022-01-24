@@ -3,16 +3,24 @@ import faker from '@faker-js/faker';
 
 import Song from '../models/Song';
 import SongCategory from '../models/SongCategory';
+import SongLocation from '../models/SongLocation';
 
 export default async (totalItem = 60) => {
   const categories = await SongCategory.find({}).lean();
 
+  const songLocations = await SongLocation.find({}).lean();
+
   let categoryIndex = 0;
 
-  for (let i = 0; i < totalItem; i++) {
+  let locationIndex = 0;
 
+  for (let i = 0; i < totalItem; i++) {
     if (categoryIndex >= categories.length) {
       categoryIndex = 0;
+    }
+
+    if (locationIndex >= songLocations.length) {
+      locationIndex = 0;
     }
 
     await Song.create({
@@ -22,8 +30,11 @@ export default async (totalItem = 60) => {
       author: faker.name.findName(),
       // genre: faker.music.genre(),
       categories: [categories[categoryIndex]._id],
+      songs_locations: [songLocations[locationIndex]._id]
     });
 
     categoryIndex++;
+
+    locationIndex++;
   }
 }

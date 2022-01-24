@@ -1,5 +1,10 @@
 import { Schema, model } from 'mongoose';
 
+export const musicTypes = {
+  VIDEO: 'VIDEO',
+  AUDIO: 'AUDIO',
+};
+
 const schema = new Schema({
   title: {
     type: String,
@@ -17,14 +22,26 @@ const schema = new Schema({
     type: String,
     required: true,
   },
-  // genre: {
-  //   type: String,
-  //   default: '',
-  // },
   categories: [{
     type: Schema.Types.ObjectId,
     ref: 'song_categories',
   }],
+  views: {
+    type: Number,
+    default: 0,
+  },
+  songs_locations: [{
+    type: Schema.Types.ObjectId,
+    ref: 'song_locations',
+  }],
+  type: {
+    type: String,
+    enum: [
+      musicTypes.AUDIO,
+      musicTypes.VIDEO,
+    ],
+    default: musicTypes.AUDIO,
+  }
 }, {
   timestamps: true,
   versionKey: false,
