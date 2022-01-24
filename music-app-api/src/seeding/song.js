@@ -30,7 +30,11 @@ export default async (totalItem = 60) => {
       author: faker.name.findName(),
       // genre: faker.music.genre(),
       categories: [categories[categoryIndex]._id],
-      songs_locations: [songLocations[locationIndex]._id]
+      songs_locations: [songLocations[locationIndex]._id],
+      views: faker.datatype.number({
+        min: 1000,
+        max: 1000000
+    })
     });
 
     categoryIndex++;
