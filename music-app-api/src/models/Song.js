@@ -1,4 +1,7 @@
 import { Schema, model } from 'mongoose';
+import mongooseLeanGetters from 'mongoose-lean-getters';
+
+import { server } from '../bin/www';
 
 export const musicTypes = {
   VIDEO: 'VIDEO',
@@ -30,6 +33,14 @@ const schema = new Schema({
     type: Number,
     default: 0,
   },
+  source: {
+    type: String,
+    required: true,
+    get: (s) => {
+      const serverAddress = server.address();
+      return `http://127.0.0.1:${serverAddress.port}/songs/${s}`;
+    }
+  },
   songs_locations: [{
     type: Schema.Types.ObjectId,
     ref: 'song_locations',
@@ -46,5 +57,7 @@ const schema = new Schema({
   timestamps: true,
   versionKey: false,
 });
+
+schema.plugin(mongooseLeanGetters)
 
 export default model('songs', schema);

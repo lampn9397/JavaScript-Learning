@@ -19,7 +19,7 @@ router.get('/list', async (req, res, next) => {
         model: SongCategory,
         select: 'id title'
       }
-    });
+    }).lean({ getters: true });
 
     res.json(createResponse({
       ok: true,
@@ -43,19 +43,22 @@ router.get('/rank', async (req, res, next) => {
           localField: '_id',
           foreignField: 'songs_locations',
           as: 'songs',
-          pipeline: [{
-            $sort: { views: -1 },
-            $project: {
-              categories: 0,
-              songs_locations: 0,
-            }
-          }]
+          pipeline: [
+            {
+              $sort: { views: -1 },
+            },
+            {
+              $project: {
+                categories: 0,
+                songs_locations: 0,
+              }
+            },
+          ]
         }
       }
     ]);
 
     res.json(createResponse({
-      ok: true,
       results: songLocations
     }));
   } catch (error) {

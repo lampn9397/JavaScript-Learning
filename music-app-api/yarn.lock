@@ -2142,6 +2142,13 @@ mongodb@4.2.2:
   optionalDependencies:
     saslprep "^1.0.3"
 
+mongoose-lean-getters@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/mongoose-lean-getters/-/mongoose-lean-getters-0.3.0.tgz#1bcc5a9c3aa696742c38cfa47fa5325e26d4aa8b"
+  integrity sha512-UO7bX0qygmUZkz17fvJn96fr5RSPLCQ6/ffP9SblUtVYQ5RGF12oL+6Mh8lka2mq3QVDX0h2Wg2XQx0J8iLOyA==
+  dependencies:
+    mpath "0.8.x"
+
 mongoose@^6.1.6:
   version "6.1.6"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.1.6.tgz#47903ef821b63fc5ef80a259c2331cabf994c957"
@@ -2169,7 +2176,7 @@ morgan@~1.9.1:
     on-finished "~2.3.0"
     on-headers "~1.0.1"
 
-mpath@0.8.4:
+mpath@0.8.4, mpath@0.8.x:
   version "0.8.4"
   resolved "https://registry.yarnpkg.com/mpath/-/mpath-0.8.4.tgz#6b566d9581621d9e931dd3b142ed3618e7599313"
   integrity sha512-DTxNZomBcTWlrMW76jy1wvV37X/cNNxPW1y2Jzd4DZkAaC5ZGsm8bfGfNOthcDuRJujXLqiuS6o3Tpy0JEoh7g==

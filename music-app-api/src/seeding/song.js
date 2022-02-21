@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
 import faker from '@faker-js/faker';
 
 import Song from '../models/Song';
 import SongCategory from '../models/SongCategory';
 import SongLocation from '../models/SongLocation';
+import songData from './songData';
 
-export default async (totalItem = 60) => {
+export default async (totalItem = 50) => {
   const categories = await SongCategory.find({}).lean();
 
   const songLocations = await SongLocation.find({}).lean();
@@ -13,6 +13,22 @@ export default async (totalItem = 60) => {
   let categoryIndex = 0;
 
   let locationIndex = 0;
+
+  for (const item of songData) {
+    await Song.create({
+      title: item.title,
+      image: item.image,
+      singer: item.singer,
+      author: item.author,
+      categories: [categories[0]._id],
+      songs_locations: [songLocations[0]._id],
+      source: item.source,
+      views: faker.datatype.number({
+        min: 1000,
+        max: 1000000
+      }),
+    });
+  }
 
   for (let i = 0; i < totalItem; i++) {
     if (categoryIndex >= categories.length) {
@@ -34,7 +50,8 @@ export default async (totalItem = 60) => {
       views: faker.datatype.number({
         min: 1000,
         max: 1000000
-    })
+      }),
+      source: ' ',
     });
 
     categoryIndex++;
