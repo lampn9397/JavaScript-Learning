@@ -27,6 +27,7 @@ export default async (totalItem = 50) => {
         min: 1000,
         max: 1000000
       }),
+      lyric: item.lyric
     });
   }
 
@@ -51,7 +52,8 @@ export default async (totalItem = 50) => {
         min: 1000,
         max: 1000000
       }),
-      source: ' ',
+      source: 'SaiGonDauLongQua-HuaKimTuyenHoangDuyen-6992977.mp3',
+      lyric: songData[0].lyric,
     });
 
     categoryIndex++;

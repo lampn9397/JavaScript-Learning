@@ -1,11 +1,11 @@
 import express from 'express';
 
 import Song from '../../models/Song';
+import { server } from '../../bin/www';
 import SongList from '../../models/SongList';
-import SongCategory from '../../models/SongCategory';
-
-import { createResponse } from '../../utils/helpers';
 import SongLocation from '../../models/SongLocation';
+import SongCategory from '../../models/SongCategory';
+import { createResponse } from '../../utils/helpers';
 
 const router = express.Router();
 
@@ -36,6 +36,8 @@ router.get('/list', async (req, res, next) => {
 
 router.get('/rank', async (req, res, next) => {
   try {
+    const serverAddress = server.address();
+
     const songLocations = await SongLocation.aggregate([
       {
         $lookup: {
@@ -44,6 +46,11 @@ router.get('/rank', async (req, res, next) => {
           foreignField: 'songs_locations',
           as: 'songs',
           pipeline: [
+            {
+              $set: {
+                source: { $concat: [`http://127.0.0.1:${serverAddress.port}/songs/`, "$source"] }
+              }
+            },
             {
               $sort: { views: -1 },
             },
@@ -72,7 +79,14 @@ router.get('/rank', async (req, res, next) => {
 
 router.get('/hot', async (req, res, next) => {
   try {
+    const serverAddress = server.address();
+    
     const songs = await Song.aggregate([
+      {
+        $set: {
+          source: { $concat: [`http://127.0.0.1:${serverAddress.port}/songs/`, "$source"] }
+        }
+      },
       { $sort: { views: -1 } },
       { $limit: 6 },
       {

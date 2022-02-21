@@ -41,6 +41,10 @@ const schema = new Schema({
       return `http://127.0.0.1:${serverAddress.port}/songs/${s}`;
     }
   },
+  lyric: {
+    type: String,
+    default: '',
+  },
   songs_locations: [{
     type: Schema.Types.ObjectId,
     ref: 'song_locations',
