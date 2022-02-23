@@ -45,6 +45,10 @@ const schema = new Schema({
     type: String,
     default: '',
   },
+  slug: {
+    type: String,
+    required: true,
+  },
   songs_locations: [{
     type: Schema.Types.ObjectId,
     ref: 'song_locations',

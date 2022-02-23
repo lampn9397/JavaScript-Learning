@@ -80,7 +80,7 @@ router.get('/rank', async (req, res, next) => {
 router.get('/hot', async (req, res, next) => {
   try {
     const serverAddress = server.address();
-    
+
     const songs = await Song.aggregate([
       {
         $set: {
@@ -105,6 +105,31 @@ router.get('/hot', async (req, res, next) => {
     res.status(500).json(createResponse({
       ok: false,
       message: 'Failed to get music by country',
+      error: error.message
+    }));
+  }
+});
+
+router.get('/:slug', async (req, res, next) => {
+  try {
+    const { slug } = req.params;
+
+    const song = await Song.findOne({ slug }).populate({
+      path: 'categories',
+      model: SongCategory,
+      select: 'id title'
+    }).lean({ getters: true });
+
+    if (!song) return res.status(404).end();
+
+    res.json(createResponse({
+      ok: true,
+      results: song
+    }));
+  } catch (error) {
+    res.status(500).json(createResponse({
+      ok: false,
+      message: 'Failed to get music',
       error: error.message
     }));
   }

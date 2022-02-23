@@ -1,3 +1,4 @@
+import slug from 'slug';
 import faker from '@faker-js/faker';
 
 import Song from '../models/Song';
@@ -27,7 +28,8 @@ export default async (totalItem = 50) => {
         min: 1000,
         max: 1000000
       }),
-      lyric: item.lyric
+      lyric: item.lyric,
+      slug: slug(`${item.title}-${Date.now()}`)
     });
   }
 
@@ -40,7 +42,7 @@ export default async (totalItem = 50) => {
       locationIndex = 0;
     }
 
-    await Song.create({
+    const songModel = {
       title: faker.name.title(),
       image: faker.image.fashion(),
       singer: faker.name.findName(),
@@ -54,7 +56,11 @@ export default async (totalItem = 50) => {
       }),
       source: 'SaiGonDauLongQua-HuaKimTuyenHoangDuyen-6992977.mp3',
       lyric: songData[0].lyric,
-    });
+    };
+
+    songModel.slug = slug(`${songModel.title}-${Date.now()}`);
+
+    await Song.create(songModel);
 
     categoryIndex++;
 
