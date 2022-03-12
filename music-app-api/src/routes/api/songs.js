@@ -135,4 +135,21 @@ router.get('/:slug', async (req, res, next) => {
   }
 });
 
+router.get('/', async (req, res, next) => {
+  try {
+    const songs = await Song.find({}).lean({ getters: true });
+
+    res.json(createResponse({
+      ok: true,
+      results: songs
+    }));
+  } catch (error) {
+    res.status(500).json(createResponse({
+      ok: false,
+      message: 'Failed to get music list',
+      error
+    }));
+  }
+});
+
 export default router;
