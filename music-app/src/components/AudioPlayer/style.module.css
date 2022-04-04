@@ -1,0 +1,59 @@
+.player {
+    height: 150px;
+    background-color: black;
+    color: white;
+    padding: 5px 5px 5px 5px;
+}
+
+.image {
+    height: 85px;
+    width: 85px;
+}
+
+audio:not([controls]) {
+    display: none !important;
+}
+
+.slider {
+    height: 5px;
+    background-color: rgba(158, 153, 153, 0.88);
+}
+
+.currentTime {
+    height: 5px;
+    background-color: rgba(84, 63, 206, 0.88);
+}
+
+.control {
+    display: flex;
+    align-items: center;
+    margin-top: 9px;
+}
+
+.volumeSlider{
+    height: 5px;
+    background-color: rgba(158, 153, 153, 0.88);
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.currentVolumeSlider{
+    height: 5px;
+    background-color: rgba(84, 63, 206, 0.88);
+ 
+}
+
+.controlIcon {
+    height: 40px;
+    width: 40px;
+}
+
+.space {
+    display: flex;
+    flex: 1;
+}
+
+.timeMusic {
+    margin-left: 10px;
+    color: white;
+}

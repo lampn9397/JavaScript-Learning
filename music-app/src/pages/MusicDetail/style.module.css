@@ -1,0 +1,86 @@
+.musicContainer{
+    display: flex;
+    flex-direction: row;
+}
+.currentMusic {
+    display: flex;
+    flex-direction: column;
+    padding: 25px 25px 100px 150px;
+    flex: 3;
+}
+
+.musicsFolder {
+font-size: 14px;
+margin-bottom: 10px;
+}
+
+.NgheNhac {
+    color: grey;
+    text-decoration: none;
+}
+
+.category {
+    color: grey;
+    text-decoration: none;
+}
+
+.author {
+    color: grey;
+    text-decoration: none;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    margin-right: 5px;
+}
+
+.author2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+    margin-right: 5px;
+}
+
+.musicTitle {
+    display: flex;
+    align-items: center;
+}
+
+.videoIcon {
+    height: 25px;
+    width: 25px;
+}
+
+.viewsContainer {
+    display: flex;
+    flex: 1;
+}
+
+.headphone {
+    height: 50px;
+    width: 50px;
+    align-self: flex-end;
+}
+
+.suggestMusic {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 25px 100px 0px 0px;
+}
+
+.continueMusic {
+    font-size: 22px;
+    color: #2daaed;
+    margin-bottom: 10px;
+}
+
+.loadingPos{
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}

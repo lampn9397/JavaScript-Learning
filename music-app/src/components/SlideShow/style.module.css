@@ -1,0 +1,23 @@
+.wrapper {
+    position: relative;
+    height: 500px;
+    width: 1000px;
+}
+
+.songImg {
+    height: 500px;
+    width: 1000px;
+    position: absolute;
+}
+
+.display {
+    position: absolute;
+    color: rgb(245, 243, 243);
+    z-index: 99;
+    height: 50px;
+    width: 50px;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

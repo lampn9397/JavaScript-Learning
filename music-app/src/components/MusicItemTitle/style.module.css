@@ -1,5 +1,7 @@
-.ListAlbum{
+.ListMusic{
     width: 850px;
+    height: 304px;
+    overflow: hidden;
 
 }
 

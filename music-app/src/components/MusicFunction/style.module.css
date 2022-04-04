@@ -1,0 +1,46 @@
+.musicFunctionContainer{
+    display: flex;
+    font-size: 14px;
+    color: black;
+}
+
+.space {
+    display: flex;
+    flex: 1;
+}
+
+.musicFunctionIcon{
+    height: 24px;
+    width: 24px;
+    margin-right: 10px;
+    margin-left: 10px;
+
+}
+
+.firstIcon{
+    height: 24px;
+    width: 24px;
+    margin-left: 10px;;
+}
+
+.threeDot:hover {
+    color: #2daaed;
+    font-size: 35px;
+}
+
+.threeDot {
+    display: flex;
+    font-size: 35px;
+    margin-left: 10px;
+    align-items: center;
+}
+
+.functionHover {
+    display: flex;
+    align-items: center;
+}
+
+.functionHover:hover{
+    color: #2daaed;
+
+}

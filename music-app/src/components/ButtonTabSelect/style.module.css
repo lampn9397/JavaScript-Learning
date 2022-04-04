@@ -3,9 +3,28 @@
     margin-bottom: 20px;
     height: 32px;
     background: #e5e5e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.25s;  
 }
 
 .active, .ButtonTabSelect:hover {
     background-color: #e74c3c;
     color: white;
   }
+
+  .ButtonTabSelect:first-of-type {
+    border-top-left-radius: 25px;   
+    border-bottom-left-radius: 25px;
+  }
+
+  .ButtonTabSelect:last-of-type {
+    border-top-right-radius: 25px;   
+    border-bottom-right-radius: 25px;
+  }
+
+  /* .ButtonTabSelect:nth-of-type(2) {
+    border-top-right-radius: 25px;   
+    border-bottom-right-radius: 25px;
+  } */

@@ -1,0 +1,15 @@
+
+.rankContainer {
+    margin-bottom: 10px;
+}
+.rank{
+    text-decoration: none;
+    margin-right: 15px;
+    color: #2daaed;
+    font-size: 35px;
+}
+
+.iconPlay{
+    height: 35px;
+    width: 35px;
+}

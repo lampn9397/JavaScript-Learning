@@ -8,7 +8,7 @@ function ButtonTabSelect(props) {
         <div
             className={classNames({
                 [styles.ButtonTabSelect]: true,
-                [styles.active]: props.isActive
+                [styles.active]: props.isActive,
             })}
             onClick={props.onClick}
         >

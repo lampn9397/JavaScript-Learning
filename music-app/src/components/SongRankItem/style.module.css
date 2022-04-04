@@ -1,0 +1,72 @@
+.songRankItem {
+    margin-bottom: 5px;
+    border-bottom: rgb(214, 209, 209) 1px solid;
+    display: flex;
+    align-items: center;
+    padding-bottom: 8px;
+}
+
+.firstItem {
+    align-items: flex-start;
+}
+
+.number {
+    font-size: 25px;
+    width: 35px;
+    color: #7a7a7a;
+    text-align: center;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.songTitle {
+    color: rgba(0,0,0,0.88);
+    font-size: 16px;
+    margin-bottom: 5px;
+
+}
+
+.nameSinger {
+    color: rgba(0,0,0,0.5) ;
+    font-size: 13px;
+}
+
+.one {
+    color: white;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    background-color:red ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+}
+
+.two {
+    color: greenyellow;
+}
+
+.three {
+    color: orange;
+}
+
+.image {
+    height: 125px;
+    width: 125px;
+}
+
+.wraper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-right: 5px;
+    
+
+}

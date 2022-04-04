@@ -1,0 +1,66 @@
+
+.suggestMusicContainer{
+    display: flex;
+    margin: 0px 0 13px 0;
+    border-bottom: #f3f3f3 solid 1px;
+    padding: 0 0 10px 0;
+    text-decoration: none;
+    color: black;
+}
+
+.suggestMusicItem{
+    display: flex;
+}
+
+.play{
+    height: 32px;
+    width: 32px;
+    display: none;
+}
+
+.functionHover:hover > .play{
+    display: block;
+}
+
+.functionHover:hover > .songNote{
+    display: none;
+}
+
+.functionHover{
+    display: flex;
+    flex: 1;
+    align-items: center;
+
+}
+
+.songNote {
+    height: 32px;
+    width: 32px;
+
+}
+
+.space {
+    display: flex;
+    flex: 1;
+}
+
+.songInforContainer{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-left: 5px;
+}
+
+.songInfor{
+    display: flex;
+    align-items: center;
+}
+
+.titleAuthor:hover{
+    color: #2daaed;
+}
+
+.headPhone {
+    height: 32px;
+    width: 32px;
+}
