@@ -6,12 +6,40 @@ import dotenv from 'dotenv';
 import logger from 'morgan';
 import express from 'express';
 import mongoose from 'mongoose';
+import passport from 'passport';
 import cookieParser from 'cookie-parser';
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 
 dotenv.config();
 
 import apiRouter from './routes/api';
 import * as Helpers from './utils/helpers';
+import User from './models/User';
+
+const { JWT_SECRET } = process.env;
+
+export const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: JWT_SECRET,
+  // issuer: 'accounts.examplesoft.com',
+  // audience: 'yoursite.net',
+};
+
+passport.use(new JwtStrategy(jwtOptions, async function (jwt_payload, done) {
+  console.log('payload received', jwt_payload);
+
+  try {
+    const user = await User.findById(jwt_payload.id);
+
+    if (user) {
+      return done(null, user);
+    }
+  } catch (error) {
+    console.log('passport error: ', error);
+  }
+
+  return done(err, false);
+}));
 
 const app = express();
 
@@ -29,6 +57,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static('public'));
+
+app.use(passport.initialize());
 
 app.use('/api', apiRouter);
 

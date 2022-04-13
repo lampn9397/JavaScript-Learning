@@ -1,7 +1,9 @@
-import express from 'express';
 import * as yup from 'yup';
+import express from 'express';
+import jwt from 'jsonwebtoken';
 
 import User from '../../models/User';
+import { jwtOptions } from '../../app';
 import * as Helpers from '../../utils/helpers';
 
 const router = express.Router();
@@ -34,8 +36,12 @@ router.post('/login', async (req, res, next) => {
       }));
     }
 
+    const payload = { id: user.id };
+
+    const token = jwt.sign(payload, jwtOptions.secretOrKey);
+
     return res.json(Helpers.createResponse({
-      results: user
+      results: token
     }));
   } catch (error) {
     next(error);
