@@ -25,11 +25,9 @@ export const jwtOptions = {
   // audience: 'yoursite.net',
 };
 
-passport.use(new JwtStrategy(jwtOptions, async function (jwt_payload, done) {
-  console.log('payload received', jwt_payload);
-
+passport.use(new JwtStrategy(jwtOptions, async function (jwtPayload, done) {
   try {
-    const user = await User.findById(jwt_payload.id);
+    const user = await User.findById(jwtPayload.id, null, { lean: true });
 
     if (user) {
       return done(null, user);
@@ -38,7 +36,7 @@ passport.use(new JwtStrategy(jwtOptions, async function (jwt_payload, done) {
     console.log('passport error: ', error);
   }
 
-  return done(err, false);
+  return done(null, false);
 }));
 
 const app = express();

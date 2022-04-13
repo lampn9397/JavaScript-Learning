@@ -1,12 +1,31 @@
 import * as yup from 'yup';
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import passport from 'passport';
 
 import User from '../../models/User';
 import { jwtOptions } from '../../app';
 import * as Helpers from '../../utils/helpers';
 
 const router = express.Router();
+
+router.get('/', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+
+    const token = authorization.split(' ')[1];
+
+    const jwtPayload = jwt.verify(token, jwtOptions.secretOrKey);
+
+    const user = await User.findById(jwtPayload.id, null, { lean: true });
+
+    return res.json(Helpers.createResponse({
+      results: user
+    }));
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.post('/login', async (req, res, next) => {
   try {
@@ -36,7 +55,7 @@ router.post('/login', async (req, res, next) => {
       }));
     }
 
-    const payload = { id: user.id };
+    const payload = { id: user._id };
 
     const token = jwt.sign(payload, jwtOptions.secretOrKey);
 
