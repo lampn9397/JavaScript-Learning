@@ -19,7 +19,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req, re
 
     const user = await User.findById(jwtPayload.id, '-password', { lean: true });
 
-    return res.json(Helpers.createResponse({
+    res.json(Helpers.createResponse({
       results: user
     }));
   } catch (error) {
@@ -59,9 +59,88 @@ router.post('/login', async (req, res, next) => {
 
     const token = jwt.sign(payload, jwtOptions.secretOrKey);
 
-    return res.json(Helpers.createResponse({
-      results: token
-    }));
+    res.json(Helpers.createResponse({ results: token }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/register', async (req, res, next) => {
+  try {
+    let {
+      username,
+      password,
+      firstname,
+      lastname,
+      gender,
+      // avatar,
+      phone,
+      email,
+      // online,
+      // lastLogin,
+    } = req.body;
+
+    username = username?.trim();
+    password = password?.trim();
+
+    if (!(username && password && firstname && lastname && gender && phone && email)) {
+      return res.status(400).json(Helpers.createResponse({
+        ok: false,
+        message: 'Please input information to register.'
+      }));
+    }
+
+    firstname = firstname?.trim();
+    lastname = lastname?.trim();
+    phone = phone?.trim();
+    email = email?.trim();
+
+    const isPhone = phone?.length === 10;
+
+    const isEmail = yup.string().email().isValidSync(email);
+
+    if (!isPhone) {
+      return res.status(400).json(Helpers.createResponse({
+        ok: false,
+        message: 'Invalid email.'
+      }));
+    }
+    
+    if (!isEmail) {
+      return res.status(400).json(Helpers.createResponse({
+        ok: false,
+        message: 'Invalid email.'
+      }));
+    }
+
+    const filter = {
+      $or: [{ username }, { email: username }]
+    };
+
+    const isUserExisted = await User.exists(filter);
+
+    if (isUserExisted) {
+      return res.status(400).json(Helpers.createResponse({
+        ok: false,
+        message: 'User existed.'
+      }));
+    }
+
+    const user = await User.create({
+      username,
+      password,
+      firstname,
+      lastname,
+      gender,
+      phone,
+      email,
+    });
+
+    const payload = { id: user._id };
+
+    const token = jwt.sign(payload, jwtOptions.secretOrKey);
+
+    res.json(Helpers.createResponse({ results: token }));
   } catch (error) {
     next(error);
   }

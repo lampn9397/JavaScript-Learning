@@ -1,4 +1,4 @@
-import { defaultResponse } from './constants';
+import { defaultResponse } from '../constants';
 
 export const createResponse = (response = defaultResponse) => {
   const responseModel = {

@@ -7,6 +7,7 @@ export default async () => {
     firstname: "Lam",
     lastname: "Phan",
     avatar: "avatar",
+    gender: 'MALE',
     phone: "0776266985",
     email: "lampndev@gmail.com",
   });
