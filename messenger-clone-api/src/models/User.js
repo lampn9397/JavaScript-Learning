@@ -30,6 +30,14 @@ const schema = new Schema({
     type: String,
     required: true,
   },
+  online: {
+    type: Boolean,
+    default: false,
+  },
+  lastLogin: {
+    type: Date,
+    default: Date.now,
+  },
   // source: {
   //   type: String,
   //   required: true,
