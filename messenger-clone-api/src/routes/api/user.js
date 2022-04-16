@@ -17,7 +17,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req, re
 
     const jwtPayload = jwt.verify(token, jwtOptions.secretOrKey);
 
-    const user = await User.findById(jwtPayload.id, '-password', { lean: true });
+    const user = await User.findById(jwtPayload.id, '-password').lean({ getters: true });
 
     res.json(Helpers.createResponse({
       results: user

@@ -7,6 +7,12 @@ const defaultImageName = 'default_avatar_{gender}.png';
 
 const getDefaultImageName = (gender) => defaultImageName.replace('{gender}', gender);
 
+export const gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  OTHER: 'OTHER',
+}
+
 const schema = new Schema({
   username: {
     type: String,
@@ -28,17 +34,15 @@ const schema = new Schema({
     type: String,
     required: true,
     enum: [
-      'MALE',
-      'FEMALE',
-      'OTHER',
+      gender.MALE,
+      gender.FEMALE,
+      gender.OTHER,
     ],
   },
   avatar: {
     type: String,
     get: (a) => `${getImageRootUrl()}/${a}`,
-    default: function () {
-      return `${getImageRootUrl()}/${getDefaultImageName(this.gender.toLowerCase())}`;
-    },
+    default: getDefaultImageName(gender.MALE.toLowerCase()),
   },
   phone: {
     type: String,
@@ -73,9 +77,7 @@ schema.plugin(mongooseLeanGetters);
 
 schema.pre('save', async function () {
   if (!this.avatar) {
-    const rootImageUrl = getImageRootUrl();
-
-    this.avatar = `${rootImageUrl}/${getDefaultImageName(this.gender.toLowerCase())}`;
+    this.avatar = getDefaultImageName(this.gender.toLowerCase());
   }
 });
 
