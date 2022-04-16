@@ -6,7 +6,7 @@ export default async () => {
     password: "admin",
     firstname: "Lam",
     lastname: "Phan",
-    avatar: "avatar",
+    avatar: "default_avatar_male.png",
     gender: 'MALE',
     phone: "0776266985",
     email: "lampndev@gmail.com",
