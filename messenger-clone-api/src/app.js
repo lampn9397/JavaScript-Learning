@@ -52,7 +52,7 @@ mongoose.connection.on('error', (err) => {
 app.use(cors({ origin: '*' }));
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('public'));
 
@@ -63,9 +63,20 @@ app.use('/api', apiRouter);
 app.use((error, req, res, next) => {
   console.error(error.stack);
 
-  res.status(500).json(Helpers.createResponse({
+  let { message } = error;
+
+  const isValidationError = !!error.errors;
+
+  if (isValidationError) {
+    const [errorField] = Object.keys(error.errors);
+
+    message = error.errors[errorField].message;
+  }
+
+  res.status(400).json(Helpers.createResponse({
     ok: false,
-    message: error.stack,
+    message,
+    // message: process.env.ENVIRONMENT === 'production' ? error.message : error.stack,
   }));
 });
 

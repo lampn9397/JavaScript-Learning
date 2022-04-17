@@ -1,7 +1,8 @@
+import * as yup from 'yup';
 import { Schema, model } from 'mongoose';
 import mongooseLeanGetters from 'mongoose-lean-getters';
 
-import { getImageRootUrl } from '../utils/helpers';
+import * as Helpers from '../utils/helpers';
 
 const defaultImageName = 'default_avatar_{gender}.png';
 
@@ -15,42 +16,62 @@ export const gender = {
 
 const schema = new Schema({
   username: {
+    trim: true,
     type: String,
-    required: true,
+    minlength: [1, 'Please input last name!'],
+    required: [true, 'Please input username!'],
   },
   password: {
     type: String,
-    required: true,
+    required: [true, 'Please input password!'],
+    minlength: [1, 'Please input password name!'],
   },
   firstname: {
+    trim: true,
     type: String,
-    required: true,
+    minlength: [1, 'Please input first name!'],
+    required: [true, 'Please input first name!'],
   },
   lastname: {
+    trim: true,
     type: String,
-    required: true,
+    minlength: [1, 'Please input last name!'],
+    required: [true, 'Please input last name!'],
   },
   gender: {
     type: String,
-    required: true,
-    enum: [
-      gender.MALE,
-      gender.FEMALE,
-      gender.OTHER,
-    ],
+    required: [true, 'Please input gender!'],
+    enum: {
+      values: [
+        gender.MALE,
+        gender.FEMALE,
+        gender.OTHER,
+      ],
+      message: 'Invalid gender!',
+    },
   },
   avatar: {
     type: String,
-    get: (a) => `${getImageRootUrl()}/${a}`,
+    get: (a) => `${Helpers.getImageRootUrl()}/${a}`,
     default: getDefaultImageName(gender.MALE.toLowerCase()),
   },
   phone: {
+    trim: true,
     type: String,
-    required: true,
+    required: [true, 'Please input phone!'],
+    validate: {
+      message: () => `Invalid phone!`,
+      validator: (v) => v.length === 10,
+    },
   },
   email: {
+    trim: true,
     type: String,
-    required: true,
+    required: [true, 'Please input email!'],
+    validate: {
+      message: () => `Invalid email!`,
+      validator: (v) => yup.string().email().isValidSync(v),
+    },
   },
   online: {
     type: Boolean,
@@ -78,6 +99,8 @@ schema.plugin(mongooseLeanGetters);
 schema.pre('save', async function () {
   if (!this.avatar) {
     this.avatar = getDefaultImageName(this.gender.toLowerCase());
+  } else {
+
   }
 });
 

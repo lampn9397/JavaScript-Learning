@@ -1,1 +1,4 @@
 dist-src/
+public/images/*
+!public/images/default_avatar_male.png
+!public/images/default_avatar_female.png

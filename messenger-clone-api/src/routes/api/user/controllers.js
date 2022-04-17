@@ -1,23 +1,12 @@
-import * as yup from 'yup';
-import express from 'express';
 import jwt from 'jsonwebtoken';
-import passport from 'passport';
 
-import User from '../../models/User';
-import { jwtOptions } from '../../app';
-import * as Helpers from '../../utils/helpers';
+import User from '../../../models/User';
+import { jwtOptions } from '../../../app';
+import * as Helpers from '../../../utils/helpers';
 
-const router = express.Router();
-
-router.get('/', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+export const getUser = async (req, res, next) => {
   try {
-    const { authorization } = req.headers;
-
-    const token = authorization.split(' ')[1];
-
-    const jwtPayload = jwt.verify(token, jwtOptions.secretOrKey);
-
-    const user = await User.findById(jwtPayload.id, '-password').lean({ getters: true });
+    const user = await User.findById(req.user._id, '-password').lean({ getters: true });
 
     res.json(Helpers.createResponse({
       results: user
@@ -25,9 +14,9 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req, re
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.post('/login', async (req, res, next) => {
+export const login = async (req, res, next) => {
   try {
     let { username, password } = req.body;
 
@@ -63,9 +52,9 @@ router.post('/login', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.post('/register', async (req, res, next) => {
+export const register = async (req, res, next) => {
   try {
     let {
       username,
@@ -81,37 +70,8 @@ router.post('/register', async (req, res, next) => {
     } = req.body;
 
     username = username?.trim();
-    password = password?.trim();
 
-    if (!(username && password && firstname && lastname && gender && phone && email)) {
-      return res.status(400).json(Helpers.createResponse({
-        ok: false,
-        message: 'Please input information to register.'
-      }));
-    }
-
-    firstname = firstname?.trim();
-    lastname = lastname?.trim();
     phone = phone?.trim();
-    email = email?.trim();
-
-    const isPhone = phone?.length === 10;
-
-    const isEmail = yup.string().email().isValidSync(email);
-
-    if (!isPhone) {
-      return res.status(400).json(Helpers.createResponse({
-        ok: false,
-        message: 'Invalid email.'
-      }));
-    }
-    
-    if (!isEmail) {
-      return res.status(400).json(Helpers.createResponse({
-        ok: false,
-        message: 'Invalid email.'
-      }));
-    }
 
     const filter = {
       $or: [{ username }, { email: username }]
@@ -144,6 +104,24 @@ router.post('/register', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-export default router;
+export const updateUser = async (req, res, next) => {
+  try {
+    const updateFields = {
+      ...req.body,
+    };
+
+    if (req.file) {
+      updateFields.avatar = req.file.filename;
+    }
+
+    await User.updateOne({ _id: req.user._id }, updateFields, { runValidators: true });
+
+    res.json(Helpers.createResponse({
+      message: 'Update successully!',
+    }));
+  } catch (error) {
+    next(error);
+  }
+};
