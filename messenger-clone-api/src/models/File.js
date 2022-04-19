@@ -1,4 +1,3 @@
-import * as yup from 'yup';
 import { Schema, model } from 'mongoose';
 import mongooseLeanGetters from 'mongoose-lean-getters';
 

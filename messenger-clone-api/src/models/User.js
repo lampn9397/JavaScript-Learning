@@ -46,7 +46,7 @@ const schema = new Schema({
       message: 'Invalid gender!',
     },
   },
-  avatar: FileSchema,
+  avatar: FileSchema.schema,
   phone: {
     trim: true,
     type: String,
