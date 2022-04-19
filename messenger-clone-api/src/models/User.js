@@ -2,17 +2,17 @@ import * as yup from 'yup';
 import { Schema, model } from 'mongoose';
 import mongooseLeanGetters from 'mongoose-lean-getters';
 
-import * as Helpers from '../utils/helpers';
+import FileSchema from './File';
 
 const defaultImageName = 'default_avatar_{gender}.png';
 
 const getDefaultImageName = (gender) => defaultImageName.replace('{gender}', gender);
 
-export const gender = {
+export const Gender = {
   MALE: 'MALE',
   FEMALE: 'FEMALE',
   OTHER: 'OTHER',
-}
+};
 
 const schema = new Schema({
   username: {
@@ -42,26 +42,18 @@ const schema = new Schema({
     type: String,
     required: [true, 'Please input gender!'],
     enum: {
-      values: [
-        gender.MALE,
-        gender.FEMALE,
-        gender.OTHER,
-      ],
+      values: Object.keys(Gender),
       message: 'Invalid gender!',
     },
   },
-  avatar: {
-    type: String,
-    get: (a) => `${Helpers.getImageRootUrl()}/${a}`,
-    default: getDefaultImageName(gender.MALE.toLowerCase()),
-  },
+  avatar: FileSchema,
   phone: {
     trim: true,
     type: String,
     required: [true, 'Please input phone!'],
     validate: {
       message: () => `Invalid phone!`,
-      validator: (v) => v.length === 10,
+      validator: (value) => value.length === 10,
     },
   },
   email: {
@@ -70,7 +62,7 @@ const schema = new Schema({
     required: [true, 'Please input email!'],
     validate: {
       message: () => `Invalid email!`,
-      validator: (v) => yup.string().email().isValidSync(v),
+      validator: (value) => yup.string().email().isValidSync(value),
     },
   },
   online: {
@@ -99,8 +91,6 @@ schema.plugin(mongooseLeanGetters);
 schema.pre('save', async function () {
   if (!this.avatar) {
     this.avatar = getDefaultImageName(this.gender.toLowerCase());
-  } else {
-
   }
 });
 
