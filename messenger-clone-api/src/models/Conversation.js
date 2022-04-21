@@ -4,9 +4,8 @@ import mongooseLeanGetters from 'mongoose-lean-getters';
 const schema = new Schema({
   title: {
     trim: true,
+    default: '',
     type: String,
-    minlength: [1, 'Please input chat title!'],
-    required: [true, 'Please input chat title!'],
   },
   users: [{
     ref: 'users',

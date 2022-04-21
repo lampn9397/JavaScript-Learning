@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 import mongooseLeanGetters from 'mongoose-lean-getters';
 
-import FileSchema from './File';
+import { FileSchema } from './File';
 
 const schema = new Schema({
   text: {

@@ -2,7 +2,8 @@ import * as yup from 'yup';
 import { Schema, model } from 'mongoose';
 import mongooseLeanGetters from 'mongoose-lean-getters';
 
-import FileSchema from './File';
+import { FileSchema } from './File';
+import * as Helpers from '../utils/helpers';
 
 const defaultImageName = 'default_avatar_{gender}.png';
 
@@ -26,13 +27,13 @@ const schema = new Schema({
     required: [true, 'Please input password!'],
     minlength: [1, 'Please input password name!'],
   },
-  firstname: {
+  firstName: {
     trim: true,
     type: String,
     minlength: [1, 'Please input first name!'],
     required: [true, 'Please input first name!'],
   },
-  lastname: {
+  lastName: {
     trim: true,
     type: String,
     minlength: [1, 'Please input last name!'],
@@ -46,7 +47,14 @@ const schema = new Schema({
       message: 'Invalid gender!',
     },
   },
-  avatar: FileSchema.schema,
+  avatar: {
+    trim: true,
+    type: FileSchema,
+    required: [true, 'Please input avatar!'],
+    get: function (value) {
+      return `${Helpers.getImageRootUrl()}/${value.type.toLowerCase()}/${value.name}`;
+    },
+  },
   phone: {
     trim: true,
     type: String,

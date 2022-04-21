@@ -6,7 +6,8 @@ import * as Helpers from '../../../utils/helpers';
 
 export const getUser = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user._id, '-password').lean({ getters: true });
+    const user = await User.findById(req.user._id, '-password')
+      .lean({ getters: true });
 
     res.json(Helpers.createResponse({
       results: user

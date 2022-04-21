@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 
 import user from './user';
+import chat from './chat';
 
 dotenv.config();
 
@@ -20,6 +21,8 @@ const startSeeding = async () => {
   await mongoose.connection.dropDatabase();
 
   await user();
+
+  await chat();
 
   process.exit();
 };
