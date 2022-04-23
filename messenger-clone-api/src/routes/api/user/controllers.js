@@ -60,8 +60,8 @@ export const register = async (req, res, next) => {
     let {
       username,
       password,
-      firstname,
-      lastname,
+      firstName,
+      lastName,
       gender,
       // avatar,
       phone,
@@ -90,8 +90,8 @@ export const register = async (req, res, next) => {
     const user = await User.create({
       username,
       password,
-      firstname,
-      lastname,
+      firstName,
+      lastName,
       gender,
       phone,
       email,
