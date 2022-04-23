@@ -94,7 +94,6 @@ schema.pre('save', function () {
   if (!this.avatar) {
     this.avatar = getUserAvatar(this);
   }
-  console.log('after > ', this.avatar);
 });
 
 schema.plugin(mongooseLeanGetters);
