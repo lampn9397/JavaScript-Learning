@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import { Schema, model } from 'mongoose';
 import mongooseLeanGetters from 'mongoose-lean-getters';
 
-import { FileSchema } from './File';
+import { FileSchema, FileTypes } from './File';
 import * as Helpers from '../utils/helpers';
 
 const defaultImageName = 'default_avatar_{gender}.png';
@@ -50,7 +50,7 @@ const schema = new Schema({
   avatar: {
     trim: true,
     type: FileSchema,
-    required: [true, 'Please input avatar!'],
+    // required: [true, 'Please input avatar!'],
     get: function (value) {
       return `${Helpers.getImageRootUrl()}/${value.type.toLowerCase()}/${value.name}`;
     },
@@ -98,7 +98,10 @@ schema.plugin(mongooseLeanGetters);
 
 schema.pre('save', async function () {
   if (!this.avatar) {
-    this.avatar = getDefaultImageName(this.gender.toLowerCase());
+    this.avatar = {
+      name: getDefaultImageName(this.gender.toLowerCase()),
+      type: FileTypes.USER_AVATAR
+    }
   }
 });
 
