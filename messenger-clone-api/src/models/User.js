@@ -7,7 +7,7 @@ import * as Helpers from '../utils/helpers';
 
 const defaultImageName = 'default_avatar_{gender}.png';
 
-const getDefaultImageName = (gender) => defaultImageName.replace('{gender}', gender);
+const getDefaultImageName = (user) => defaultImageName.replace('{gender}', user.gender);
 
 export const Gender = {
   MALE: 'MALE',
@@ -49,19 +49,17 @@ const schema = new Schema({
   },
   avatar: {
     type: FileSchema,
-    // // required: [true, 'Please input avatar!'],
-    // get: function (value) {
-    //   console.log(value);
-
-    //   return `${Helpers.getImageRootUrl()}/${value.type.toLowerCase()}/${value.name}`;
-    // },
+    get: function (value) {
+      return `${Helpers.getImageRootUrl()}/${value.type.toLowerCase()}/${value.name}`;
+    },
+    default: null, // This will set in pre save hook
   },
   phone: {
     trim: true,
     type: String,
     required: [true, 'Please input phone!'],
     validate: {
-      message: () => `Invalid phone!`,
+      message: () => `Least phone length is 10!`,
       validator: (value) => value.length === 10,
     },
   },
@@ -82,28 +80,20 @@ const schema = new Schema({
     type: Date,
     default: Date.now,
   },
-  // source: {
-  //   type: String,
-  //   required: true,
-  //   get: (s) => {
-  //     const serverAddress = server.address();
-  //     return `http://127.0.0.1:${serverAddress.port}/songs/${s}`;
-  //   }
-  // },
 }, {
   timestamps: true,
   versionKey: false,
 });
 
-schema.plugin(mongooseLeanGetters);
-
 schema.pre('save', function () {
-  // if (!this.avatar) {
-  //   this.avatar = {
-  //     name: getDefaultImageName(this.gender.toLowerCase()),
-  //     type: FileTypes.USER_AVATAR
-  //   }
-  // }
+  if (!this.avatar) {
+    this.avatar = {
+      name: getDefaultImageName(this.gender.toLowerCase()),
+      type: FileTypes.USER_AVATAR
+    };
+  }
 });
+
+schema.plugin(mongooseLeanGetters);
 
 export default model('users', schema);
