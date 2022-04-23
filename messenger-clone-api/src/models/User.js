@@ -48,12 +48,13 @@ const schema = new Schema({
     },
   },
   avatar: {
-    trim: true,
     type: FileSchema,
-    // required: [true, 'Please input avatar!'],
-    get: function (value) {
-      return `${Helpers.getImageRootUrl()}/${value.type.toLowerCase()}/${value.name}`;
-    },
+    // // required: [true, 'Please input avatar!'],
+    // get: function (value) {
+    //   console.log(value);
+
+    //   return `${Helpers.getImageRootUrl()}/${value.type.toLowerCase()}/${value.name}`;
+    // },
   },
   phone: {
     trim: true,
@@ -96,13 +97,13 @@ const schema = new Schema({
 
 schema.plugin(mongooseLeanGetters);
 
-schema.pre('save', async function () {
-  if (!this.avatar) {
-    this.avatar = {
-      name: getDefaultImageName(this.gender.toLowerCase()),
-      type: FileTypes.USER_AVATAR
-    }
-  }
+schema.pre('save', function () {
+  // if (!this.avatar) {
+  //   this.avatar = {
+  //     name: getDefaultImageName(this.gender.toLowerCase()),
+  //     type: FileTypes.USER_AVATAR
+  //   }
+  // }
 });
 
 export default model('users', schema);
