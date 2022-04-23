@@ -96,12 +96,14 @@ const schema = new Schema({
   versionKey: false,
 });
 
-schema.pre('save', function () {
+schema.pre('save', function (next) {
   const avatar = this.get('avatar');
 
   if (!avatar) {
     this.set('avatar', getDefaultUserAvatar(this.toJSON()));
   }
+
+  next();
 });
 
 schema.plugin(mongooseLeanGetters);
