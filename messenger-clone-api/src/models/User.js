@@ -7,7 +7,12 @@ import * as Helpers from '../utils/helpers';
 
 const defaultImageName = 'default_avatar_{gender}.png';
 
-const getDefaultImageName = (user) => defaultImageName.replace('{gender}', user.gender);
+const getDefaultImageName = (gender) => defaultImageName.replace('{gender}', gender);
+
+const getUserAvatar = (user) => ({
+  name: getDefaultImageName(user.gender.toLowerCase()),
+  type: FileTypes.USER_AVATAR
+})
 
 export const Gender = {
   MALE: 'MALE',
@@ -52,7 +57,7 @@ const schema = new Schema({
     get: function (value) {
       return `${Helpers.getImageRootUrl()}/${value.type.toLowerCase()}/${value.name}`;
     },
-    default: null, // This will set in pre save hook
+    default: getUserAvatar,
   },
   phone: {
     trim: true,
@@ -87,11 +92,9 @@ const schema = new Schema({
 
 schema.pre('save', function () {
   if (!this.avatar) {
-    this.avatar = {
-      name: getDefaultImageName(this.gender.toLowerCase()),
-      type: FileTypes.USER_AVATAR
-    };
+    this.avatar = getUserAvatar(this);
   }
+  console.log('after > ', this.avatar);
 });
 
 schema.plugin(mongooseLeanGetters);
