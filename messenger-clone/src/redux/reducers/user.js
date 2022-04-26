@@ -2,7 +2,7 @@ import * as ActionTypes from "../actionTypes";
 
 const defaultState = {
     user: null,
-    loading: true,
+    loginLoading: true,
 
 };
 
@@ -11,18 +11,18 @@ export default function homeMusicReducer(state = defaultState, action) {
         case ActionTypes.GET_USERINFO:
             return {
                 ...state,
-                loading: true,
+                loginLoading: true,
             };
         case ActionTypes.GET_USERINFO_SUCCESS:
             return {
                 ...state,
-                loading: false,
+                loginLoading: false,
                 user: action.payload,
             };
         case ActionTypes.GET_USERINFO_FAILED:
             return {
                 ...state,
-                loading: false,
+                loginLoading: false,
             };
         default:
             return state;

@@ -33,6 +33,28 @@ function* getUserInfo() {
     }
 }
 
+function* registerUser(action) {
+    try {
+        const { payload, callback } = action;
+
+        const { data } = yield axiosClient.post('/user/register', payload);
+
+        axiosClient.defaults.headers.Authorization = `Bearer ${data.results}`;
+
+        yield getUserInfo()
+
+        callback();
+
+    } catch (error) {
+        const errorMessage = error.response?.data?.message ?? error.message;
+
+        yield put({ type: ActionTypes.REGISTER_ACCOUNT_FAILED });
+
+        alert(errorMessage);
+    }
+}
+
 export default function* user() {
     yield takeLeading(ActionTypes.LOGIN, loginAction);
+    yield takeLeading(ActionTypes.REGISTER_ACCOUNT, registerUser);
 }

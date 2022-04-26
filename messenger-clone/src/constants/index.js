@@ -2,6 +2,7 @@ import HomePage from "../Pages/HomePage";
 import MenuPage from "../Pages/MenuPage";
 import LoginPage from "../Pages/LoginPage";
 import axios from 'axios';
+import RegisterPage from "../Pages/RegisterPage";
 
 export const routes = {
     HOME: {
@@ -14,12 +15,21 @@ export const routes = {
         exact: true,
         component: MenuPage
     },
+}
+
+export const publicRoutes = {
     LoginPage: {
-        path: '/Login',
+        path: '/',
         exact: true,
         component: LoginPage
-    }
+    },
+    RegisterPage: {
+        path: '/Register',
+        exact: true,
+        component: RegisterPage
+    },
 }
+
 
 export const listFriend = [
     {
