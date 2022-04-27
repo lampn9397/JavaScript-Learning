@@ -1,4 +1,8 @@
 import multer from 'multer';
+import mongoose from 'mongoose';
+
+import * as Helpers from '../../../utils/helpers';
+import Conversation from '../../../models/Conversation';
 
 const storage = multer.diskStorage({
   destination: 'public/images/',
@@ -27,3 +31,36 @@ export const chatMulter = multer({
     cb(null, true);
   },
 });
+
+export const checkObjectId = (idFieldName = 'id') => (req, res, next) => {
+  const isObjectId = mongoose.isValidObjectId(req.params[idFieldName]);
+
+  if (!isObjectId) {
+    return res.status(404).end();
+  }
+
+  next();
+}
+
+export const checkUserPermissionToChat = (chatFieldName = 'id', dataFieldName = 'params') => async (req, res, next) => {
+  try {
+    const conversation = await Conversation
+      .findById(req[dataFieldName][chatFieldName])
+      .lean({ getters: true });
+
+    if (!conversation) {
+      return res.status(404).end();
+    }
+
+    if (!conversation.users.indexOf(req.user._id)) {
+      return res.status(401).end();
+    }
+
+    next();
+  } catch (error) {
+    res.status(400).json(Helpers.createResponse({
+      ok: false,
+      message: error.message,
+    }));
+  }
+}

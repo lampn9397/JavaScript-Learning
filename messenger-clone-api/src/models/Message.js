@@ -7,12 +7,18 @@ const schema = new Schema({
   text: {
     trim: true,
     type: String,
+    required: [true, 'Please input message!']
   },
   files: [FileSchema],
   user: {
     ref: 'users',
     type: Schema.Types.ObjectId,
   },
+  conversationId: {
+    required: true,
+    ref: 'conversations',
+    type: Schema.Types.ObjectId,
+  }
 }, {
   timestamps: true,
   versionKey: false,

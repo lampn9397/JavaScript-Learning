@@ -7,7 +7,10 @@ import { getUser, login, register, updateUser } from './controllers';
 const router = express.Router();
 
 router.route('/')
-  .get(passport.authenticate('jwt', { session: false }), getUser)
+  .get(
+    passport.authenticate('jwt', { session: false }),
+    getUser,
+  )
   .put(
     passport.authenticate('jwt', { session: false }),
     userAvatarMulter.single('avatar'),

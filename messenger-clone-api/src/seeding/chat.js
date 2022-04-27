@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 import User from '../models/User';
 import Message from '../models/Message';
 import Conversation from '../models/Conversation';
@@ -7,9 +9,12 @@ export default async () => {
 
   const messages = [];
 
+  const conversationId = new mongoose.Types.ObjectId();
+
   for (const user of users) {
     const message = await Message.create({
       user: user._id,
+      conversationId,
       text: `Hello from ${user.firstName} ${user.lastName}!`,
     });
 
@@ -17,9 +22,10 @@ export default async () => {
   }
 
   await Conversation.create({
+    _id: conversationId,
     users: users.map((x) => x._id),
-    lastMessage: messages[messages.length -1]._id,
+    lastMessage: messages[messages.length - 1]._id,
   });
-  
+
   console.log('--- DONE FAKE CHAT')
 };

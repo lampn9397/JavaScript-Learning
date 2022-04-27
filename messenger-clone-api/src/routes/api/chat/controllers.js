@@ -1,6 +1,6 @@
+import Message from '../../../models/Message';
 import * as Helpers from '../../../utils/helpers';
 import Conversation from '../../../models/Conversation';
-import Message from '../../../models/Message';
 
 export const getConversations = async (req, res, next) => {
   try {
@@ -23,9 +23,32 @@ export const getConversations = async (req, res, next) => {
   }
 };
 
+export const getMessages = async (req, res, next) => {
+  try {
+    const messages = await Message
+      .find({ conversationId: req.params.id })
+      .select('-conversationId')
+      .lean({ getters: true });
+
+    res.json(Helpers.createResponse({
+      results: messages
+    }));
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const sendMessage = async (req, res, next) => {
   try {
-    res.json(Helpers.createResponse());
+    const { text, id } = req.body;
+
+    await Message.create({
+      text,
+      user: req.user._id,
+      conversationId: id,
+    });
+
+    res.end();
   } catch (error) {
     next(error);
   }

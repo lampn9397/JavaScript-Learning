@@ -1,20 +1,24 @@
 import express from 'express';
 import passport from 'passport';
 
-import { chatMulter } from './middlewares';
-import { getConversations, sendMessage } from './controllers';
+import { chatMulter, checkObjectId, checkUserPermissionToChat } from './middlewares';
+import { getConversations, sendMessage, getMessages,  } from './controllers';
 
 const router = express.Router();
 
 router.route('/')
-  .get(
-    passport.authenticate('jwt', { session: false }),
-    getConversations
-  )
+  .get(getConversations)
   .post(
-    passport.authenticate('jwt', { session: false }),
+    checkUserPermissionToChat('id', 'body'),
     chatMulter.array('files'),
     sendMessage,
+  );
+
+router.route('/:id')
+  .get(
+    checkObjectId('id'),
+    checkUserPermissionToChat('id', 'params'),
+    getMessages
   );
 
 export default router;
