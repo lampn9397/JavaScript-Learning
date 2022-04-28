@@ -4,7 +4,9 @@ import Conversation from '../../../models/Conversation';
 
 export const getConversations = async (req, res, next) => {
   try {
-    const conversations = await Conversation.find({})
+    const conversations = await Conversation
+      .find({ users: `${req.user._id}` })
+      .sort('-updatedAt')
       .populate('users', 'firstName lastName avatar online lastLogin')
       .populate({
         path: 'lastMessage',
@@ -14,6 +16,26 @@ export const getConversations = async (req, res, next) => {
         }
       })
       .lean({ getters: true });
+
+    conversations.forEach((item, index) => {
+      if (!item.title) {
+        if (item.users.length <= 2) {
+          let title = '';
+
+          const otherUserNickname = item.nicknames?.find((x) => req.user._id.equals(x.user));
+
+          if (otherUserNickname) {
+            title = otherUserNickname.nickname;
+          } else {
+            const otherUser = item.users.find((x) => !x._id.equals(req.user._id));
+
+            title = `${otherUser.firstName} ${otherUser.lastName}`;
+          }
+
+          conversations[index].title = title;
+        }
+      }
+    });
 
     res.json(Helpers.createResponse({
       results: conversations

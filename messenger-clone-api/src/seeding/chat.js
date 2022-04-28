@@ -24,6 +24,10 @@ export default async () => {
   await Conversation.create({
     _id: conversationId,
     users: users.map((x) => x._id),
+    nicknames: users.map((x) => ({
+      user: x._id,
+      nickname: `${x.firstName} ${x.lastName} nickname👌👌👌`,
+    })),
     lastMessage: messages[messages.length - 1]._id,
   });
 
