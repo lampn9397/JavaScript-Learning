@@ -32,8 +32,8 @@ export const chatMulter = multer({
   },
 });
 
-export const checkObjectId = (idFieldName = 'id') => (req, res, next) => {
-  const isObjectId = mongoose.isValidObjectId(req.params[idFieldName]);
+export const checkObjectId = (fieldName = 'id', parentFieldName = 'params') => (req, res, next) => {
+  const isObjectId = mongoose.isValidObjectId(req[parentFieldName][fieldName]);
 
   if (!isObjectId) {
     return res.status(404).end();
@@ -42,17 +42,17 @@ export const checkObjectId = (idFieldName = 'id') => (req, res, next) => {
   next();
 }
 
-export const checkUserPermissionToChat = (chatFieldName = 'id', dataFieldName = 'params') => async (req, res, next) => {
+export const checkUserPermissionToChat = (fieldName = 'id', parentFieldName = 'params') => async (req, res, next) => {
   try {
     const conversation = await Conversation
-      .findById(req[dataFieldName][chatFieldName])
+      .findById(req[parentFieldName][fieldName])
       .lean({ getters: true });
 
     if (!conversation) {
       return res.status(404).end();
     }
 
-    if (!conversation.users.indexOf(req.user._id)) {
+    if (conversation.users.findIndex((x) => x.equals(req.user._id)) === -1) {
       return res.status(401).end();
     }
 
@@ -63,4 +63,24 @@ export const checkUserPermissionToChat = (chatFieldName = 'id', dataFieldName = 
       message: error.message,
     }));
   }
+}
+
+export const getConversationTitle = (conversation, req) => {
+  let { title } = conversation;
+
+  if (!title) {
+    if (conversation.users.length <= 2) {
+      const otherUserNickname = conversation.nicknames?.find((x) => !x.user.equals(req.user._id));
+
+      if (otherUserNickname) {
+        title = otherUserNickname.nickname;
+      } else {
+        const otherUser = conversation.users.find((x) => !x._id.equals(req.user._id));
+
+        title = `${otherUser.firstName} ${otherUser.lastName}`;
+      }
+    }
+  }
+
+  return title;
 }

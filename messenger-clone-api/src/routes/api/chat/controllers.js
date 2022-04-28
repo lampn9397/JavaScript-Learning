@@ -1,44 +1,43 @@
 import Message from '../../../models/Message';
 import * as Helpers from '../../../utils/helpers';
 import Conversation from '../../../models/Conversation';
+import { getConversationTitle } from './middlewares';
 
 export const getConversations = async (req, res, next) => {
   try {
-    const conversations = await Conversation
-      .find({ users: `${req.user._id}` })
-      .sort('-updatedAt')
-      .populate('users', 'firstName lastName avatar online lastLogin')
-      .populate({
-        path: 'lastMessage',
-        populate: {
-          path: 'user',
-          select: 'firstName lastName avatar'
-        }
-      })
-      .lean({ getters: true });
+    let results = [];
 
-    conversations.forEach((item, index) => {
-      if (!item.title) {
-        if (item.users.length <= 2) {
-          let title = '';
-
-          const otherUserNickname = item.nicknames?.find((x) => req.user._id.equals(x.user));
-
-          if (otherUserNickname) {
-            title = otherUserNickname.nickname;
-          } else {
-            const otherUser = item.users.find((x) => !x._id.equals(req.user._id));
-
-            title = `${otherUser.firstName} ${otherUser.lastName}`;
+    const processPipelines = (query) => {
+      return query
+        .populate('users', 'firstName lastName avatar online lastLogin')
+        .populate({
+          path: 'lastMessage',
+          populate: {
+            path: 'user',
+            select: 'firstName lastName avatar'
           }
+        })
+        .lean({ getters: true })
+    }
 
-          conversations[index].title = title;
-        }
-      }
-    });
+    if (req.params.id) {
+      results = await processPipelines(Conversation.findById(req.params.id));
+
+      results.title = getConversationTitle(results, req);
+    } else {
+      results = await processPipelines(
+        Conversation
+          .find({ users: `${req.user._id}` })
+          .sort('-updatedAt')
+      );
+
+      results.forEach((item, index) => {
+        results[index].title = getConversationTitle(item, req);
+      });
+    }
 
     res.json(Helpers.createResponse({
-      results: conversations
+      results
     }));
   } catch (error) {
     next(error);
@@ -49,6 +48,7 @@ export const getMessages = async (req, res, next) => {
   try {
     const messages = await Message
       .find({ conversationId: req.params.id })
+      .sort('createdAt')
       .select('-conversationId')
       .lean({ getters: true });
 

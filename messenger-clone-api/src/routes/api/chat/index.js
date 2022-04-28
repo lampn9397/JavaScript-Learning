@@ -1,8 +1,7 @@
 import express from 'express';
-import passport from 'passport';
 
 import { chatMulter, checkObjectId, checkUserPermissionToChat } from './middlewares';
-import { getConversations, sendMessage, getMessages,  } from './controllers';
+import { getConversations, sendMessage, getMessages, } from './controllers';
 
 const router = express.Router();
 
@@ -16,7 +15,14 @@ router.route('/')
 
 router.route('/:id')
   .get(
-    checkObjectId('id'),
+    checkObjectId('id', 'params'),
+    checkUserPermissionToChat('id', 'params'),
+    getConversations,
+  )
+
+router.route('/:id/message')
+  .get(
+    checkObjectId('id', 'params'),
     checkUserPermissionToChat('id', 'params'),
     getMessages
   );
