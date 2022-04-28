@@ -65,13 +65,15 @@ export const sendMessage = async (req, res, next) => {
   try {
     const { text, id } = req.body;
 
-    await Message.create({
+    const message = await Message.create({
       text,
       user: req.user._id,
       conversationId: id,
     });
 
-    res.end();
+    res.json(Helpers.createResponse({
+      results: message
+    }));
   } catch (error) {
     next(error);
   }
