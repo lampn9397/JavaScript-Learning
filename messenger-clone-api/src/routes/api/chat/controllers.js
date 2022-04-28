@@ -9,6 +9,7 @@ export const getConversations = async (req, res, next) => {
 
     const processPipelines = (query) => {
       return query
+        .select('-nicknames')
         .populate('users', 'firstName lastName avatar online lastLogin')
         .populate({
           path: 'lastMessage',
