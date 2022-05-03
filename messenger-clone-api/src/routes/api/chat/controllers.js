@@ -54,6 +54,21 @@ export const getConversations = async (req, res, next) => {
             ]
           },
         },
+      ];
+
+      if (q) {
+        pipelines.push({
+          $match: {
+            $or: [
+              { title: { $regex: q, $options: 'i' } },
+              { 'users.firstName': { $regex: q, $options: 'i' } },
+              { 'users.lastName': { $regex: q, $options: 'i' } },
+            ]
+          }
+        });
+      }
+
+      pipelines.push(...[
         {
           $lookup: {
             from: 'messages',
@@ -86,17 +101,7 @@ export const getConversations = async (req, res, next) => {
             updatedAt: -1
           }
         }
-      ];
-
-      if (q) {
-        // pipeline = pipeline.find({
-        //   $or: [
-        //     { title: { $regex: q, $options: 'i' } },
-        //     { 'users.firstName': { $regex: q, $options: 'i' } },
-        //     { 'users.lastName': { $regex: q, $options: 'i' } },
-        //   ]
-        // });
-      }
+      ]);
 
       results = await Conversation.aggregate(pipelines);
 
@@ -105,9 +110,7 @@ export const getConversations = async (req, res, next) => {
       });
     }
 
-    res.json(Helpers.createResponse({
-      results
-    }));
+    res.json(Helpers.createResponse({ results }));
   } catch (error) {
     next(error);
   }
