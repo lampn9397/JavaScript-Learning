@@ -2,8 +2,8 @@ import * as yup from 'yup';
 import { Schema, model } from 'mongoose';
 import mongooseLeanGetters from 'mongoose-lean-getters';
 
-import { FileSchema, FileTypes } from './File';
 import * as Helpers from '../utils/helpers';
+import { FileSchema, FileTypes } from './File';
 
 const defaultImageName = 'default_avatar_{gender}.png';
 
@@ -19,17 +19,6 @@ export const Gender = {
   FEMALE: 'FEMALE',
   OTHER: 'OTHER',
 };
-
-export function avatarGetter(value, doc) {
-  let type = value?.type;
-  let name = value?.name;
-
-  if (!value) {
-    ({ type, name } = getDefaultUserAvatar(this));
-  }
-
-  return `${Helpers.getImageRootUrl()}/${type.toLowerCase()}/${name}`;
-}
 
 const schema = new Schema({
   username: {
@@ -65,7 +54,16 @@ const schema = new Schema({
   },
   avatar: {
     type: FileSchema,
-    get: avatarGetter,
+    get: function (value) {
+      let type = value?.type;
+      let name = value?.name;
+    
+      if (!value) {
+        ({ type, name } = getDefaultUserAvatar(this));
+      }
+    
+      return `${Helpers.getImageRootUrl()}/${type.toLowerCase()}/${name}`;
+    },
   },
   phone: {
     trim: true,

@@ -1,7 +1,7 @@
 import multer from 'multer';
 
 const storage = multer.diskStorage({
-  destination: 'public/images/',
+  destination: 'public/images/user_avatar/',
   filename: (req, file, cb) => {
     const fileExtensionArray = file.originalname.split('.');
 
@@ -15,7 +15,7 @@ export const userAvatarMulter = multer({
   storage,
   limits: {
     files: 1,
-    fileSize: 2097152, // 2 MB
+    fileSize: 5242880, // 5 MB
   },
   fileFilter: function (req, file, cb) {
     const isImage = file.mimetype.startsWith('image/');

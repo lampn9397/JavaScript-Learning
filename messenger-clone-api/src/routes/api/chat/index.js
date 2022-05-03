@@ -6,12 +6,7 @@ import { getConversations, sendMessage, getMessages, } from './controllers';
 const router = express.Router();
 
 router.route('/')
-  .get(getConversations)
-  .post(
-    checkUserPermissionToChat('id', 'body'),
-    chatMulter.array('files'),
-    sendMessage,
-  );
+  .get(getConversations);
 
 router.route('/:id')
   .get(
@@ -25,6 +20,12 @@ router.route('/:id/message')
     checkObjectId('id', 'params'),
     checkUserPermissionToChat('id', 'params'),
     getMessages
+  )
+  .post(
+    checkObjectId('id', 'params'),
+    checkUserPermissionToChat('id', 'params'),
+    chatMulter.array('files'),
+    sendMessage,
   );
 
 export default router;

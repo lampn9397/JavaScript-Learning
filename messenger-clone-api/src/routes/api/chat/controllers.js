@@ -1,7 +1,7 @@
-import Message from '../../../models/Message';
 import * as Helpers from '../../../utils/helpers';
-import Conversation from '../../../models/Conversation';
 import { getConversationTitle } from './middlewares';
+import Conversation from '../../../models/Conversation';
+import Message, { fileGetter } from '../../../models/Message';
 
 export const getConversations = async (req, res, next) => {
   try {
@@ -134,16 +134,35 @@ export const getMessages = async (req, res, next) => {
 
 export const sendMessage = async (req, res, next) => {
   try {
-    const { text, id } = req.body;
+    const { user, files } = req;
+
+    const { id } = req.params;
+
+    const { text } = req.body;
 
     const message = await Message.create({
       text,
-      user: req.user._id,
+      user: user._id,
       conversationId: id,
+      files: files.map((x) => {
+        let type = 'CHAT_FILE';
+
+        if (x.mimetype.startsWith('image/')) {
+          type = 'CHAT_IMAGE';
+        } else if (x.mimetype.startsWith('video/')) {
+          type = 'CHAT_VIDEO';
+        }
+
+        return { name: x.filename, type };
+      }),
     });
 
+    const clonedMessage = message.toJSON();
+
+    clonedMessage.files = clonedMessage.files.map(fileGetter);
+
     res.json(Helpers.createResponse({
-      results: message
+      results: clonedMessage
     }));
   } catch (error) {
     next(error);

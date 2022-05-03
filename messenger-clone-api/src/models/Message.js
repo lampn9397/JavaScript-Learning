@@ -2,6 +2,9 @@ import { Schema, model } from 'mongoose';
 import mongooseLeanGetters from 'mongoose-lean-getters';
 
 import { FileSchema } from './File';
+import * as Helpers from '../utils/helpers';
+
+export const fileGetter = (value) => `${Helpers.getImageRootUrl()}/chat_files/${value.name}`
 
 const schema = new Schema({
   text: {
