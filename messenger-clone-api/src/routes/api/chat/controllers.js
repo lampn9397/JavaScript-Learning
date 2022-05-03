@@ -18,19 +18,87 @@ export const getConversations = async (req, res, next) => {
             select: 'firstName lastName avatar'
           }
         })
-        .lean({ getters: true })
     }
 
     if (req.params.id) {
-      results = await processPipelines(Conversation.findById(req.params.id));
+      results = await processPipelines(Conversation.findById(req.params.id)).lean({ getters: true });
 
       results.title = getConversationTitle(results, req);
     } else {
-      results = await processPipelines(
-        Conversation
-          .find({ users: `${req.user._id}` })
-          .sort('-updatedAt')
-      );
+      const { q } = req.query;
+
+      // let pipeline = processPipelines(
+      //   Conversation
+      //     .find({ users: `${req.user._id}` })
+      //     .sort('-updatedAt')
+      // );
+
+      const pipelines = [
+        { $match: { users: req.user._id } },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'users',
+            foreignField: '_id',
+            as: 'users',
+            pipeline: [
+              {
+                $project: {
+                  'firstName': 1,
+                  'lastName': 1,
+                  'online': 1,
+                  'lastLogin': 1,
+                  avatar: { $concat: [Helpers.getImageRootUrl(), '/', { $toLower: '$avatar.type' }, '/', '$avatar.name'] },
+                }
+              }
+            ]
+          },
+        },
+        {
+          $lookup: {
+            from: 'messages',
+            localField: 'lastMessage',
+            foreignField: '_id',
+            as: 'lastMessage',
+            pipeline: [
+              { $project: { conversationId: 0, updatedAt: 0 } }
+            ]
+          },
+        },
+        { $unwind: '$lastMessage' },
+        // {
+        //   $lookup: {
+        //     from: 'users',
+        //     localField: 'lastMessage.user',
+        //     foreignField: '_id',
+        //     as: 'lastMessage.user'
+        //   },
+        // },
+        // { $unwind: '$lastMessage.user' },
+        {
+          $project: {
+            createdAt: 0,
+            'nicknames._id': 0,
+          }
+        },
+        {
+          $sort: {
+            updatedAt: -1
+          }
+        }
+      ];
+
+      if (q) {
+        // pipeline = pipeline.find({
+        //   $or: [
+        //     { title: { $regex: q, $options: 'i' } },
+        //     { 'users.firstName': { $regex: q, $options: 'i' } },
+        //     { 'users.lastName': { $regex: q, $options: 'i' } },
+        //   ]
+        // });
+      }
+
+      results = await Conversation.aggregate(pipelines);
 
       results.forEach((item, index) => {
         results[index].title = getConversationTitle(item, req);

@@ -20,6 +20,17 @@ export const Gender = {
   OTHER: 'OTHER',
 };
 
+export function avatarGetter(value, doc) {
+  let type = value?.type;
+  let name = value?.name;
+
+  if (!value) {
+    ({ type, name } = getDefaultUserAvatar(this));
+  }
+
+  return `${Helpers.getImageRootUrl()}/${type.toLowerCase()}/${name}`;
+}
+
 const schema = new Schema({
   username: {
     trim: true,
@@ -54,16 +65,7 @@ const schema = new Schema({
   },
   avatar: {
     type: FileSchema,
-    get: function (value) {
-      let type = value?.type;
-      let name = value?.name;
-
-      if (!value) {
-        ({ type, name } = getDefaultUserAvatar(this));
-      }
-
-      return `${Helpers.getImageRootUrl()}/${type.toLowerCase()}/${name}`;
-    },
+    get: avatarGetter,
   },
   phone: {
     trim: true,
