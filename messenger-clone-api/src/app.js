@@ -8,13 +8,15 @@ import express from 'express';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
+import i18nextMiddleware from 'i18next-http-middleware';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 
 dotenv.config();
 
+import i18next from './i18n';
+import User from './models/User';
 import apiRouter from './routes/api';
 import * as Helpers from './utils/helpers';
-import User from './models/User';
 
 const { JWT_SECRET } = process.env;
 
@@ -49,6 +51,7 @@ mongoose.connection.on('error', (err) => {
   }
 });
 
+app.use(i18nextMiddleware.handle(i18next));
 app.use(cors({ origin: '*' }));
 app.use(logger('dev'));
 app.use(express.json());
