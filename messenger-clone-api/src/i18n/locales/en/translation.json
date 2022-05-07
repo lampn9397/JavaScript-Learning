@@ -1,3 +1,11 @@
 {
-  "hello": "hello"
+  "error": {
+    "input_login": "Please input information to login.",
+    "incorrect_login": "Incorrect username or password.",
+  
+    "user_existed": "User existed"
+  },
+  "result": {
+    "update_successfully": "Update successfully!"
+  }
 }

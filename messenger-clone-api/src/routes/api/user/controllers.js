@@ -28,7 +28,7 @@ export const login = async (req, res, next) => {
     if (!username || !password) {
       return res.status(400).json(Helpers.createResponse({
         ok: false,
-        message: 'Please input information to login.'
+        message: req.t('error.input_login'),
       }));
     }
 
@@ -41,7 +41,7 @@ export const login = async (req, res, next) => {
     if (!user || user.password !== password) {
       return res.status(400).json(Helpers.createResponse({
         ok: false,
-        message: 'Incorrect username or password.'
+        message: req.t('error.incorrect_login'),
       }));
     }
 
@@ -83,7 +83,7 @@ export const register = async (req, res, next) => {
     if (isUserExisted) {
       return res.status(400).json(Helpers.createResponse({
         ok: false,
-        message: 'User existed.'
+        message: req.t('error.user_existed')
       }));
     }
 
@@ -120,7 +120,7 @@ export const updateUser = async (req, res, next) => {
     await User.updateOne({ _id: req.user._id }, updateFields, { runValidators: true });
 
     res.json(Helpers.createResponse({
-      message: 'Update successully!',
+      message: req.t('result.update_successfully'),
     }));
   } catch (error) {
     next(error);
