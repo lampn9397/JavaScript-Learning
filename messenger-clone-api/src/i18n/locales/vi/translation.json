@@ -1,0 +1,11 @@
+{
+  "error": {
+    "input_login": "Vui lòng điền thông tin đăng nhập.",
+    "incorrect_login": "Sai tài khoản hoặc mật khẩu.",
+
+    "user_existed": "Tài khoản đã tồn tại"
+  },
+  "result": {
+    "update_successfully": "Cập nhật thành công!"
+  }
+}
