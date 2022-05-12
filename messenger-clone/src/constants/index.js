@@ -3,6 +3,7 @@ import MenuPage from "../Pages/MenuPage";
 import LoginPage from "../Pages/LoginPage";
 import axios from 'axios';
 import RegisterPage from "../Pages/RegisterPage";
+import ProfilePage from "../Pages/ProfilePage";
 
 export const routes = {
     HOME: (id = '') => {
@@ -21,10 +22,10 @@ export const routes = {
         exact: true,
         component: MenuPage
     },
-    MenuPage: {
-        path: '/Menu',
+    ProfilePage: {
+        path: '/ProfilePage',
         exact: true,
-        component: MenuPage
+        component: ProfilePage
     },
 }
 
