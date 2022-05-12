@@ -6,7 +6,7 @@ const defaultState = {
 
 };
 
-export default function homeMusicReducer(state = defaultState, action) {
+export default function userReducer(state = defaultState, action) {
     switch (action.type) {
         case ActionTypes.GET_USERINFO:
             return {
@@ -24,6 +24,17 @@ export default function homeMusicReducer(state = defaultState, action) {
                 ...state,
                 loginLoading: false,
             };
+        case ActionTypes.CHECK_LOGIN_DONE:
+            return {
+                ...state,
+                loginLoading: false,
+            }
+        case ActionTypes.LOGOUT_DONE:
+            return {
+                ...state,
+                user: null,
+                loginLoading: false,
+            }
         default:
             return state;
     }

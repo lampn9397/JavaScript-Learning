@@ -1,10 +1,22 @@
 import * as ActionTypes from '../actionTypes'
-import { takeLeading, put, delay } from 'redux-saga/effects';
+import { takeLeading, put } from 'redux-saga/effects';
 
-import { axiosClient } from '../../constants'
+import { axiosClient, localStorageKey } from '../../constants'
+
+function* checkLogin() {
+
+    const token = localStorage.getItem(localStorageKey.token);
+
+    if (!token) {
+        yield put({ type: ActionTypes.CHECK_LOGIN_DONE });
+        return;
+    }
+    axiosClient.defaults.headers.Authorization = `Bearer ${token}`;
+
+    yield getUserInfo()
+}
 
 function* loginAction(action) {
-    let errorMessage = 'Đăng nhập không thành công';
 
     try {
         const { payload } = action
@@ -12,6 +24,8 @@ function* loginAction(action) {
         const { data } = yield axiosClient.post('/user/login', payload);
 
         axiosClient.defaults.headers.Authorization = `Bearer ${data.results}`;
+
+        localStorage.setItem(localStorageKey.token, data.results);
 
         yield getUserInfo()
 
@@ -53,8 +67,15 @@ function* registerUser(action) {
         alert(errorMessage);
     }
 }
+function* checkLogout() {
+    localStorage.removeItem(localStorageKey.token);
+    yield put({ type: ActionTypes.LOGOUT_DONE });
+
+}
 
 export default function* user() {
     yield takeLeading(ActionTypes.LOGIN, loginAction);
     yield takeLeading(ActionTypes.REGISTER_ACCOUNT, registerUser);
+    yield takeLeading(ActionTypes.CHECK_LOGIN, checkLogin);
+    yield takeLeading(ActionTypes.LOGOUT, checkLogout);
 }

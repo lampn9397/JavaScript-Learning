@@ -1,17 +1,27 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';// react-router v4/v5
 import { ConnectedRouter } from 'connected-react-router'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import * as ActionTypes from './redux/actionTypes'
 
-import './App.css'
+import styles from './App.module.css'
 import { publicRoutes, routes } from './constants'
 import { history } from './redux/store';
+import AppNavigationBar from './components/AppNavigationBar';
 
 function App() {
 
   const user = useSelector((state) => state.user.user)
 
   const loginLoading = useSelector((state) => state.user.loginLoading)
+
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch({ type: ActionTypes.CHECK_LOGIN });
+  }, [dispatch])
 
   const renderRouteItem = React.useCallback((routeArray) => (key) => {
     let route = routeArray[key];
@@ -41,13 +51,13 @@ function App() {
     )
   }, []);
 
-  // if (loginLoading) {
-  //   return (
-  //     <Box sx={{ display: 'flex' }}>
-  //       <CircularProgress />
-  //     </Box>
-  //   )
-  // }
+  if (loginLoading) {
+    return (
+      <Box className={styles.loginLoading}>
+        <CircularProgress />
+      </Box>
+    )
+  }
 
   if (!user) {
     return (
@@ -66,6 +76,7 @@ function App() {
 
   return (
     <ConnectedRouter history={history}>
+      <AppNavigationBar />
       <Switch>
         {Object.keys(routes).map(renderRouteItem(routes))}
         <Route path="*" >
