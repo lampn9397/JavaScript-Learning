@@ -24,32 +24,32 @@ const schema = new Schema({
   username: {
     trim: true,
     type: String,
-    minlength: [1, 'Please input last name!'],
-    required: [true, 'Please input username!'],
+    minlength: [1, 'mongoose_error.model.user.username_required'],
+    required: [true, 'mongoose_error.model.user.username_required'],
   },
   password: {
     type: String,
-    required: [true, 'Please input password!'],
-    minlength: [1, 'Please input password name!'],
+    required: [true, 'mongoose_error.model.user.password_required'],
+    minlength: [1, 'mongoose_error.model.user.password_required'],
   },
   firstName: {
     trim: true,
     type: String,
-    minlength: [1, 'Please input first name!'],
-    required: [true, 'Please input first name!'],
+    minlength: [1, 'mongoose_error.model.user.firstname_required'],
+    required: [true, 'mongoose_error.model.user.firstname_required'],
   },
   lastName: {
     trim: true,
     type: String,
-    minlength: [1, 'Please input last name!'],
-    required: [true, 'Please input last name!'],
+    minlength: [1, 'mongoose_error.model.user.lastname_required'],
+    required: [true, 'mongoose_error.model.user.lastname_required'],
   },
   gender: {
     type: String,
-    required: [true, 'Please input gender!'],
+    required: [true, 'mongoose_error.model.user.gender_required'],
     enum: {
       values: Object.keys(Gender),
-      message: 'Invalid gender!',
+      message: 'mongoose_error.model.user.gender_enum',
     },
   },
   avatar: {
@@ -68,18 +68,18 @@ const schema = new Schema({
   phone: {
     trim: true,
     type: String,
-    required: [true, 'Please input phone!'],
+    required: [true, 'mongoose_error.model.user.phone_required'],
     validate: {
-      message: () => `Least phone length is 10!`,
+      message: () => 'mongoose_error.model.user.phone_length',
       validator: (value) => value.length === 10,
     },
   },
   email: {
     trim: true,
     type: String,
-    required: [true, 'Please input email!'],
+    required: [true, 'mongoose_error.model.user.email_required'],
     validate: {
-      message: () => `Invalid email!`,
+      message: () => 'mongoose_error.model.user.email_invalid',
       validator: (value) => yup.string().email().isValidSync(value),
     },
   },

@@ -16,10 +16,10 @@ export const FileSchema = new Schema({
   },
   type: {
     type: String,
-    required: [true, 'Please input media type!'],
+    required: [true, 'mongoose_error.model.file.type_required'],
     enum: {
       values: Object.keys(FileTypes),
-      message: 'Invalid media type!',
+      message: 'mongoose_error.model.file.type_enum',
     },
   }
 }, {

@@ -5,12 +5,12 @@ const nicknameSchema = new Schema({
   user: {
     ref: 'users',
     type: Schema.Types.ObjectId,
-    required: [true, 'Please input user id.']
+    required: [true, 'mongoose_error.model.nickname.user_required']
   },
   nickname: {
     trim: true,
     type: String,
-    required: [true, 'Please input nickname.']
+    required: [true, 'mongoose_error.model.nickname.nickname_required']
   },
 });
 

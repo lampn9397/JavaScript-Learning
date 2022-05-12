@@ -10,7 +10,7 @@ const schema = new Schema({
   text: {
     trim: true,
     type: String,
-    required: [true, 'Please input message!']
+    required: [true, 'mongoose_error.model.message.message_required']
   },
   files: [FileSchema],
   user: {

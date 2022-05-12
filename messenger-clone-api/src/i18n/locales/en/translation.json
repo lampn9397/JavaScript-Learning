@@ -1,11 +1,38 @@
 {
+  "mongoose_error": {
+    "model": {
+      "file": {
+        "type_required": "Type is required.",
+        "type_enum": "Invalid type."
+      },
+      "nickname": {
+        "user_required": "User is required.",
+        "nickname_required": "Nickname is required."
+      },
+      "message": {
+        "message_required": "Message is required."
+      },
+      "user": {
+        "username_required": "Username is required.",
+        "password_required": "Password is required.",
+        "firstname_required": "Firstname is required.",
+        "lastname_required": "Lastname is required.",
+        "gender_required": "Gender is required.",
+        "gender_enum": "Gender is invalid.",
+        "phone_required": "Phone is required.",
+        "phone_length": "Phone length is 10.",
+        "email_required": "Email is required.",
+        "email_invalid": "Email is invalid."
+      }
+    }
+  },
   "error": {
     "input_login": "Please input information to login.",
     "incorrect_login": "Incorrect username or password.",
-  
-    "user_existed": "User existed"
+    "user_existed": "User existed.",
+    "invalid_avatar_image": "Invalid avatar image."
   },
   "result": {
-    "update_successfully": "Update successfully!"
+    "update_successfully": "Update successfully."
   }
 }

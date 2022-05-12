@@ -64,16 +64,18 @@ app.use(passport.initialize());
 app.use('/api', apiRouter);
 
 app.use((error, req, res, next) => {
-  console.error(error.stack);
-
   let { message } = error;
 
-  const isValidationError = !!error.errors;
+  const isMongooseError = !!error.errors;
 
-  if (isValidationError) {
+  if (isMongooseError) {
     const [errorField] = Object.keys(error.errors);
 
     message = error.errors[errorField].message;
+
+    message = req.t(message);
+  } else {
+    console.error(error);
   }
 
   res.status(400).json(Helpers.createResponse({

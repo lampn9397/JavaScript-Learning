@@ -21,7 +21,7 @@ export const userAvatarMulter = multer({
     const isImage = file.mimetype.startsWith('image/');
 
     if (!isImage) {
-      return cb(new Error('Invalid avatar image!'));
+      return cb(new Error('error.invalid_avatar_image'));
     }
 
     cb(null, true);

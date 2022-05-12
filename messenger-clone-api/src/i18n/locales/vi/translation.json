@@ -1,11 +1,38 @@
 {
+  "mongoose_error": {
+    "model": {
+      "file": {
+        "type_required": "Trường type là bắt buộc.",
+        "type_enum": "Type không hợp lệ."
+      },
+      "nickname": {
+        "user_required": "Trường user là bắt buộc.",
+        "nickname_required": "Trường nickname là bắt buộc."
+      },
+      "message": {
+        "message_required": "Trường message là bắt buộc."
+      },
+      "user": {
+        "username_required": "Tên tài khoản là bắt buộc.",
+        "password_required": "Mật khẩu là bắt buộc.",
+        "firstname_required": "Tên là bắt buộc.",
+        "lastname_required": "Họ là bắt buộc.",
+        "gender_required": "Giới tính là bắt buộc.",
+        "gender_enum": "Giới tính không hợp lệ.",
+        "phone_required": "Số điện thoại là bắt buộc.",
+        "phone_length": "Số điện thoại phải là 10 số.",
+        "email_required": "Email là bắt buộc.",
+        "email_invalid": "Email không hợp lệ."
+      }
+    }
+  },
   "error": {
     "input_login": "Vui lòng điền thông tin đăng nhập.",
     "incorrect_login": "Sai tài khoản hoặc mật khẩu.",
-
-    "user_existed": "Tài khoản đã tồn tại"
+    "user_existed": "Tài khoản đã tồn tại.",
+    "invalid_avatar_image": "Ảnh đại diện không hợp lệ."
   },
   "result": {
-    "update_successfully": "Cập nhật thành công!"
+    "update_successfully": "Cập nhật thành công."
   }
 }
