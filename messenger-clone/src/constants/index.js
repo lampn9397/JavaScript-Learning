@@ -6,6 +6,16 @@ import RegisterPage from "../Pages/RegisterPage";
 import ProfilePage from "../Pages/ProfilePage";
 
 export const routes = {
+    MenuPage: {
+        path: '/Menu',
+        exact: true,
+        component: MenuPage
+    },
+    ProfilePage: {
+        path: '/ProfilePage',
+        exact: true,
+        component: ProfilePage
+    },
     HOME: (id = '') => {
         let path = '/:id?'
 
@@ -16,16 +26,6 @@ export const routes = {
             path,
             component: HomePage
         }
-    },
-    MenuPage: {
-        path: '/Menu',
-        exact: true,
-        component: MenuPage
-    },
-    ProfilePage: {
-        path: '/ProfilePage',
-        exact: true,
-        component: ProfilePage
     },
 }
 

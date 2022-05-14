@@ -13,7 +13,9 @@ const vi = {
         phone: "Số Điện Thoại",
         email: "Thư Điện Tử",
         phoneError: "Mời nhập ít nhất 10 chữ số",
-        registerSuccess: "Đăng kí thành công"
+        registerSuccess: "Đăng kí thành công",
+        updateProfile: "Lưu Thay Đổi",
+        updateProfileSuccess: "Lưu Thay Đổi Thành Công",
     },
 
     chat: {

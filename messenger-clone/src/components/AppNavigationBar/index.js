@@ -10,13 +10,16 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import { useHistory } from "react-router-dom";
 
-import BadgeAvatars from '../BadgeAvatars';
+import { routes } from '../../constants';
 import * as ActionTypes from '../../redux/actionTypes'
 
 export default function AppNavigationBar() {
 
     const dispatch = useDispatch();
+
+    let history = useHistory();
 
     const user = useSelector((state) => state.user.user)
 
@@ -34,8 +37,8 @@ export default function AppNavigationBar() {
     }, [dispatch])
 
     const onClickProfile = React.useCallback(() => {
-
-    }, [])
+        history.push(routes.ProfilePage.path)
+    }, [history])
 
     return (
         <>
@@ -51,7 +54,7 @@ export default function AppNavigationBar() {
                             aria-expanded={open ? 'true' : undefined}
                             className={styles.iconButton}
                         >
-                            <BadgeAvatars className={styles.userAvatar} avatar={user.avatar} />
+                            <Avatar className={styles.userAvatar} src={user.avatar} />
                         </IconButton>
                     </Tooltip>
                     <Menu

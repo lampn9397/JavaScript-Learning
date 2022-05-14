@@ -13,7 +13,9 @@ const en = {
         phone: "Phone",
         email: "Email",
         phoneError: "Please enter at least 10 numbers",
-        registerSuccess: " Register Succesfully"
+        registerSuccess: " Register Succesfully",
+        updateProfile: "Save Changes",
+        updateProfileSuccess: "Save Changes Succesfully",
     },
 
     chat: {
