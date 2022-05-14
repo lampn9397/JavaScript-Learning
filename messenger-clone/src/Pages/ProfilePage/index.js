@@ -35,7 +35,6 @@ function ProfilePage() {
     const [state, setState] = React.useState({
         firstName: user.firstName,
         lastName: user.lastName,
-        password: "",
         phone: user.phone,
         avatar: user.avatar,
         email: user.email,
@@ -96,7 +95,6 @@ function ProfilePage() {
                     <TextField fullWidth className={styles.firstNameButton} label={i18n.t('auth.firstName')} variant="outlined" value={state.firstName} onChange={onChange("firstName")} disabled={updateUserLoading} />
                     <TextField fullWidth label={i18n.t('auth.lastName')} variant="outlined" value={state.lastName} onChange={onChange("lastName")} disabled={updateUserLoading} />
                 </div>
-                <TextField fullWidth label={i18n.t('auth.password')} variant="outlined" value={state.password} onChange={onChange("password")} disabled={updateUserLoading} />
                 <TextField
                     fullWidth
                     label={i18n.t('auth.phone')}
