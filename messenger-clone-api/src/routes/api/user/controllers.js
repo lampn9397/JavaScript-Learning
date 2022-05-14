@@ -111,7 +111,11 @@ export const register = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   try {
     const updateFields = {
-      ...req.body,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      gender: req.body.gender,
+      phone: req.body.phone,
+      email: req.body.email,
     };
 
     if (req.file) {
