@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../../../models/User';
 import { jwtOptions } from '../../../app';
 import * as Helpers from '../../../utils/helpers';
+import { FileTypes } from '../../../models/File';
 
 export const getUser = async (req, res, next) => {
   try {
@@ -114,7 +115,10 @@ export const updateUser = async (req, res, next) => {
     };
 
     if (req.file) {
-      updateFields.avatar = req.file.filename;
+      updateFields.avatar = {
+        name: req.file.filename,
+        type: FileTypes.USER_AVATAR,
+      };
     }
 
     await User.updateOne({ _id: req.user._id }, updateFields, { runValidators: true });
