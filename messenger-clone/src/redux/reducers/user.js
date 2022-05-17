@@ -3,6 +3,7 @@ import * as ActionTypes from "../actionTypes";
 const defaultState = {
     user: null,
     loginLoading: true,
+    updateUserLoading: false,
 
 };
 
@@ -23,6 +24,21 @@ export default function userReducer(state = defaultState, action) {
             return {
                 ...state,
                 loginLoading: false,
+            };
+        case ActionTypes.UPDATE_USERINFO:
+            return {
+                ...state,
+                updateUserLoading: true,
+            };
+        case ActionTypes.UPDATE_USERINFO_SUCCESS:
+            return {
+                ...state,
+                updateUserLoading: false,
+            };
+        case ActionTypes.UPDATE_USERINFO_FAILED:
+            return {
+                ...state,
+                updateUserLoading: false,
             };
         case ActionTypes.CHECK_LOGIN_DONE:
             return {

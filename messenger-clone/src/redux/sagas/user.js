@@ -67,6 +67,40 @@ function* registerUser(action) {
         alert(errorMessage);
     }
 }
+
+function* updaterUser(action) {
+    try {
+        const { payload, callback } = action;
+
+        const formData = new FormData();
+
+        formData.append('firstName', payload.firstName)
+
+        formData.append('lastName', payload.firstName)
+
+        formData.append('gender', payload.gender)
+
+        formData.append('avatar', payload.avatar)
+
+        formData.append('phone', payload.phone)
+
+        formData.append('email', payload.email)
+
+        const { data } = yield axiosClient.put('/user', payload);
+
+        yield put({ type: ActionTypes.UPDATE_USERINFO_SUCCESS, payload: data.results });
+
+        callback();
+
+    } catch (error) {
+        const errorMessage = error.response?.data?.message ?? error.message;
+
+        yield put({ type: ActionTypes.UPDATE_USERINFO_FAILED });
+
+        alert(errorMessage);
+    }
+}
+
 function* checkLogout() {
     localStorage.removeItem(localStorageKey.token);
     yield put({ type: ActionTypes.LOGOUT_DONE });
@@ -76,6 +110,7 @@ function* checkLogout() {
 export default function* user() {
     yield takeLeading(ActionTypes.LOGIN, loginAction);
     yield takeLeading(ActionTypes.REGISTER_ACCOUNT, registerUser);
+    yield takeLeading(ActionTypes.UPDATE_USERINFO, updaterUser);
     yield takeLeading(ActionTypes.CHECK_LOGIN, checkLogin);
     yield takeLeading(ActionTypes.LOGOUT, checkLogout);
 }
