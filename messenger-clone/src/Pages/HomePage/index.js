@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import SendIcon from '@mui/icons-material/Send';
 
 import styles from '../HomePage/style.module.css'
 import i18n from '../../utils/i18n';
@@ -38,7 +41,8 @@ function HomePage() {
     const messagesLoading = useSelector((state) => state.conversations.messagesLoading)
 
     const [state, setState] = React.useState({
-        searchKey: ""
+        searchKey: "",
+        inputMessage: "",
     })
 
     const onClickConversation = React.useCallback((item) => () => {
@@ -91,6 +95,28 @@ function HomePage() {
         dispatch({ type: ActionTypes.SEARCHCONVERSATIONS, payload: event.target.value })
         setState((prevState) => ({ ...prevState, searchKey: event.target.value }))
     }, [dispatch])
+
+    const onChangeInputMessage = React.useCallback((event) => {
+        setState((prevState) => ({ ...prevState, inputMessage: event.target.value }))
+    }, [])
+
+    const onKeyDownInputMessage = React.useCallback((event) => {
+        if (event.key === "Enter") {
+            setState((prevState) => ({ ...prevState, inputMessage: "" }))
+            dispatch({
+                type: ActionTypes.SEND_MESSAGES,
+                payload: { text: state.inputMessage, conversationId: selectedConversation._id }
+            })
+        }
+    }, [dispatch, selectedConversation, state.inputMessage])
+
+    const onClickSendMessage = React.useCallback((event) => {
+        setState((prevState) => ({ ...prevState, inputMessage: "" }))
+        dispatch({
+            type: ActionTypes.SEND_MESSAGES,
+            payload: { text: state.inputMessage, conversationId: selectedConversation._id }
+        })
+    }, [dispatch, selectedConversation, state.inputMessage])
 
     React.useEffect(() => {
         dispatch({ type: ActionTypes.GET_CONVERSATIONS });
@@ -146,24 +172,31 @@ function HomePage() {
                         messages.map(renderMessageItem)
                     )}
                 </div>
-                <TextField
-                    sx={{
-                        '& .MuiOutlinedInput-notchedOutline': {
-                            border: '0px',
-                        },
-                    }}
-                    id="outlined-size-small"
-                    size="small"
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start" >
-                                <AiOutlineSearch />
-                            </InputAdornment>
-                        ),
-                        className: styles.searchInput
-                    }}
-                    placeholder={i18n.t('chat.searchDescription')}
-                />
+                <div className={styles.chatUltils}>
+                    <AttachFileIcon color='primary' />
+                    <TextField
+                        sx={{
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                border: '0px',
+                            },
+                        }}
+                        id="outlined-size-small"
+                        size="small"
+                        InputProps={{
+                            className: styles.searchInput
+                        }}
+                        placeholder="Aa"
+                        value={state.inputMessage}
+                        onChange={onChangeInputMessage}
+                        onKeyDown={onKeyDownInputMessage}
+                        className={styles.inputMessageContainer}
+                    />
+                    {state.inputMessage ? (
+                        <SendIcon color='primary' sx={{ marginRight: '5px' }} onClick={onClickSendMessage} />
+                    ) : (
+                        <ThumbUpIcon color='primary' sx={{ marginRight: '5px' }} />
+                    )}
+                </div>
             </div>
             <div className={styles.profileContainer}>
             </div>

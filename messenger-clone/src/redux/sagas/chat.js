@@ -78,10 +78,35 @@ function* getMessageAction(action) {
     }
 }
 
+function* sendMessageAction(action) {
+    try {
+
+        const { payload } = action;
+
+        const formData = new FormData();
+
+        formData.append('text', payload.text)
+
+        // formData.append('files', payload.firstName)
+
+        const { data } = yield axiosClient.post(`/chat/${payload.conversationId}/message`, formData);
+
+        yield put({ type: ActionTypes.SEND_MESSAGES_SUCCESS, payload: data.results });
+
+    } catch (error) {
+        const errorMessage = error.response?.data?.message ?? error.message;
+
+        yield put({ type: ActionTypes.SEND_MESSAGES_FAILED });
+
+        alert(errorMessage);
+    }
+}
+
 export default function* chat() {
     yield takeLeading(ActionTypes.GET_CONVERSATIONS, getConversationsAction);
     yield takeLeading(ActionTypes.GET_CONVERSATIONID, getConversationIdAction);
     yield takeLeading(ActionTypes.GET_MESSAGES, getMessageAction);
+    yield takeLeading(ActionTypes.SEND_MESSAGES, sendMessageAction);
 
     yield debounce(1000, ActionTypes.SEARCHCONVERSATIONS, searchConversationsAction)
 }
