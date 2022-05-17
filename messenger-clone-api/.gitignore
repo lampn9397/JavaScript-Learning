@@ -1,5 +1,5 @@
 dist-src/
 public/images/*
-!public/images/user_avatar/
+public/images/user_avatar/*
 !public/images/user_avatar/default_avatar_male.png
 !public/images/user_avatar/default_avatar_female.png

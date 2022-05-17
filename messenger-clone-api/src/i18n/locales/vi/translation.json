@@ -30,7 +30,8 @@
     "input_login": "Vui lòng điền thông tin đăng nhập.",
     "incorrect_login": "Sai tài khoản hoặc mật khẩu.",
     "user_existed": "Tài khoản đã tồn tại.",
-    "invalid_avatar_image": "Ảnh đại diện không hợp lệ."
+    "invalid_avatar_image": "Ảnh đại diện không hợp lệ.",
+    "failed_to_send_message": "Gửi tin nhắn không thành công."
   },
   "result": {
     "update_successfully": "Cập nhật thành công."

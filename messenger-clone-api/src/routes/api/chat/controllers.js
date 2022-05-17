@@ -140,6 +140,10 @@ export const sendMessage = async (req, res, next) => {
 
     const { text } = req.body;
 
+    if (!text && (!files || !files.length)) {
+      return next(Error(req.t('error.failed_to_send_message')));
+    }
+
     const message = await Message.create({
       text,
       user: user._id,
