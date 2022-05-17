@@ -144,7 +144,7 @@ export const sendMessage = async (req, res, next) => {
       text,
       user: user._id,
       conversationId: id,
-      files: files.map((x) => {
+      files: (files ?? []).map((x) => {
         let type = 'CHAT_FILE';
 
         if (x.mimetype.startsWith('image/')) {
