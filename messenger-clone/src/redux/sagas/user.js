@@ -86,7 +86,7 @@ function* updaterUser(action) {
 
         formData.append('email', payload.email)
 
-        const { data } = yield axiosClient.put('/user', payload);
+        const { data } = yield axiosClient.put('/user', formData);
 
         yield put({ type: ActionTypes.UPDATE_USERINFO_SUCCESS, payload: data.results });
 
