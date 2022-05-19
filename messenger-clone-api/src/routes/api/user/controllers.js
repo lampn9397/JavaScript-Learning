@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import User from '../../../models/User';
+import User, { avatarGetter } from '../../../models/User';
 import { jwtOptions } from '../../../app';
 import * as Helpers from '../../../utils/helpers';
 import { FileTypes } from '../../../models/File';
@@ -125,9 +125,14 @@ export const updateUser = async (req, res, next) => {
       };
     }
 
-    await User.updateOne({ _id: req.user._id }, updateFields, { runValidators: true });
+    const user = await User
+      .findByIdAndUpdate(req.user._id, updateFields, { new: true, runValidators: true })
+      .lean({ getter: true });
+
+    user.avatar = avatarGetter(user.avatar, user);
 
     res.json(Helpers.createResponse({
+      results: user,
       message: req.t('result.update_successfully'),
     }));
   } catch (error) {

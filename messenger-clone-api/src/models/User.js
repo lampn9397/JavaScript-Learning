@@ -12,7 +12,18 @@ const getDefaultImageName = (gender) => defaultImageName.replace('{gender}', gen
 const getDefaultUserAvatar = (user) => ({
   name: getDefaultImageName(user.gender.toLowerCase()),
   type: FileTypes.USER_AVATAR
-})
+});
+
+export function avatarGetter(value, user) {
+  let type = value?.type;
+  let name = value?.name;
+
+  if (!value) {
+    ({ type, name } = getDefaultUserAvatar(user || this));
+  }
+
+  return `${Helpers.getImageRootUrl()}/${type.toLowerCase()}/${name}`;
+}
 
 export const Gender = {
   MALE: 'MALE',
@@ -54,16 +65,7 @@ const schema = new Schema({
   },
   avatar: {
     type: FileSchema,
-    get: function (value) {
-      let type = value?.type;
-      let name = value?.name;
-    
-      if (!value) {
-        ({ type, name } = getDefaultUserAvatar(this));
-      }
-    
-      return `${Helpers.getImageRootUrl()}/${type.toLowerCase()}/${name}`;
-    },
+    get: avatarGetter,
   },
   phone: {
     trim: true,
