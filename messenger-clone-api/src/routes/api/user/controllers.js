@@ -127,6 +127,7 @@ export const updateUser = async (req, res, next) => {
 
     const user = await User
       .findByIdAndUpdate(req.user._id, updateFields, { new: true, runValidators: true })
+      .select('-password')
       .lean({ getter: true });
 
     user.avatar = avatarGetter(user.avatar, user);
