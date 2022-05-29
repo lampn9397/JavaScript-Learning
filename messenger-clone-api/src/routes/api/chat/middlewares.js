@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 export const chatMulter = multer({
   storage,
   limits: {
-    files: 1,
+    // files: 1,
     fileSize: 5242880, // 5 MB
   },
 });
