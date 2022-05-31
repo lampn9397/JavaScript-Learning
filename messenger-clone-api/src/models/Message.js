@@ -10,7 +10,8 @@ export const fileGetter = (value) => {
   }
 
   return {
-    ...value,
+    name: value.name,
+    type: value.type,
     url: `${Helpers.getImageRootUrl()}/chat_files/${value.name}`
   };
 }
