@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 
+import { createSocketServer } from '../services/socket';
+
 var app = require('../app');
 var debug = require('debug')('music-app-api:server');
 var http = require('http');
@@ -20,6 +22,14 @@ app.set('port', port);
  */
 
 export var server = http.createServer(app);
+
+createSocketServer(server);
+
+// export const io = new Server(server, {
+//   cors: {
+//     origin: '*',
+//   }
+// });
 
 /**
  * Listen on provided port, on all network interfaces.
