@@ -33,6 +33,7 @@ export default function userReducer(state = defaultState, action) {
         case ActionTypes.UPDATE_USERINFO_SUCCESS:
             return {
                 ...state,
+                user: action.payload,
                 updateUserLoading: false,
             };
         case ActionTypes.UPDATE_USERINFO_FAILED:

@@ -7,16 +7,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import SendIcon from '@mui/icons-material/Send';
+import { useHistory, useParams } from 'react-router-dom';
 
 import styles from '../HomePage/style.module.css'
 import i18n from '../../utils/i18n';
 import { routes } from '../../constants';
 import * as ActionTypes from '../../redux/actionTypes'
 import BadgeAvatars from '../../components/BadgeAvatars';
-import { useHistory } from 'react-router-dom';
+import ChatInput from '../../components/ChatInput';
+import MessageItem from '../../components/MessageItem';
+
 
 function HomePage() {
 
@@ -40,16 +40,15 @@ function HomePage() {
 
     const messagesLoading = useSelector((state) => state.conversations.messagesLoading)
 
+    const { id } = useParams();
+
     const [state, setState] = React.useState({
         searchKey: "",
-        inputMessage: "",
     })
 
     const onClickConversation = React.useCallback((item) => () => {
         history.push(routes.HOME(item._id).path)
-        dispatch({ type: ActionTypes.GET_CONVERSATIONID, payload: item._id })
-        dispatch({ type: ActionTypes.GET_MESSAGES, payload: item._id })
-    }, [dispatch, history])
+    }, [history])
 
     const otherUser = selectedConversation?.users.find((userItem) => userItem._id !== user._id)
 
@@ -75,19 +74,8 @@ function HomePage() {
     }
 
     function renderMessageItem(item) {
-
-        if (item.user !== user._id) {
-            return (
-                <div className={styles.otherMessageContainer} key={item._id}>
-                    <div className={styles.otherMessages}>{item.text}</div>
-                </div>
-            )
-        }
-
         return (
-            <div className={styles.myMessageContainer} key={item._id}>
-                <div className={styles.myMessages}>{item.text}</div>
-            </div>
+            <MessageItem item={item} user={user} key={item._id} />
         )
     }
 
@@ -96,31 +84,22 @@ function HomePage() {
         setState((prevState) => ({ ...prevState, searchKey: event.target.value }))
     }, [dispatch])
 
-    const onChangeInputMessage = React.useCallback((event) => {
-        setState((prevState) => ({ ...prevState, inputMessage: event.target.value }))
-    }, [])
-
-    const onKeyDownInputMessage = React.useCallback((event) => {
-        if (event.key === "Enter") {
-            setState((prevState) => ({ ...prevState, inputMessage: "" }))
-            dispatch({
-                type: ActionTypes.SEND_MESSAGES,
-                payload: { text: state.inputMessage, conversationId: selectedConversation._id }
-            })
-        }
-    }, [dispatch, selectedConversation, state.inputMessage])
-
-    const onClickSendMessage = React.useCallback((event) => {
-        setState((prevState) => ({ ...prevState, inputMessage: "" }))
+    const sendMessage = React.useCallback((fileSend, inputMessage) => {
         dispatch({
             type: ActionTypes.SEND_MESSAGES,
-            payload: { text: state.inputMessage, conversationId: selectedConversation._id }
+            payload: { text: inputMessage, files: fileSend, conversationId: selectedConversation._id }
         })
-    }, [dispatch, selectedConversation, state.inputMessage])
+    }, [dispatch, selectedConversation])
 
     React.useEffect(() => {
         dispatch({ type: ActionTypes.GET_CONVERSATIONS });
     }, [dispatch]);
+
+    React.useEffect(() => {
+        if (!id) return
+        dispatch({ type: ActionTypes.GET_CONVERSATIONID, payload: id })
+        dispatch({ type: ActionTypes.GET_MESSAGES, payload: id })
+    }, [dispatch, id]);
 
     return (
         <div className={styles.homePageContainer}>
@@ -172,31 +151,7 @@ function HomePage() {
                         messages.map(renderMessageItem)
                     )}
                 </div>
-                <div className={styles.chatUltils}>
-                    <AttachFileIcon color='primary' />
-                    <TextField
-                        sx={{
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                border: '0px',
-                            },
-                        }}
-                        id="outlined-size-small"
-                        size="small"
-                        InputProps={{
-                            className: styles.searchInput
-                        }}
-                        placeholder="Aa"
-                        value={state.inputMessage}
-                        onChange={onChangeInputMessage}
-                        onKeyDown={onKeyDownInputMessage}
-                        className={styles.inputMessageContainer}
-                    />
-                    {state.inputMessage ? (
-                        <SendIcon color='primary' sx={{ marginRight: '5px' }} onClick={onClickSendMessage} />
-                    ) : (
-                        <ThumbUpIcon color='primary' sx={{ marginRight: '5px' }} />
-                    )}
-                </div>
+                <ChatInput onSubmit={sendMessage} />
             </div>
             <div className={styles.profileContainer}>
             </div>

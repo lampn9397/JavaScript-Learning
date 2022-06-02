@@ -80,7 +80,9 @@ function* updaterUser(action) {
 
         formData.append('gender', payload.gender)
 
-        formData.append('avatar', payload.avatar)
+        if (payload.avatar.file) {
+            formData.append('avatar', payload.avatar.file)
+        }
 
         formData.append('phone', payload.phone)
 

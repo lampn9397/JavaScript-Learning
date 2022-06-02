@@ -49,3 +49,10 @@ export const axiosClient = axios.create({
 export const localStorageKey = {
     token: "token"
 }
+
+export const FileTypes = {
+    CHAT_IMAGE: 'CHAT_IMAGE',
+    CHAT_VIDEO: 'CHAT_VIDEO',
+    CHAT_FILE: 'CHAT_FILE',
+    USER_AVATAR: 'USER_AVATAR',
+};

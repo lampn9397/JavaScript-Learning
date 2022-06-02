@@ -36,7 +36,7 @@ function ProfilePage() {
         firstName: user.firstName,
         lastName: user.lastName,
         phone: user.phone,
-        avatar: user.avatar,
+        avatar: { src: user.avatar, file: null },
         email: user.email,
         gender: user.gender,
         phoneError: false,
@@ -75,7 +75,7 @@ function ProfilePage() {
 
     const onChangeUserAvatar = React.useCallback(async (event) => {
         const response = await readFile(event.target.files[0]);
-        setState((prevState) => ({ ...prevState, avatar: response.result }))
+        setState((prevState) => ({ ...prevState, avatar: { src: response.result, file: event.target.files[0] } }))
     }, [])
 
     return (
@@ -89,7 +89,7 @@ function ProfilePage() {
                 noValidate
                 autoComplete="off"
             >
-                <img src={state.avatar} alt='' className={styles.userAvatar} onClick={onClickUserAvatar} />
+                <img src={state.avatar.src} alt='' className={styles.userAvatar} onClick={onClickUserAvatar} />
                 <input type="file" ref={inputRef} accept="image/*" hidden onChange={onChangeUserAvatar} />
                 <div className={styles.nameContainer}>
                     <TextField fullWidth className={styles.firstNameButton} label={i18n.t('auth.firstName')} variant="outlined" value={state.firstName} onChange={onChange("firstName")} disabled={updateUserLoading} />

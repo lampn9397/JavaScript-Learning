@@ -1,0 +1,83 @@
+.PreviewFileContainer {
+    display: flex;
+    max-width: 100%;
+}
+
+.previewImg {
+    height: 48px;
+    width: 48px;
+    margin-right: 10px;
+
+}
+
+.previewOtherFileType {
+    display: flex;
+    height: 48px;
+    width: 128px;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px;
+    border-radius: 12px;
+    background-color: #d6d9dd;
+    padding: 0px 4px 0px 4px;
+
+}
+
+.filesIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px !important;
+    background-color: white;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filesDescription {
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.clearIconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px !important;
+    background-color: white;
+    position: absolute;
+    top: -4px;
+    right: 0px;
+    z-index: 10;
+
+}
+
+.fileItemContainer {
+    position: relative;
+    margin-top: 8px;
+    margin-bottom: 5px;
+    margin-right: 8px;
+}
+
+.previewImgContainer {
+    position: relative;
+    margin-top: 8px;
+}
+
+.clearImgContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px !important;
+    background-color: white;
+    position: absolute;
+    top: -4px;
+    right: 0px;
+    z-index: 10;
+}
