@@ -87,7 +87,9 @@ function* sendMessageAction(action) {
 
         formData.append('text', payload.text)
 
-        // formData.append('files', payload.firstName)
+        for (let index = 0; index < payload.files.length; index++) {
+            formData.append('files', payload.files[index])
+        }
 
         const { data } = yield axiosClient.post(`/chat/${payload.conversationId}/message`, formData);
 

@@ -7,7 +7,7 @@ const defaultState = {
     selectedConversation: null,
     conversationIdLoading: true,
     messages: [],
-    messagesLoading: true,
+    messagesLoading: false,
     sendMessagesLoading: false,
 };
 
