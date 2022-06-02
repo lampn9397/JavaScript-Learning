@@ -8,7 +8,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import { useHistory, useParams } from 'react-router-dom';
-import { io } from 'socket.io-client';
 
 import styles from '../HomePage/style.module.css'
 import i18n from '../../utils/i18n';
@@ -93,14 +92,6 @@ function HomePage() {
     }, [dispatch, selectedConversation])
 
     React.useEffect(() => {
-        const socket = io('http://localhost:3001', {
-            // transports: ['websocket']
-        });
-
-        socket.on('connect', (s) => {
-            console.log('connected > ', s);
-        });
-
         dispatch({ type: ActionTypes.GET_CONVERSATIONS });
     }, [dispatch]);
 
