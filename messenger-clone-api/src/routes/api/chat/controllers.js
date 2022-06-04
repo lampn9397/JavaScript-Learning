@@ -121,7 +121,7 @@ export const getMessages = async (req, res, next) => {
   try {
     const messages = await Message
       .find({ conversationId: req.params.id })
-      .sort('createdAt')
+      .sort('-createdAt')
       .select('-conversationId')
       .lean({ getters: true });
 
