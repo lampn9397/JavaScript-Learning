@@ -5,35 +5,32 @@ import Conversation from '../../../models/Conversation';
 import { SocketEvents } from '../../../services/socket';
 import Message, { fileGetter } from '../../../models/Message';
 
+const conversationPipelines = (query) => {
+  return query
+    // .select('-nicknames')
+    .populate('users', 'firstName lastName avatar online lastLogin')
+    .populate({
+      path: 'lastMessage',
+      populate: {
+        path: 'user',
+        select: 'firstName lastName avatar'
+      }
+    })
+}
+
 export const getConversations = async (req, res, next) => {
   try {
     let results = [];
 
-    const processPipelines = (query) => {
-      return query
-        .select('-nicknames')
-        .populate('users', 'firstName lastName avatar online lastLogin')
-        .populate({
-          path: 'lastMessage',
-          populate: {
-            path: 'user',
-            select: 'firstName lastName avatar'
-          }
-        })
-    }
-
     if (req.params.id) {
-      results = await processPipelines(Conversation.findById(req.params.id)).lean({ getters: true });
+      results = await conversationPipelines(Conversation.findById(req.params.id))
+        .lean({ getters: true });
 
       results.title = getConversationTitle(results, req);
+
+      results.nicknames = undefined;
     } else {
       const { q } = req.query;
-
-      // let pipeline = processPipelines(
-      //   Conversation
-      //     .find({ users: `${req.user._id}` })
-      //     .sort('-updatedAt')
-      // );
 
       const pipelines = [
         { $match: { users: req.user._id } },
@@ -109,6 +106,7 @@ export const getConversations = async (req, res, next) => {
 
       results.forEach((item, index) => {
         results[index].title = getConversationTitle(item, req);
+        results[index].nicknames = undefined;
       });
     }
 
@@ -173,11 +171,13 @@ export const sendMessage = async (req, res, next) => {
       results: clonedMessage
     }));
 
-    const conversation = await Conversation.findByIdAndUpdate(id, {
+    const conversation = await conversationPipelines(Conversation.findByIdAndUpdate(id, {
       lastMessage: clonedMessage._id
-    }, { new: true }).lean();
+    }, { new: true })).lean({ getters: true });
 
     conversation.title = getConversationTitle(conversation, req);
+
+    conversation.nicknames = undefined;
 
     io.emit(SocketEvents.NEW_CONVERSATION, conversation);
   } catch (error) {

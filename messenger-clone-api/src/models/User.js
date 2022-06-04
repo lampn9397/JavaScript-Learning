@@ -10,8 +10,6 @@ const defaultImageName = 'default_avatar_{gender}.png';
 const getDefaultImageName = (gender) => defaultImageName.replace('{gender}', gender);
 
 const getDefaultUserAvatar = (user) => {
-  console.log('user > ', user);
-
   return ({
     name: getDefaultImageName(user.gender.toLowerCase()),
     type: FileTypes.USER_AVATAR
@@ -107,8 +105,6 @@ schema.pre('save', function (next) {
 
   if (!avatar) {
     const user = this.toJSON();
-
-    console.log('user > ', user);
 
     this.set('avatar', getDefaultUserAvatar(user));
   }
