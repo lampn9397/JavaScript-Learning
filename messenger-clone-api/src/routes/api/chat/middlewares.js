@@ -60,16 +60,14 @@ export const getConversationTitle = (conversation, req) => {
   let { title } = conversation;
 
   if (!title) {
-    if (conversation.users.length <= 2) {
-      const otherUserNickname = conversation.nicknames?.find((x) => !x.user.equals(req.user._id));
+    const otherUserNickname = conversation.nicknames?.find((x) => !x.user.equals(req.user._id));
 
-      if (otherUserNickname) {
-        title = otherUserNickname.nickname;
-      } else {
-        const otherUser = conversation.users.find((x) => !x._id.equals(req.user._id));
+    if (otherUserNickname) {
+      title = otherUserNickname.nickname;
+    } else {
+      const otherUser = conversation.users.find((x) => !x._id.equals(req.user._id));
 
-        title = `${otherUser.firstName} ${otherUser.lastName}`;
-      }
+      title = `${otherUser.firstName} ${otherUser.lastName}`;
     }
   }
 

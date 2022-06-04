@@ -1,8 +1,9 @@
+import { io } from '../../../bin/www';
 import * as Helpers from '../../../utils/helpers';
 import { getConversationTitle } from './middlewares';
 import Conversation from '../../../models/Conversation';
+import { SocketEvents } from '../../../services/socket';
 import Message, { fileGetter } from '../../../models/Message';
-import { io } from '../../../bin/www';
 
 export const getConversations = async (req, res, next) => {
   try {
@@ -165,12 +166,20 @@ export const sendMessage = async (req, res, next) => {
     const clonedMessage = message.toJSON();
 
     clonedMessage.files = clonedMessage.files.map(fileGetter);
-  
-    io.emit('new-message', clonedMessage);
+
+    io.emit(SocketEvents.NEW_MESSAGE, clonedMessage);
 
     res.json(Helpers.createResponse({
       results: clonedMessage
     }));
+
+    const conversation = await Conversation.findByIdAndUpdate(id, {
+      lastMessage: clonedMessage._id
+    }, { new: true }).lean();
+
+    conversation.title = getConversationTitle(conversation, req);
+
+    io.emit(SocketEvents.NEW_CONVERSATION, conversation);
   } catch (error) {
     next(error);
   }

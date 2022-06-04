@@ -1,5 +1,10 @@
 import { Server } from 'socket.io';
 
+export const SocketEvents = {
+  NEW_MESSAGE: 'new-message',
+  NEW_CONVERSATION: 'new-conversation',
+};
+
 export const createSocketServer = (server) => {
   const io = new Server(server, {
     cors: {
