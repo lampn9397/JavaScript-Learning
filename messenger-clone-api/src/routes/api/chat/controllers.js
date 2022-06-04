@@ -2,6 +2,7 @@ import * as Helpers from '../../../utils/helpers';
 import { getConversationTitle } from './middlewares';
 import Conversation from '../../../models/Conversation';
 import Message, { fileGetter } from '../../../models/Message';
+import { io } from '../../../bin/www';
 
 export const getConversations = async (req, res, next) => {
   try {
@@ -164,6 +165,8 @@ export const sendMessage = async (req, res, next) => {
     const clonedMessage = message.toJSON();
 
     clonedMessage.files = clonedMessage.files.map(fileGetter);
+  
+    io.emit('new-message', clonedMessage);
 
     res.json(Helpers.createResponse({
       results: clonedMessage

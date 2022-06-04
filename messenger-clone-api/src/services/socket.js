@@ -10,4 +10,6 @@ export const createSocketServer = (server) => {
   io.on("connection", (socket) => {
     console.log('A client is connected > ', socket.id);
   });
+
+  return io;
 };

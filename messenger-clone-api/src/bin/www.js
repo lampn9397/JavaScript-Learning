@@ -23,13 +23,7 @@ app.set('port', port);
 
 export var server = http.createServer(app);
 
-createSocketServer(server);
-
-// export const io = new Server(server, {
-//   cors: {
-//     origin: '*',
-//   }
-// });
+export const io = createSocketServer(server);
 
 /**
  * Listen on provided port, on all network interfaces.
