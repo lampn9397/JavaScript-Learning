@@ -9,17 +9,21 @@ const defaultImageName = 'default_avatar_{gender}.png';
 
 const getDefaultImageName = (gender) => defaultImageName.replace('{gender}', gender);
 
-const getDefaultUserAvatar = (user) => ({
-  name: getDefaultImageName(user.gender.toLowerCase()),
-  type: FileTypes.USER_AVATAR
-});
+const getDefaultUserAvatar = (user) => {
+  console.log('user > ', user);
+
+  return ({
+    name: getDefaultImageName(user.gender.toLowerCase()),
+    type: FileTypes.USER_AVATAR
+  })
+};
 
 export function avatarGetter(value, user) {
   let type = value?.type;
   let name = value?.name;
 
   if (!value) {
-    ({ type, name } = getDefaultUserAvatar(user || this));
+    ({ type, name } = getDefaultUserAvatar(this || user));
   }
 
   return `${Helpers.getImageRootUrl()}/${type.toLowerCase()}/${name}`;
@@ -102,7 +106,11 @@ schema.pre('save', function (next) {
   const avatar = this.get('avatar');
 
   if (!avatar) {
-    this.set('avatar', getDefaultUserAvatar(this.toJSON()));
+    const user = this.toJSON();
+
+    console.log('user > ', user);
+
+    this.set('avatar', getDefaultUserAvatar(user));
   }
 
   next();
