@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 import mongooseLeanGetters from 'mongoose-lean-getters';
 
 import * as Helpers from '../utils/helpers';
-import { FileSchema, FileTypes } from './File';
+import File, { FileSchema, FileTypes } from './File';
 
 const defaultImageName = 'default_avatar_{gender}.png';
 
@@ -101,9 +101,7 @@ const schema = new Schema({
 });
 
 schema.pre('save', function (next) {
-  const avatar = this.get('avatar');
-
-  if (!avatar) {
+  if (!avatar || typeof avatar === 'string') {
     const user = this.toJSON();
 
     this.set('avatar', getDefaultUserAvatar(user));
