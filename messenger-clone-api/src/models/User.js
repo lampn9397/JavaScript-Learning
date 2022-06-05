@@ -101,6 +101,8 @@ const schema = new Schema({
 });
 
 schema.pre('save', function (next) {
+  const avatar = this.get('avatar');
+
   if (!avatar || typeof avatar === 'string') {
     const user = this.toJSON();
 
