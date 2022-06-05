@@ -29,6 +29,23 @@ export default function chatReducer(state = defaultState, action) {
                 ...state,
                 conversationsLoading: false,
             };
+        case ActionTypes.UPDATE_CONVERSATION: {
+
+            let conversations = [...state.conversations]
+
+            const index = conversations.findIndex((item) => item._id === action.payload._id)
+
+            if (index !== -1) {
+                conversations.splice(index, 1)
+            }
+
+            conversations = [action.payload, ...conversations]
+
+            return {
+                ...state,
+                conversations
+            };
+        }
         case ActionTypes.SEARCHCONVERSATIONS:
             return {
                 ...state,
@@ -86,7 +103,7 @@ export default function chatReducer(state = defaultState, action) {
             return {
                 ...state,
                 sendMessagesLoading: false,
-                messages: [...state.messages, action.payload]
+                messages: [action.payload, ...state.messages]
             };
         case ActionTypes.SEND_MESSAGES_FAILED:
             return {

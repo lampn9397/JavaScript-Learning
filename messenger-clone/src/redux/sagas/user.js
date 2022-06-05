@@ -2,6 +2,7 @@ import * as ActionTypes from '../actionTypes'
 import { takeLeading, put } from 'redux-saga/effects';
 
 import { axiosClient, localStorageKey } from '../../constants'
+import { push } from 'connected-react-router';
 
 function* checkLogin() {
 
@@ -37,6 +38,9 @@ function* loginAction(action) {
 function* getUserInfo() {
     try {
         const { data } = yield axiosClient.get('/user');
+
+        yield put(push('/'))
+
         yield put({ type: ActionTypes.GET_USERINFO_SUCCESS, payload: data.results });
     } catch (error) {
         const errorMessage = error.response?.data?.message ?? error.message;

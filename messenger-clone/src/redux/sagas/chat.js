@@ -93,7 +93,7 @@ function* sendMessageAction(action) {
 
         const { data } = yield axiosClient.post(`/chat/${payload.conversationId}/message`, formData);
 
-        yield put({ type: ActionTypes.SEND_MESSAGES_SUCCESS, payload: data.results });
+        // yield put({ type: ActionTypes.SEND_MESSAGES_SUCCESS, payload: data.results });
 
     } catch (error) {
         const errorMessage = error.response?.data?.message ?? error.message;

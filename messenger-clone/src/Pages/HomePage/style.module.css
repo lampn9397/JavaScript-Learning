@@ -126,7 +126,8 @@
     padding: 0px 10px 0px 10px;
     flex: 1;
     max-height: calc(100vh - 52px - 64px - 80px);
-    overflow-y: scroll;
+    overflow: auto;
+    flex-direction: column-reverse;
 
 }
 

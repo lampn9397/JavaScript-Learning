@@ -42,8 +42,10 @@ export const publicRoutes = {
     },
 }
 
+export const host = 'http://127.0.0.1:3001';
+
 export const axiosClient = axios.create({
-    baseURL: 'http://127.0.0.1:3001/api'
+    baseURL: `${host}/api`
 });
 
 export const localStorageKey = {
@@ -55,4 +57,9 @@ export const FileTypes = {
     CHAT_VIDEO: 'CHAT_VIDEO',
     CHAT_FILE: 'CHAT_FILE',
     USER_AVATAR: 'USER_AVATAR',
+};
+
+export const SocketEvents = {
+    NEW_MESSAGE: 'new-message',
+    NEW_CONVERSATION: 'new-conversation',
 };

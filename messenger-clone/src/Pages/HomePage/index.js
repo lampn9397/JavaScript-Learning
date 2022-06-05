@@ -8,10 +8,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import { useHistory, useParams } from 'react-router-dom';
+import { io } from "socket.io-client";
 
 import styles from '../HomePage/style.module.css'
 import i18n from '../../utils/i18n';
-import { routes } from '../../constants';
+import { host, routes, SocketEvents } from '../../constants';
 import * as ActionTypes from '../../redux/actionTypes'
 import BadgeAvatars from '../../components/BadgeAvatars';
 import ChatInput from '../../components/ChatInput';
@@ -92,7 +93,26 @@ function HomePage() {
     }, [dispatch, selectedConversation])
 
     React.useEffect(() => {
+
+        const socket = io(host);
+
+        socket.on(SocketEvents.NEW_MESSAGE, (message) => {
+            dispatch({ type: ActionTypes.SEND_MESSAGES_SUCCESS, payload: message });
+        })
+
+        socket.on(SocketEvents.NEW_CONVERSATION, (conversation) => {
+            dispatch({ type: ActionTypes.UPDATE_CONVERSATION, payload: conversation });
+            console.log(conversation)
+        })
+
         dispatch({ type: ActionTypes.GET_CONVERSATIONS });
+
+        return () => {
+            socket.off(SocketEvents.NEW_MESSAGE);
+            socket.off(SocketEvents.NEW_CONVERSATION);
+            socket.disconnect();
+        }; //function component cleanup
+
     }, [dispatch]);
 
     React.useEffect(() => {
@@ -138,7 +158,7 @@ function HomePage() {
                         {conversationIdLoading ? (
                             <Skeleton variant="text" width={60} height={20} />
                         ) : (
-                            <div>{otherUser?.firstName} {otherUser?.lastName}</div>
+                            <div>{selectedConversation?.title}</div>
                         )}
                     </div>
                 </div>
