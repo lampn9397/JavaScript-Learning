@@ -85,7 +85,18 @@ export const getConversations = async (req, res, next) => {
             from: 'users',
             localField: 'lastMessage.user',
             foreignField: '_id',
-            as: 'lastMessage.user'
+            as: 'lastMessage.user',
+            pipeline: [
+              {
+                $project: {
+                  'firstName': 1,
+                  'lastName': 1,
+                  'online': 1,
+                  'lastLogin': 1,
+                  avatar: { $concat: [Helpers.getImageRootUrl(), '/', { $toLower: '$avatar.type' }, '/', '$avatar.name'] },
+                }
+              }
+            ]
           },
         },
         { $unwind: '$lastMessage.user' },
