@@ -80,15 +80,15 @@ export const getConversations = async (req, res, next) => {
           },
         },
         { $unwind: '$lastMessage' },
-        // {
-        //   $lookup: {
-        //     from: 'users',
-        //     localField: 'lastMessage.user',
-        //     foreignField: '_id',
-        //     as: 'lastMessage.user'
-        //   },
-        // },
-        // { $unwind: '$lastMessage.user' },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'lastMessage.user',
+            foreignField: '_id',
+            as: 'lastMessage.user'
+          },
+        },
+        { $unwind: '$lastMessage.user' },
         {
           $project: {
             createdAt: 0,
