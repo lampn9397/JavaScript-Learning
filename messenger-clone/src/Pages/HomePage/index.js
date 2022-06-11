@@ -57,6 +57,10 @@ function HomePage() {
 
         const itemOtherUser = item.users.find((userItem) => userItem._id !== user._id)
 
+        const otherConversation = item.lastMessage.user._id !== user._id
+
+        const lastMessageUsername = otherConversation ? item.lastMessage.user.firstName : i18n.t('auth.you')
+
         return (
             <div className={styles.userContainer} key={item._id} onClick={onClickConversation(item)}>
                 <div className={styles.avatarContainer}>
@@ -65,6 +69,7 @@ function HomePage() {
                 <div className={styles.userInfo}>
                     <div>{item.title}</div>
                     <div className={styles.lastMessageContainer}>
+                        <div className={styles.lastMessageUsername}>{lastMessageUsername} :</div>
                         <div className={styles.lastMessage}>{item.lastMessage.text}</div>
                         <div className={styles.dotSpace}>·</div>
                         <div>{moment(item.lastMessage.createdAt).fromNow()}</div>

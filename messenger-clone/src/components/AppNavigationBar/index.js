@@ -14,6 +14,7 @@ import { useHistory } from "react-router-dom";
 
 import { routes } from '../../constants';
 import * as ActionTypes from '../../redux/actionTypes'
+import i18n from '../../utils/i18n';
 
 export default function AppNavigationBar() {
 
@@ -43,10 +44,61 @@ export default function AppNavigationBar() {
     return (
         <>
             <div className={styles.navBarContainer}>
-                <div className={styles.myProfile}>
+                <Menu
+                    anchorEl={anchorEl}
+                    id="account-menu"
+                    open={open}
+                    onClose={handleClose}
+                    onClick={handleClose}
+                    PaperProps={{
+                        elevation: 0,
+                        sx: {
+                            overflow: 'visible',
+                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                            mt: 1.5,
+                            '& .MuiAvatar-root': {
+                                width: 32,
+                                height: 32,
+                                ml: -0.5,
+                                mr: 1,
+                            },
+                            '&:before': {
+                                content: '""',
+                                display: 'block',
+                                position: 'absolute',
+                                top: 0,
+                                right: 14,
+                                width: 10,
+                                height: 10,
+                                bgcolor: 'background.paper',
+                                transform: 'translateY(-50%) rotate(45deg)',
+                                zIndex: 0,
+                            },
+                        },
+                    }}
+                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                    <MenuItem onClick={onClickProfile}>
+                        <Avatar /> {i18n.t('auth.profile')}
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                        <ListItemIcon>
+                            <Settings fontSize="small" />
+                        </ListItemIcon>
+                        {i18n.t('auth.settings')}
+                    </MenuItem>
+                    <MenuItem onClick={onClickLogout}>
+                        <ListItemIcon>
+                            <Logout fontSize="small" />
+                        </ListItemIcon>
+                        {i18n.t('auth.logout')}
+                    </MenuItem>
+                </Menu>
+                <div className={styles.myProfile} onClick={handleClick}>
                     <Tooltip title="Account settings">
                         <IconButton
-                            onClick={handleClick}
                             size="small"
                             sx={{ ml: 2 }}
                             aria-controls={open ? 'account-menu' : undefined}
@@ -57,58 +109,7 @@ export default function AppNavigationBar() {
                             <Avatar className={styles.userAvatar} src={user.avatar} />
                         </IconButton>
                     </Tooltip>
-                    <Menu
-                        anchorEl={anchorEl}
-                        id="account-menu"
-                        open={open}
-                        onClose={handleClose}
-                        onClick={handleClose}
-                        PaperProps={{
-                            elevation: 0,
-                            sx: {
-                                overflow: 'visible',
-                                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                mt: 1.5,
-                                '& .MuiAvatar-root': {
-                                    width: 32,
-                                    height: 32,
-                                    ml: -0.5,
-                                    mr: 1,
-                                },
-                                '&:before': {
-                                    content: '""',
-                                    display: 'block',
-                                    position: 'absolute',
-                                    top: 0,
-                                    right: 14,
-                                    width: 10,
-                                    height: 10,
-                                    bgcolor: 'background.paper',
-                                    transform: 'translateY(-50%) rotate(45deg)',
-                                    zIndex: 0,
-                                },
-                            },
-                        }}
-                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                    >
-                        <MenuItem onClick={onClickProfile}>
-                            <Avatar /> Profile
-                        </MenuItem>
-                        <Divider />
-                        <MenuItem>
-                            <ListItemIcon>
-                                <Settings fontSize="small" />
-                            </ListItemIcon>
-                            Settings
-                        </MenuItem>
-                        <MenuItem onClick={onClickLogout}>
-                            <ListItemIcon>
-                                <Logout fontSize="small" />
-                            </ListItemIcon>
-                            Logout
-                        </MenuItem>
-                    </Menu>
+
                     <div className={styles.myFirstName}>{user.firstName}</div>
                 </div>
 

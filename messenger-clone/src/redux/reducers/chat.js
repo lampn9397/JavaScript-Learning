@@ -110,6 +110,8 @@ export default function chatReducer(state = defaultState, action) {
                 ...state,
                 sendMessagesLoading: false,
             };
+        case ActionTypes.LOGOUT_DONE:
+            return defaultState
         default:
             return state;
     }

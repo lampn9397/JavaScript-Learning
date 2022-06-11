@@ -31,10 +31,17 @@ function RegisterPage() {
         lastName: "",
         username: "",
         password: "",
+        confirmPassword: "",
         phone: "",
         email: "",
         gender: "FEMALE",
+        firstNameError: false,
+        lastNameError: false,
+        usernameError: false,
+        passwordError: false,
+        confirmPasswordError: false,
         phoneError: false,
+        emailError: false,
         snackBar: false
     })
 
@@ -51,17 +58,44 @@ function RegisterPage() {
 
     const onClickRegister = React.useCallback(() => {
 
+        const firstNameError = state.firstName.length === 0;
+
+        const lastNameError = state.lastName.length === 0;
+
+        const usernameError = state.username.length === 0;
+
+        const passwordError = state.password.length === 0;
+
+        const confirmPasswordError = state.password !== state.confirmPassword;
+
         const phoneError = state.phone.length !== 10;
 
-        if (!phoneError) {
+        const emailError = state.email.length === 0;
+
+        if (!firstNameError || !lastNameError || !usernameError || !passwordError || !confirmPasswordError || !phoneError || !emailError) {
             dispatch({
                 type: ActionTypes.REGISTER_ACCOUNT,
                 payload: state,
                 callback: () => { setState((prevState) => ({ ...prevState, snackBar: true })) }
-            })
+            });
         }
-        setState((prevState) => ({ ...prevState, phoneError }))
+
+        setState((prevState) => ({ ...prevState, firstNameError }));
+        setState((prevState) => ({ ...prevState, lastNameError }));
+        setState((prevState) => ({ ...prevState, usernameError }));
+        setState((prevState) => ({ ...prevState, passwordError }));
+        setState((prevState) => ({ ...prevState, confirmPasswordError }));
+        setState((prevState) => ({ ...prevState, phoneError }));
+        setState((prevState) => ({ ...prevState, emailError }));
+
     }, [dispatch, state])
+
+    let passwordError = "";
+    if (state.passwordError) {
+        passwordError = i18n.t('auth.passwordError');
+    } else if (state.confirmPasswordError) {
+        passwordError = i18n.t('auth.confirmPasswordError');
+    }
 
     return (
         <div className={styles.RegisterContainer}>
@@ -76,11 +110,52 @@ function RegisterPage() {
             >
                 <img src={images.messLogo} alt='' className={styles.messLogo} />
                 <div className={styles.nameContainer}>
-                    <TextField fullWidth className={styles.firstNameButton} label={i18n.t('auth.firstName')} variant="outlined" value={state.firstName} onChange={onChange("firstName")} />
-                    <TextField fullWidth label={i18n.t('auth.lastName')} variant="outlined" value={state.lastName} onChange={onChange("lastName")} />
+                    <TextField
+                        fullWidth
+                        className={styles.firstNameButton}
+                        label={i18n.t('auth.firstName')}
+                        error={state.firstNameError}
+                        helperText={state.firstNameError ? i18n.t('auth.firstNameError') : ""}
+                        variant="outlined"
+                        value={state.firstName}
+                        onChange={onChange("firstName")}
+                    />
+                    <TextField
+                        fullWidth
+                        label={i18n.t('auth.lastName')}
+                        error={state.lastNameError}
+                        helperText={state.lastNameError ? i18n.t('auth.lastNameError') : ""}
+                        variant="outlined"
+                        value={state.lastName}
+                        onChange={onChange("lastName")}
+                    />
                 </div>
-                <TextField fullWidth label={i18n.t('auth.username')} variant="outlined" value={state.username} onChange={onChange("username")} />
-                <TextField fullWidth label={i18n.t('auth.password')} variant="outlined" value={state.password} onChange={onChange("password")} />
+                <TextField fullWidth
+                    label={i18n.t('auth.username')}
+                    error={state.usernameError}
+                    helperText={state.usernameError ? i18n.t('auth.usernameError') : ""}
+                    variant="outlined" value={state.username}
+                    onChange={onChange("username")}
+
+                />
+                <TextField
+                    fullWidth
+                    label={i18n.t('auth.password')}
+                    error={state.passwordError || state.confirmPasswordError}
+                    helperText={passwordError}
+                    variant="outlined" value={state.password}
+                    type='password' onChange={onChange("password")}
+                />
+                <TextField
+                    fullWidth
+                    label={i18n.t('auth.confirmPassword')}
+                    error={state.confirmPasswordError || state.passwordError}
+                    helperText={state.confirmPasswordError ? i18n.t('auth.confirmPasswordError') : ""}
+                    variant="outlined"
+                    value={state.confirmPassword}
+                    type='password'
+                    onChange={onChange("confirmPassword")}
+                />
                 <TextField
                     fullWidth
                     label={i18n.t('auth.phone')}
@@ -90,7 +165,14 @@ function RegisterPage() {
                     value={state.phone}
                     onChange={onChange("phone")}
                 />
-                <TextField fullWidth label={i18n.t('auth.email')} variant="outlined" value={state.email} onChange={onChange("email")} />
+                <TextField
+                    fullWidth
+                    label={i18n.t('auth.email')}
+                    error={state.emailError}
+                    helperText={state.emailError ? i18n.t('auth.emailError') : ""}
+                    variant="outlined"
+                    value={state.email}
+                    onChange={onChange("email")} />
                 <FormControl>
                     <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
                     <RadioGroup
@@ -106,7 +188,10 @@ function RegisterPage() {
                         <FormControlLabel value="OTHER" control={<Radio />} label="Other" />
                     </RadioGroup>
                 </FormControl>
-                <Button variant="outlined" onClick={onClickRegister}>{i18n.t('auth.register')}</Button>
+                <Button
+                    variant="outlined"
+                    onClick={onClickRegister}
+                >{i18n.t('auth.register')}</Button>
                 <Stack spacing={2} sx={{ width: '100%' }}>
                     <Snackbar open={state.snackBar} autoHideDuration={3000} onClose={handleClose}>
                         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
