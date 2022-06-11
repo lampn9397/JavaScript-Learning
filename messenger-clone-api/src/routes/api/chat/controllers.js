@@ -176,8 +176,6 @@ export const sendMessage = async (req, res, next) => {
 
     clonedMessage.files = clonedMessage.files.map(fileGetter);
 
-    io.emit(SocketEvents.NEW_MESSAGE, clonedMessage);
-
     res.json(Helpers.createResponse({
       results: clonedMessage
     }));
@@ -186,11 +184,17 @@ export const sendMessage = async (req, res, next) => {
       lastMessage: clonedMessage._id
     }, { new: true })).lean({ getters: true });
 
-    conversation.title = getConversationTitle(conversation, req);
+    conversation.users.forEach((item) => {
+      // EMIT NEW MESSAGE
+      io.in(`user_${item._id}`).emit(SocketEvents.NEW_MESSAGE, clonedMessage);
+
+      // EMIT CONVERSATION UPDATE
+      const title = getConversationTitle(conversation, { user: item });
+
+      io.in(`user_${item._id}`).emit(SocketEvents.NEW_CONVERSATION, { ...conversation, title });
+    });
 
     conversation.nicknames = undefined;
-
-    io.emit(SocketEvents.NEW_CONVERSATION, conversation);
   } catch (error) {
     next(error);
   }
