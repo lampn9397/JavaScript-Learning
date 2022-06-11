@@ -11,6 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { useHistory } from "react-router-dom";
+import HomeIcon from '@mui/icons-material/Home';
 
 import { routes } from '../../constants';
 import * as ActionTypes from '../../redux/actionTypes'
@@ -32,6 +33,10 @@ export default function AppNavigationBar() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const onClickReturnHome = React.useCallback(() => {
+        history.push(routes.HOME('').path)
+    }, [history])
 
     const onClickLogout = React.useCallback(() => {
         dispatch({ type: ActionTypes.LOGOUT })
@@ -96,8 +101,10 @@ export default function AppNavigationBar() {
                         {i18n.t('auth.logout')}
                     </MenuItem>
                 </Menu>
+                <HomeIcon className={styles.homeIcon} color='primary' onClick={onClickReturnHome} />
+                <div className={styles.space} />
                 <div className={styles.myProfile} onClick={handleClick}>
-                    <Tooltip title="Account settings">
+                    <Tooltip title={i18n.t('auth.accountSetting')}>
                         <IconButton
                             size="small"
                             sx={{ ml: 2 }}

@@ -16,10 +16,10 @@ export const routes = {
         exact: true,
         component: ProfilePage
     },
-    HOME: (id = '') => {
+    HOME: (id) => {
         let path = '/:id?'
 
-        if (id) {
+        if (id !== undefined) {
             path = `/${id}`
         }
         return {

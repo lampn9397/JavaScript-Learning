@@ -1,6 +1,8 @@
 const en = {
 
     auth: {
+        vi: "Vietnamese",
+        en: "English",
         username: "Username",
         password: "Password",
         confirmPassword: "confirmPassword",
@@ -11,6 +13,9 @@ const en = {
         firstName: "First Name",
         lastName: "Last Name",
         gender: "Gender",
+        female: "Female",
+        male: "Male",
+        other: "Other",
         phone: "Phone",
         email: "Email",
         firstNameError: "Please enter your firstName",
@@ -26,7 +31,9 @@ const en = {
         profile: "Profile",
         settings: "Settings",
         logout: "Logout",
+        accountSetting: "account Settings",
         you: "You",
+        language: "language",
     },
 
     chat: {

@@ -46,3 +46,10 @@
     background-color: transparent !important;
 
 }
+
+.homeIcon {}
+
+.space {
+    display: flex;
+    flex: 1;
+}

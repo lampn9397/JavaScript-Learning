@@ -12,7 +12,7 @@ import { io } from "socket.io-client";
 
 import styles from '../HomePage/style.module.css'
 import i18n from '../../utils/i18n';
-import { host, routes, SocketEvents } from '../../constants';
+import { host, routes, SocketEvents, localStorageKey } from '../../constants';
 import * as ActionTypes from '../../redux/actionTypes'
 import BadgeAvatars from '../../components/BadgeAvatars';
 import ChatInput from '../../components/ChatInput';
@@ -99,7 +99,9 @@ function HomePage() {
 
     React.useEffect(() => {
 
-        const socket = io(host);
+        const token = localStorage.getItem(localStorageKey.token);
+
+        const socket = io(host, { auth: { token } });
 
         socket.on(SocketEvents.NEW_MESSAGE, (message) => {
             dispatch({ type: ActionTypes.SEND_MESSAGES_SUCCESS, payload: message });
@@ -107,7 +109,6 @@ function HomePage() {
 
         socket.on(SocketEvents.NEW_CONVERSATION, (conversation) => {
             dispatch({ type: ActionTypes.UPDATE_CONVERSATION, payload: conversation });
-            console.log(conversation)
         })
 
         dispatch({ type: ActionTypes.GET_CONVERSATIONS });

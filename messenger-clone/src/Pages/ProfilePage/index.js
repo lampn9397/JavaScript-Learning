@@ -13,16 +13,27 @@ import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
-import i18n from '../../utils/i18n';
+import i18n, { languageOption } from '../../utils/i18n';
 import { readFile } from '../../utils';
 import * as ActionTypes from '../../redux/actionTypes'
+import images from '../../assets';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 function ProfilePage() {
+
+    const [age, setAge] = React.useState('');
+
+    const handleChange = (event) => {
+        setAge(event.target.value);
+    };
 
     const updateUserLoading = useSelector((state) => state.user.updateUserLoading)
 
@@ -106,8 +117,27 @@ function ProfilePage() {
                     disabled={updateUserLoading}
                 />
                 <TextField fullWidth label={i18n.t('auth.email')} variant="outlined" value={state.email} onChange={onChange("email")} disabled={updateUserLoading} />
+                <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">{i18n.t('auth.language')}</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={age}
+                        label={i18n.t('auth.language')}
+                        onChange={handleChange}
+                    >
+                        {Object.keys(languageOption).map((item) => (
+                            <MenuItem value={item}>
+                                <div>
+                                    <img src={images[item]} style={styles.flagIcon} alt='' />
+                                    {i18n.t(`auth.${item}`)}
+                                </div>
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
                 <FormControl>
-                    <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+                    <FormLabel id="demo-radio-buttons-group-label">{i18n.t('auth.gender')}</FormLabel>
                     <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
                         defaultValue="female"
@@ -116,9 +146,9 @@ function ProfilePage() {
                         value={state.gender}
                         onChange={onChange("gender")}
                     >
-                        <FormControlLabel value="FEMALE" control={<Radio />} label="Female" disabled={updateUserLoading} />
-                        <FormControlLabel value="MALE" control={<Radio />} label="Male" disabled={updateUserLoading} />
-                        <FormControlLabel value="OTHER" control={<Radio />} label="Other" disabled={updateUserLoading} />
+                        <FormControlLabel value="FEMALE" control={<Radio />} label={i18n.t('auth.female')} disabled={updateUserLoading} />
+                        <FormControlLabel value="MALE" control={<Radio />} label={i18n.t('auth.male')} disabled={updateUserLoading} />
+                        <FormControlLabel value="OTHER" control={<Radio />} label={i18n.t('auth.other')} disabled={updateUserLoading} />
                     </RadioGroup>
                 </FormControl>
                 <Button variant="outlined" onClick={onClickUpdateProfile} disabled={updateUserLoading}>

@@ -1,6 +1,8 @@
 const vi = {
     listfriend: "Danh Sách Bạn",
     auth: {
+        vi: "Tiếng Việt",
+        en: "Tiếng Anh",
         username: "Tên Tài Khoản",
         password: "Mật Khẩu",
         confirmPassword: "Xác Nhận Mật Khẩu",
@@ -11,6 +13,9 @@ const vi = {
         firstName: "Tên",
         lastName: "Họ",
         gender: "Giới Tính",
+        female: "Nữ",
+        male: "Nam",
+        other: "Giới tính khác",
         phone: "Số Điện Thoại",
         email: "Thư Điện Tử",
         firstNameError: "Vui lòng nhập họ của bạn ",
@@ -26,7 +31,9 @@ const vi = {
         profile: "Hồ Sơ",
         settings: "Cài Đặt",
         logout: "Đăng Xuất",
+        accountSetting: "Cài Đặt Tài Khoản",
         you: "Bạn",
+        language: "Ngôn Ngữ",
     },
 
     chat: {
