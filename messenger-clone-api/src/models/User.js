@@ -33,6 +33,11 @@ export const Gender = {
   OTHER: 'OTHER',
 };
 
+export const Language = {
+  VI: 'vi',
+  EN: 'en',
+};
+
 const schema = new Schema({
   username: {
     trim: true,
@@ -95,6 +100,11 @@ const schema = new Schema({
     type: Date,
     default: Date.now,
   },
+  language: {
+    type: String,
+    default: Language.VI,
+    enum: Object.keys(Language).map((key) => Language[key]),
+  }
 }, {
   timestamps: true,
   versionKey: false,

@@ -116,6 +116,7 @@ export const updateUser = async (req, res, next) => {
       gender: req.body.gender,
       phone: req.body.phone,
       email: req.body.email,
+      language: req.body.language,
     };
 
     if (req.file) {
