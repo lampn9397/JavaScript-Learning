@@ -33,7 +33,7 @@ const en = {
         logout: "Logout",
         accountSetting: "account Settings",
         you: "You",
-        language: "language",
+        language: "Language",
     },
 
     chat: {

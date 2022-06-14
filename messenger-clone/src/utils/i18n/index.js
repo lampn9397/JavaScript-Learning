@@ -33,8 +33,8 @@ i18n
 
         interpolation: {
             escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
-        }
+        },
+
     });
-i18n.changeLanguage("vi")
 
 export default i18n

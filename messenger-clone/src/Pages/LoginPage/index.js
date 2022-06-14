@@ -39,7 +39,6 @@ function LoginPage() {
 
     return (
         <div className={styles.loginContainer}>
-
             <Box
                 className={styles.loginForm}
                 component="form"

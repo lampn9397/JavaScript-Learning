@@ -49,7 +49,8 @@ export const axiosClient = axios.create({
 });
 
 export const localStorageKey = {
-    token: "token"
+    token: "token",
+    language: "",
 }
 
 export const FileTypes = {
