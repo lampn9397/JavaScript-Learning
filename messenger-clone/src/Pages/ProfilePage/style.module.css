@@ -49,6 +49,12 @@
 }
 
 .flagIcon {
-    height: 6px;
-    width: 6px;
+    height: 24px;
+    width: 24px;
+    margin-right: 5px;
+}
+
+.languageOption {
+    display: flex;
+    align-items: center;
 }

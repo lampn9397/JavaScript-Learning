@@ -1,6 +1,6 @@
 .RegisterContainer {
     background-color: #f0f2f5;
-    height: 100vh;
+    height: calc(100vh + 52px);
     display: flex;
     justify-content: center;
     align-items: center;

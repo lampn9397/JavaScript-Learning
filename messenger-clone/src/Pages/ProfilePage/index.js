@@ -16,7 +16,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import ListItemIcon from '@mui/material/ListItemIcon';
 
 import i18n, { languageOption } from '../../utils/i18n';
 import { readFile } from '../../utils';
@@ -28,12 +27,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 function ProfilePage() {
-
-    const [age, setAge] = React.useState('');
-
-    const handleChange = (event) => {
-        setAge(event.target.value);
-    };
 
     const updateUserLoading = useSelector((state) => state.user.updateUserLoading)
 
@@ -52,7 +45,7 @@ function ProfilePage() {
         gender: user.gender,
         phoneError: false,
         snackBar: false,
-
+        language: user.language,
     })
 
     const handleClose = (event, reason) => {
@@ -122,14 +115,14 @@ function ProfilePage() {
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={age}
+                        value={state.language}
                         label={i18n.t('auth.language')}
-                        onChange={handleChange}
+                        onChange={onChange("language")}
                     >
-                        {Object.keys(languageOption).map((item) => (
-                            <MenuItem value={item}>
-                                <div>
-                                    <img src={images[item]} style={styles.flagIcon} alt='' />
+                        {Object.keys(languageOption).map((item, index) => (
+                            <MenuItem value={item} key={index}>
+                                <div className={styles.languageOption}>
+                                    <img src={images[item]} className={styles.flagIcon} alt='' />
                                     {i18n.t(`auth.${item}`)}
                                 </div>
                             </MenuItem>

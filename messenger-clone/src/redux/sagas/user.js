@@ -3,6 +3,7 @@ import { takeLeading, put } from 'redux-saga/effects';
 
 import { axiosClient, localStorageKey } from '../../constants'
 import { push } from 'connected-react-router';
+import i18n from '../../utils/i18n'
 
 function* checkLogin() {
 
@@ -38,6 +39,8 @@ function* loginAction(action) {
 function* getUserInfo() {
     try {
         const { data } = yield axiosClient.get('/user');
+
+        i18n.changeLanguage(data.results.language)
 
         yield put(push('/'))
 
@@ -92,9 +95,13 @@ function* updaterUser(action) {
 
         formData.append('email', payload.email)
 
+        formData.append('language', payload.language)
+
         const { data } = yield axiosClient.put('/user', formData);
 
         yield put({ type: ActionTypes.UPDATE_USERINFO_SUCCESS, payload: data.results });
+
+        i18n.changeLanguage(payload.language)
 
         callback();
 

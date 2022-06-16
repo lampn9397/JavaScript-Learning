@@ -5,11 +5,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import * as ActionTypes from './redux/actionTypes'
+import { withTranslation } from 'react-i18next';
 
 import styles from './App.module.css'
 import { publicRoutes, routes } from './constants'
 import { history } from './redux/store';
 import AppNavigationBar from './components/AppNavigationBar';
+import Header from './components/Header';
 
 function App() {
 
@@ -64,6 +66,7 @@ function App() {
       <ConnectedRouter history={history}>
         {/* <Redirect to="/" />
         <LoginPage /> */}
+        <Header />
         <Switch>
           {Object.keys(publicRoutes).map(renderRouteItem(publicRoutes))}
           <Route path="*" >
@@ -87,4 +90,4 @@ function App() {
   );
 }
 
-export default App;
+export default withTranslation()(App);
