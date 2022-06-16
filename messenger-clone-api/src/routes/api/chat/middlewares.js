@@ -19,7 +19,7 @@ export const chatMulter = multer({
   storage,
   limits: {
     // files: 1,
-    fileSize: 5242880, // 5 MB
+    fileSize: 10485760, // 10 MB
   },
 });
 
