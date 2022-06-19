@@ -7,12 +7,26 @@ import { FileTypes } from '../../../models/File';
 
 export const getUser = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user._id, '-password')
-      .lean({ getters: true });
+    let results;
 
-    res.json(Helpers.createResponse({
-      results: user
-    }));
+    const { q } = req.query;
+
+    if (typeof q === 'string') {
+      results = await User.find({
+        match: {
+          $or: [
+            { firstName: { $regex: q, $options: 'i' } },
+            { lastName: { $regex: q, $options: 'i' } },
+          ]
+        }
+      }, '-password')
+        .lean({ getters: true });
+    } else {
+      results = await User.findById(req.user._id, '-password')
+        .lean({ getters: true });
+    }
+
+    res.json(Helpers.createResponse({ results }));
   } catch (error) {
     next(error);
   }
