@@ -6,3 +6,11 @@ export const readFile = (file) => {
         reader.onerror = error => reject(error);
     });
 }
+
+export const ValidateEmail = (mail) => {
+    const emailRegExp = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
+    if (emailRegExp.test(mail)) {
+        return (true)
+    }
+    return (false)
+}

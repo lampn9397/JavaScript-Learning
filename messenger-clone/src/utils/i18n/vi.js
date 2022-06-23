@@ -23,8 +23,8 @@ const vi = {
         usernameError: "Vui lòng nhập tên đăng nhập của bạn ",
         passwordError: "Vui lòng nhập mật khẩu của bạn ",
         confirmPasswordError: "Mật khẩu không khớp",
-        phoneError: "Mời nhập của bạn ít nhất 10 chữ số",
-        emailError: "Vui lòng nhập thư điện tử của bạn ",
+        phoneError: "Vui lòng nhập số điện thoại hợp lệ",
+        emailError: "Vui lòng nhập thư điện tử hợp lệ ",
         registerSuccess: "Đăng kí thành công",
         updateProfile: "Lưu Thay Đổi",
         updateProfileSuccess: "Lưu Thay Đổi Thành Công",
@@ -34,6 +34,7 @@ const vi = {
         accountSetting: "Cài Đặt Tài Khoản",
         you: "Bạn",
         language: "Ngôn Ngữ",
+        loginError: "Sai Tên Tài Khoản Hoặc Mật Khẩu",
     },
 
     chat: {

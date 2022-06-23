@@ -83,7 +83,7 @@ function* updaterUser(action) {
 
         formData.append('firstName', payload.firstName)
 
-        formData.append('lastName', payload.firstName)
+        formData.append('lastName', payload.lastName)
 
         formData.append('gender', payload.gender)
 

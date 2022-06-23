@@ -19,7 +19,9 @@ function LoginPage() {
 
     const [state, setState] = React.useState({
         username: "",
-        password: ""
+        password: "",
+        usernameError: false,
+        passwordError: false,
     })
 
     function onChange(fieldName) {
@@ -30,8 +32,26 @@ function LoginPage() {
     }
 
     const onClickLogin = React.useCallback(function () {
-        dispatch({ type: ActionTypes.LOGIN, payload: { username: state.username, password: state.password } })
+
+        const usernameError = state.username.length === 0;
+
+        const passwordError = state.password.length === 0;
+
+        if (!usernameError && !passwordError) {
+            dispatch({ type: ActionTypes.LOGIN, payload: { username: state.username, password: state.password } })
+        }
+        setState((prevState) => ({
+            ...prevState,
+            usernameError,
+            passwordError
+        }))
     }, [dispatch, state.username, state.password])
+
+    const onKeyDownLogin = React.useCallback((event) => {
+        if (event.key === "Enter") {
+            onClickLogin()
+        }
+    }, [onClickLogin])
 
     const onClickRegister = React.useCallback(function () {
         history.push(publicRoutes.RegisterPage.path)
@@ -49,8 +69,26 @@ function LoginPage() {
                 autoComplete="off"
             >
                 <img src={images.messLogo} alt='' className={styles.messLogo} />
-                <TextField id="outlined-basic" label={i18n.t('auth.username')} variant="outlined" value={state.username} onChange={onChange("username")} />
-                <TextField id="outlined-basic" label={i18n.t('auth.password')} variant="outlined" value={state.password} onChange={onChange("password")} type="password" />
+                <TextField
+                    error={state.usernameError}
+                    helperText={state.usernameError ? i18n.t('auth.usernameError') : ""}
+                    id="outlined-basic"
+                    label={i18n.t('auth.username')}
+                    variant="outlined" value={state.username}
+                    onChange={onChange("username")}
+                    onKeyDown={onKeyDownLogin}
+                />
+                <TextField
+                    error={state.passwordError}
+                    helperText={state.passwordError ? i18n.t('auth.passwordError') : ""}
+                    id="outlined-basic"
+                    label={i18n.t('auth.password')}
+                    variant="outlined"
+                    value={state.password}
+                    onChange={onChange("password")}
+                    type="password"
+                    onKeyDown={onKeyDownLogin}
+                />
                 <Button variant="contained" onClick={onClickLogin}>{i18n.t('auth.login')}</Button>
                 <div className={styles.resetPassword}>
                     <div className={styles.line}></div>

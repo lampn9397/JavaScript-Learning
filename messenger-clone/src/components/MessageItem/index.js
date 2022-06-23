@@ -2,9 +2,14 @@ import * as React from 'react';
 import ArticleIcon from '@mui/icons-material/Article';
 
 import styles from './style.module.css'
-import { FileTypes } from '../../constants';
+import { FileTypes, fullScreenImageRef } from '../../constants';
 
 export default function MessageItem(props) {
+
+    const onClickImage = React.useCallback((item) => () => {
+        fullScreenImageRef.current.show(item, props.item.files)
+
+    }, [props.item.files])
 
     const renderItemFile = React.useCallback(() => {
         return (
@@ -13,11 +18,23 @@ export default function MessageItem(props) {
                     if (item.type === FileTypes.CHAT_IMAGE) {
                         return (
                             <React.Fragment key={index}>
-                                <img className={styles.imgFile} src={item.url} alt='' />
+                                <img className={styles.imgFile} src={item.url} alt='' onClick={onClickImage(item)} />
                                 {(index + 1) % 3 === 0 && <br />}
                             </React.Fragment>
                         )
                     }
+
+                    if (item.type === FileTypes.CHAT_VIDEO) {
+                        return (
+                            <React.Fragment key={index}>
+                                <video width="320" height="240" controls className={styles.video}>
+                                    <source src={item.url} type="video/mp4" />
+                                </video>
+                                <br />
+                            </React.Fragment>
+                        )
+                    }
+
                     return (
                         <a href={item.url} className={styles.otherFileContainer} key={index}>
                             <div className={styles.filesIcon} >
@@ -29,7 +46,7 @@ export default function MessageItem(props) {
                 })}
             </div>
         )
-    }, [props.item.files])
+    }, [onClickImage, props.item.files])
 
     if (props.item.user !== props.user._id) {
         return (

@@ -4,6 +4,7 @@ import LoginPage from "../Pages/LoginPage";
 import axios from 'axios';
 import RegisterPage from "../Pages/RegisterPage";
 import ProfilePage from "../Pages/ProfilePage";
+import * as React from 'react';
 
 export const routes = {
     MenuPage: {
@@ -64,3 +65,4 @@ export const SocketEvents = {
     NEW_MESSAGE: 'new-message',
     NEW_CONVERSATION: 'new-conversation',
 };
+export const fullScreenImageRef = React.createRef()

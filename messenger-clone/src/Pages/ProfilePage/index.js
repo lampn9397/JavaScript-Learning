@@ -43,7 +43,10 @@ function ProfilePage() {
         avatar: { src: user.avatar, file: null },
         email: user.email,
         gender: user.gender,
+        firstNameError: false,
+        lastNameError: false,
         phoneError: false,
+        emailError: false,
         snackBar: false,
         language: user.language,
     })
@@ -61,16 +64,28 @@ function ProfilePage() {
 
     const onClickUpdateProfile = React.useCallback(() => {
 
+        const firstNameError = state.firstName.length === 0;
+
+        const lastNameError = state.lastName.length === 0;
+
         const phoneError = state.phone.length !== 10;
 
-        if (!phoneError) {
+        const emailError = state.email.length === 0;
+
+        if (!firstNameError && !lastNameError && !phoneError && !emailError) {
             dispatch({
                 type: ActionTypes.UPDATE_USERINFO,
                 payload: state,
                 callback: () => { setState((prevState) => ({ ...prevState, snackBar: true })) }
             })
         }
-        setState((prevState) => ({ ...prevState, phoneError }))
+        setState((prevState) => ({
+            ...prevState,
+            firstNameError,
+            lastNameError,
+            phoneError,
+            emailError,
+        }));
     }, [dispatch, state])
 
     const onClickUserAvatar = React.useCallback(() => {
@@ -96,8 +111,24 @@ function ProfilePage() {
                 <img src={state.avatar.src} alt='' className={styles.userAvatar} onClick={onClickUserAvatar} />
                 <input type="file" ref={inputRef} accept="image/*" hidden onChange={onChangeUserAvatar} />
                 <div className={styles.nameContainer}>
-                    <TextField fullWidth className={styles.firstNameButton} label={i18n.t('auth.firstName')} variant="outlined" value={state.firstName} onChange={onChange("firstName")} disabled={updateUserLoading} />
-                    <TextField fullWidth label={i18n.t('auth.lastName')} variant="outlined" value={state.lastName} onChange={onChange("lastName")} disabled={updateUserLoading} />
+                    <TextField
+                        fullWidth
+                        error={state.firstNameError}
+                        helperText={state.firstNameError ? i18n.t('auth.firstNameError') : ""}
+                        className={styles.firstNameButton}
+                        label={i18n.t('auth.firstName')}
+                        variant="outlined" value={state.firstName}
+                        onChange={onChange("firstName")}
+                        disabled={updateUserLoading}
+                    />
+                    <TextField fullWidth
+                        error={state.lastNameError}
+                        helperText={state.lastNameError ? i18n.t('auth.lastNameError') : ""}
+                        label={i18n.t('auth.lastName')}
+                        variant="outlined" value={state.lastName}
+                        onChange={onChange("lastName")}
+                        disabled={updateUserLoading}
+                    />
                 </div>
                 <TextField
                     fullWidth
@@ -109,7 +140,15 @@ function ProfilePage() {
                     onChange={onChange("phone")}
                     disabled={updateUserLoading}
                 />
-                <TextField fullWidth label={i18n.t('auth.email')} variant="outlined" value={state.email} onChange={onChange("email")} disabled={updateUserLoading} />
+                <TextField
+                    fullWidth
+                    error={state.emailError}
+                    helperText={state.emailError ? i18n.t('auth.emailError') : ""}
+                    label={i18n.t('auth.email')}
+                    variant="outlined" value={state.email}
+                    onChange={onChange("email")}
+                    disabled={updateUserLoading}
+                />
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">{i18n.t('auth.language')}</InputLabel>
                     <Select
