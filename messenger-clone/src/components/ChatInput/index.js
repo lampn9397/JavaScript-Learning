@@ -20,6 +20,7 @@ export default function ChatInput(props) {
     const inputRef = React.useRef()
 
     const onSubmit = React.useCallback(() => {
+
         if (state.attachFiles.fileSend.length || state.inputMessage) {
             props.onSubmit(state.attachFiles.fileSend, state.inputMessage)
             setState((prevState) => ({
@@ -52,10 +53,16 @@ export default function ChatInput(props) {
 
 
     const onChangeInputFiles = React.useCallback(async (event) => {
-
+        console.log(event.target.files)
         const filePreview = []
 
+        const fileSend = [];
+
         for (const item of event.target.files) {
+
+            const file = new File([item], item.name, { type: item.type });
+
+            fileSend.push(file)
             if (item.type.startsWith('image')) {
                 const response = await readFile(item);
                 filePreview.push(response.result);
@@ -67,10 +74,11 @@ export default function ChatInput(props) {
             ...prevState,
             attachFiles: {
                 filePreview: prevState.attachFiles.filePreview.concat(filePreview),
-                fileSend: prevState.attachFiles.fileSend.concat([...event.target.files])
+                fileSend: prevState.attachFiles.fileSend.concat(fileSend)
             }
         }))
 
+        inputRef.current.value = ''
     }, [])
 
     return (

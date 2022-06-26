@@ -81,3 +81,34 @@
     right: 0px;
     z-index: 10;
 }
+
+.previewVideo {
+    height: 48px;
+    width: 48px;
+    margin-right: 10px;
+    background-color: black;
+    position: relative;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.clearVideo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px !important;
+    background-color: white;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    z-index: 10;
+}
+
+.playIcon {
+    color: white;
+}

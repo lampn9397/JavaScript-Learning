@@ -8,10 +8,11 @@ import * as ActionTypes from './redux/actionTypes'
 import { withTranslation } from 'react-i18next';
 
 import styles from './App.module.css'
-import { publicRoutes, routes } from './constants'
+import { fullScreenImageRef, publicRoutes, routes } from './constants'
 import { history } from './redux/store';
 import AppNavigationBar from './components/AppNavigationBar';
 import Header from './components/Header';
+import FullScreenImage from './components/FullScreenImage';
 
 function App() {
 
@@ -80,6 +81,7 @@ function App() {
   return (
     <ConnectedRouter history={history}>
       <AppNavigationBar />
+      <FullScreenImage ref={fullScreenImageRef} />
       <Switch>
         {Object.keys(routes).map(renderRouteItem(routes))}
         <Route path="*" >

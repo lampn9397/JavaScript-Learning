@@ -23,8 +23,8 @@ const en = {
         usernameError: "Please enter your username",
         passwordError: "Please enter your password",
         confirmPasswordError: "Password not match",
-        phoneError: "Please enter at least 10 numbers",
-        emailError: "Please enter your email",
+        phoneError: "Please enter valid mobile number",
+        emailError: "Please enter valid email",
         registerSuccess: " Register Succesfully",
         updateProfile: "Save Changes",
         updateProfileSuccess: "Save Changes Succesfully",
@@ -34,6 +34,7 @@ const en = {
         accountSetting: "account Settings",
         you: "You",
         language: "Language",
+        loginError: "Username or Password Incorrect",
     },
 
     chat: {

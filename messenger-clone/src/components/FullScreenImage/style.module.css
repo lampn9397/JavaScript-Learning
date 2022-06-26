@@ -1,0 +1,89 @@
+.fullScreenImageContainer {
+    position: absolute;
+    z-index: 101;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgb(62 65 65 / 98%);
+}
+
+.fullScreenImageSubContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 100vh;
+}
+
+.fullScreenImage {
+    width: 75%;
+    height: 75%;
+}
+
+.clearIconContainer {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    width: 36px;
+    height: 36px;
+    border-radius: 18px !important;
+    cursor: pointer;
+}
+
+.columnSpace {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.clearIcon {
+    color: white;
+}
+
+.nextIconContainer {
+    position: absolute;
+    top: calc(50% - 36px);
+    right: 10px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    width: 36px;
+    height: 36px;
+    border-radius: 18px !important;
+    cursor: pointer;
+}
+
+.navigateIcon {
+    color: white;
+}
+
+.backIconContainer {
+    position: absolute;
+    left: 10px;
+    top: calc(50% - 36px);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    width: 36px;
+    height: 36px;
+    border-radius: 18px !important;
+    cursor: pointer;
+}
+
+.backIcon {
+    transform: rotateZ(180deg);
+}

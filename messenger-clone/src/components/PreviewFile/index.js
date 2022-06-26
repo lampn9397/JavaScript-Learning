@@ -1,6 +1,7 @@
 import * as React from 'react';
 import ArticleIcon from '@mui/icons-material/Article';
 import ClearIcon from '@mui/icons-material/Clear';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 
 import styles from './style.module.css'
 
@@ -40,6 +41,18 @@ export default function PreviewFile(props) {
                         </div>
                     )
                 }
+
+                if (item.type.startsWith('video')) {
+                    return (
+                        <div className={styles.previewVideo} key={index}>
+                            <PlayCircleOutlineIcon className={styles.playIcon} />
+                            <div className={styles.clearVideo} onClick={onClickClearIcon(item, index)}>
+                                <ClearIcon fontSize='12px' />
+                            </div>
+                        </div>
+                    )
+                }
+
                 return (
                     <div className={styles.fileItemContainer} key={index}>
                         <div className={styles.previewOtherFileType} >

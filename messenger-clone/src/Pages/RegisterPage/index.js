@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { ValidateEmail } from '../../utils'
 
 
 import images from '../../assets';
@@ -70,9 +71,10 @@ function RegisterPage() {
 
         const phoneError = state.phone.length !== 10;
 
-        const emailError = state.email.length === 0;
+        const emailError = !ValidateEmail(state.email);
 
-        if (!firstNameError || !lastNameError || !usernameError || !passwordError || !confirmPasswordError || !phoneError || !emailError) {
+        if (!firstNameError && !lastNameError && !usernameError && !passwordError
+            && !confirmPasswordError && !phoneError && !emailError) {
             dispatch({
                 type: ActionTypes.REGISTER_ACCOUNT,
                 payload: state,
@@ -80,13 +82,16 @@ function RegisterPage() {
             });
         }
 
-        setState((prevState) => ({ ...prevState, firstNameError }));
-        setState((prevState) => ({ ...prevState, lastNameError }));
-        setState((prevState) => ({ ...prevState, usernameError }));
-        setState((prevState) => ({ ...prevState, passwordError }));
-        setState((prevState) => ({ ...prevState, confirmPasswordError }));
-        setState((prevState) => ({ ...prevState, phoneError }));
-        setState((prevState) => ({ ...prevState, emailError }));
+        setState((prevState) => ({
+            ...prevState,
+            firstNameError,
+            lastNameError,
+            usernameError,
+            passwordError,
+            confirmPasswordError,
+            phoneError,
+            emailError,
+        }));
 
     }, [dispatch, state])
 
@@ -96,6 +101,12 @@ function RegisterPage() {
     } else if (state.confirmPasswordError) {
         passwordError = i18n.t('auth.confirmPasswordError');
     }
+
+    const onKeyDownRegister = React.useCallback((event) => {
+        if (event.key === "Enter") {
+            onClickRegister()
+        }
+    }, [onClickRegister])
 
     return (
         <div className={styles.RegisterContainer}>
@@ -119,6 +130,7 @@ function RegisterPage() {
                         variant="outlined"
                         value={state.firstName}
                         onChange={onChange("firstName")}
+                        onKeyDown={onKeyDownRegister}
                     />
                     <TextField
                         fullWidth
@@ -128,6 +140,7 @@ function RegisterPage() {
                         variant="outlined"
                         value={state.lastName}
                         onChange={onChange("lastName")}
+                        onKeyDown={onKeyDownRegister}
                     />
                 </div>
                 <TextField fullWidth
@@ -136,6 +149,7 @@ function RegisterPage() {
                     helperText={state.usernameError ? i18n.t('auth.usernameError') : ""}
                     variant="outlined" value={state.username}
                     onChange={onChange("username")}
+                    onKeyDown={onKeyDownRegister}
 
                 />
                 <TextField
@@ -145,6 +159,7 @@ function RegisterPage() {
                     helperText={passwordError}
                     variant="outlined" value={state.password}
                     type='password' onChange={onChange("password")}
+                    onKeyDown={onKeyDownRegister}
                 />
                 <TextField
                     fullWidth
@@ -155,6 +170,7 @@ function RegisterPage() {
                     value={state.confirmPassword}
                     type='password'
                     onChange={onChange("confirmPassword")}
+                    onKeyDown={onKeyDownRegister}
                 />
                 <TextField
                     fullWidth
@@ -164,6 +180,7 @@ function RegisterPage() {
                     variant="outlined"
                     value={state.phone}
                     onChange={onChange("phone")}
+                    onKeyDown={onKeyDownRegister}
                 />
                 <TextField
                     fullWidth
@@ -172,7 +189,9 @@ function RegisterPage() {
                     helperText={state.emailError ? i18n.t('auth.emailError') : ""}
                     variant="outlined"
                     value={state.email}
-                    onChange={onChange("email")} />
+                    onChange={onChange("email")}
+                    onKeyDown={onKeyDownRegister}
+                />
                 <FormControl>
                     <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
                     <RadioGroup
