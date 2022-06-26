@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 import { io } from '../../../bin/www';
 import * as Helpers from '../../../utils/helpers';
 import { getConversationTitle } from './middlewares';
@@ -193,9 +195,67 @@ export const sendMessage = async (req, res, next) => {
 
       io.in(`user_${item._id}`).emit(SocketEvents.NEW_CONVERSATION, { ...conversation, title });
     });
-
-    conversation.nicknames = undefined;
   } catch (error) {
     next(error);
   }
 };
+
+export const createConversation = async (req, res, next) => {
+  try {
+    const { user, files } = req;
+
+    const { text, receiver } = req.body;
+
+    const users = [user._id, receiver];
+
+    const conversationId = new mongoose.Types.ObjectId();
+
+    const message = await Message.create({
+      text,
+      conversationId,
+      user: user._id,
+      files: (files ?? []).map((x) => {
+        let type = 'CHAT_FILE';
+
+        if (x.mimetype.startsWith('image/')) {
+          type = 'CHAT_IMAGE';
+        } else if (x.mimetype.startsWith('video/')) {
+          type = 'CHAT_VIDEO';
+        }
+
+        return { name: x.filename, type };
+      }),
+    });
+
+    const createdConversation = await Conversation.create({
+      users,
+      nicknames: users.map((x) => ({
+        user: x,
+        nickname: '',
+      })),
+      lastMessage: message._id,
+    });
+
+    res.json(Helpers.createResponse());
+
+    const clonedMessage = message.toJSON();
+
+    clonedMessage.files = clonedMessage.files.map(fileGetter);
+
+    const conversation = await conversationPipelines(Conversation.findByIdAndUpdate(createdConversation._id, {
+      lastMessage: clonedMessage._id
+    }, { new: true })).lean({ getters: true });
+
+    conversation.users.forEach((item) => {
+      // EMIT NEW MESSAGE
+      io.in(`user_${item._id}`).emit(SocketEvents.NEW_MESSAGE, clonedMessage);
+
+      // EMIT CONVERSATION UPDATE
+      const title = getConversationTitle(conversation, { user: item });
+
+      io.in(`user_${item._id}`).emit(SocketEvents.NEW_CONVERSATION, { ...conversation, title });
+    });
+  } catch (error) {
+    next(error);
+  }
+}
