@@ -212,7 +212,7 @@ export const createConversation = async (req, res, next) => {
 
     const message = await Message.create({
       text,
-      conversationId,
+      conversationId: conversationId._id,
       user: user._id,
       files: (files ?? []).map((x) => {
         let type = 'CHAT_FILE';
@@ -228,6 +228,7 @@ export const createConversation = async (req, res, next) => {
     });
 
     const createdConversation = await Conversation.create({
+      _id: conversationId,
       users,
       nicknames: users.map((x) => ({
         user: x,
