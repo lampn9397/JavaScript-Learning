@@ -212,7 +212,7 @@ export const createConversation = async (req, res, next) => {
 
     const message = await Message.create({
       text,
-      conversationId: conversationId._id,
+      conversationId,
       user: user._id,
       files: (files ?? []).map((x) => {
         let type = 'CHAT_FILE';
@@ -227,13 +227,13 @@ export const createConversation = async (req, res, next) => {
       }),
     });
 
-    const createdConversation = await Conversation.create({
+    await Conversation.create({
       _id: conversationId,
       users,
-      nicknames: users.map((x) => ({
-        user: x,
-        nickname: '',
-      })),
+      // nicknames: users.map((x) => ({
+      //   user: x,
+      //   nickname: '',
+      // })),
       lastMessage: message._id,
     });
 
@@ -243,7 +243,7 @@ export const createConversation = async (req, res, next) => {
 
     clonedMessage.files = clonedMessage.files.map(fileGetter);
 
-    const conversation = await conversationPipelines(Conversation.findByIdAndUpdate(createdConversation._id, {
+    const conversation = await conversationPipelines(Conversation.findByIdAndUpdate(conversationId, {
       lastMessage: clonedMessage._id
     }, { new: true })).lean({ getters: true });
 
