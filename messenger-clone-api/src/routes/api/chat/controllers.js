@@ -237,8 +237,6 @@ export const createConversation = async (req, res, next) => {
       lastMessage: message._id,
     });
 
-    res.json(Helpers.createResponse());
-
     const clonedMessage = message.toJSON();
 
     clonedMessage.files = clonedMessage.files.map(fileGetter);
@@ -247,6 +245,10 @@ export const createConversation = async (req, res, next) => {
       lastMessage: clonedMessage._id
     }, { new: true })).lean({ getters: true });
 
+    res.json(Helpers.createResponse({
+      results: conversation
+    }));
+    
     conversation.users.forEach((item) => {
       // EMIT NEW MESSAGE
       io.in(`user_${item._id}`).emit(SocketEvents.NEW_MESSAGE, clonedMessage);
