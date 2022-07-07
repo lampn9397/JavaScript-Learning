@@ -27,6 +27,7 @@ export default function MessageItem(props) {
                     if (item.type === FileTypes.CHAT_VIDEO) {
                         return (
                             <React.Fragment key={index}>
+                                <br />
                                 <video width="320" height="240" controls className={styles.video}>
                                     <source src={item.url} type="video/mp4" />
                                 </video>

@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
+import PropTypes from 'prop-types';
 
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -23,18 +24,36 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
         },
     },
 }));
-
-export default function BadgeAvatars(props) {
+export default function BadgeAvatars({
+    className,
+    avatar,
+    badgeVisible,
+}) {
     return (
         <Stack direction="row" spacing={2}>
-            <StyledBadge
-                overlap="circular"
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                variant="dot"
-                className={props.className}
-            >
-                <Avatar alt="Remy Sharp" src={props.avatar} />
-            </StyledBadge>
+            {badgeVisible ? (
+                <StyledBadge
+                    overlap="circular"
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    variant="dot"
+                    className={className}
+                >
+                    <Avatar alt="" src={avatar} />
+                </StyledBadge>
+            ) : (
+                <Avatar alt="" src={avatar} />
+            )}
         </Stack>
     );
+}
+
+BadgeAvatars.propTypes = {
+    className: PropTypes.string,
+    avatar: PropTypes.string.isRequired,
+    badgeVisible: PropTypes.bool,
+}
+
+BadgeAvatars.defaultProps = {
+    className: '',
+    badgeVisible: true,
 }

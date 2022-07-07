@@ -35,6 +35,10 @@ const vi = {
         you: "Bạn",
         language: "Ngôn Ngữ",
         loginError: "Sai Tên Tài Khoản Hoặc Mật Khẩu",
+        lastFileSend: "{{sender}} đã gửi {{number}} {{fileType}}",
+        image: "ảnh",
+        file: "tệp",
+        video: "video"
     },
 
     chat: {

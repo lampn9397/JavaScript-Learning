@@ -53,7 +53,7 @@ export default function ChatInput(props) {
 
 
     const onChangeInputFiles = React.useCallback(async (event) => {
-        console.log(event.target.files)
+
         const filePreview = []
 
         const fileSend = [];

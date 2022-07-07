@@ -1,5 +1,6 @@
 import * as ActionTypes from '../actionTypes'
-import { takeLeading, put } from 'redux-saga/effects';
+import { takeLeading, put, debounce } from 'redux-saga/effects';
+import moment from 'moment';
 
 import { axiosClient, localStorageKey } from '../../constants'
 import { push } from 'connected-react-router';
@@ -40,7 +41,9 @@ function* getUserInfo() {
     try {
         const { data } = yield axiosClient.get('/user');
 
-        i18n.changeLanguage(data.results.language)
+        i18n.changeLanguage(data.results.language);
+
+        moment.locale(data.results.language);
 
         yield put(push('/'))
 
@@ -49,6 +52,24 @@ function* getUserInfo() {
         const errorMessage = error.response?.data?.message ?? error.message;
 
         yield put({ type: ActionTypes.GET_USERINFO_FAILED });
+
+        alert(errorMessage);
+    }
+}
+function* searchUser(action) {
+    try {
+
+        const { payload } = action;
+
+        if (!payload) return
+
+        const { data } = yield axiosClient.get(`/user?q=${payload}`);
+
+        yield put({ type: ActionTypes.SEARCH_USER_SUCCESS, payload: data.results });
+    } catch (error) {
+        const errorMessage = error.response?.data?.message ?? error.message;
+
+        yield put({ type: ActionTypes.SEARCH_USER_FAILED });
 
         alert(errorMessage);
     }
@@ -103,6 +124,8 @@ function* updaterUser(action) {
 
         i18n.changeLanguage(payload.language)
 
+        moment.locale(payload.language);
+
         callback();
 
     } catch (error) {
@@ -126,4 +149,6 @@ export default function* user() {
     yield takeLeading(ActionTypes.UPDATE_USERINFO, updaterUser);
     yield takeLeading(ActionTypes.CHECK_LOGIN, checkLogin);
     yield takeLeading(ActionTypes.LOGOUT, checkLogout);
+
+    yield debounce(1000, ActionTypes.SEARCH_USER, searchUser)
 }

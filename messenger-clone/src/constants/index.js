@@ -61,6 +61,8 @@ export const FileTypes = {
     USER_AVATAR: 'USER_AVATAR',
 };
 
+export const newChat = 'newChat'
+
 export const SocketEvents = {
     NEW_MESSAGE: 'new-message',
     NEW_CONVERSATION: 'new-conversation',

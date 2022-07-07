@@ -5,7 +5,7 @@ const en = {
         en: "English",
         username: "Username",
         password: "Password",
-        confirmPassword: "confirmPassword",
+        confirmPassword: "Confirm Password",
         login: "Login",
         or: "Or",
         register: "Register",
@@ -31,15 +31,20 @@ const en = {
         profile: "Profile",
         settings: "Settings",
         logout: "Logout",
-        accountSetting: "account Settings",
+        accountSetting: "Account Settings",
         you: "You",
         language: "Language",
         loginError: "Username or Password Incorrect",
+        lastFileSend: "{{sender}} have sent {{number}} {{fileType}}",
+        image: "image",
+        file: "file",
+        video: "video"
     },
 
     chat: {
         listChat: "List Chat",
         searchDescription: "Find on Messenger",
+        searchUserDescription: "Find on Messenger",
     }
 
 }

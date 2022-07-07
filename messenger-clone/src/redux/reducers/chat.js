@@ -49,7 +49,8 @@ export default function chatReducer(state = defaultState, action) {
         case ActionTypes.SEARCHCONVERSATIONS:
             return {
                 ...state,
-                conversationsLoading: true,
+                conversationsLoading: !!action.payload,
+                searchConversation: [],
             };
         case ActionTypes.SEARCHCONVERSATIONS_SUCCESS:
             return {
@@ -93,6 +94,11 @@ export default function chatReducer(state = defaultState, action) {
             return {
                 ...state,
                 messagesLoading: false,
+            };
+        case ActionTypes.RESET_MESSAGES:
+            return {
+                ...state,
+                messages: [],
             };
         case ActionTypes.SEND_MESSAGES:
             return {
