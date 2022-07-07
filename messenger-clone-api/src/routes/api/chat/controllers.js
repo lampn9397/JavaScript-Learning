@@ -140,7 +140,7 @@ export const getMessages = async (req, res, next) => {
 
     const options = {
       limit,
-      skip: page * limit,
+      skip: (page - 1) * limit,
       sort: '-createdAt',
     };
 
