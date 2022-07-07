@@ -131,9 +131,22 @@ export const getConversations = async (req, res, next) => {
 
 export const getMessages = async (req, res, next) => {
   try {
+    const {
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const filter = { conversationId: req.params.id };
+
+    const options = {
+      limit,
+      skip: page * limit,
+      sort: '-createdAt',
+    };
+
     const messages = await Message
-      .find({ conversationId: req.params.id })
-      .sort('-createdAt')
+      .find(filter, null, options)
+      // .sort('-createdAt')
       .select('-conversationId')
       .lean({ getters: true });
 
@@ -248,7 +261,7 @@ export const createConversation = async (req, res, next) => {
     res.json(Helpers.createResponse({
       results: conversation
     }));
-    
+
     conversation.users.forEach((item) => {
       // EMIT NEW MESSAGE
       io.in(`user_${item._id}`).emit(SocketEvents.NEW_MESSAGE, clonedMessage);
