@@ -183,3 +183,9 @@
     height: calc(100vh - 165px);
     overflow-y: scroll;
 }
+
+.loadMore {
+    padding: 6px;
+    display: flex;
+    justify-content: center;
+}

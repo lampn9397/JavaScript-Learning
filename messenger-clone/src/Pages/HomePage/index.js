@@ -30,6 +30,8 @@ function HomePage() {
 
     const conversations = useSelector((state) => state.conversations.conversations)
 
+    const loadMore = useSelector((state) => state.conversations.loadMore)
+    console.log(loadMore)
     const searchConversations = useSelector((state) => state.conversations.searchConversation)
 
     const selectedConversation = useSelector((state) => state.conversations.selectedConversation)
@@ -41,8 +43,12 @@ function HomePage() {
     const conversationIdLoading = useSelector((state) => state.conversations.conversationIdLoading)
 
     const messagesLoading = useSelector((state) => state.conversations.messagesLoading)
-
+    console.log(messagesLoading)
     const page = React.useRef(1)
+
+    const lastPage = React.useRef(false)
+
+    const callChatMessageAPI = React.useRef(false)
 
     const { id } = useParams();
 
@@ -134,10 +140,21 @@ function HomePage() {
 
         const scrollPosition = event.target.scrollHeight - (event.target.scrollTop * (-1))
 
-        const isEndReached = scrollPosition >= event.target.clientHeight + 10;
+        const isEndReached = scrollPosition <= event.target.clientHeight + 10;
 
-        if (isEndReached) {
-            dispatch({ type: ActionTypes.GET_MESSAGES, payload: id, page: ++page.current })
+        if (isEndReached && !lastPage.current && !callChatMessageAPI.current) {
+
+            callChatMessageAPI.current = true;
+
+            dispatch({
+                type: ActionTypes.GET_MESSAGES,
+                payload: id,
+                page: ++page.current,
+                callback: (data) => {
+                    lastPage.current = data.length === 0;
+                    callChatMessageAPI.current = false;
+                }
+            });
         }
 
     }, [dispatch, id])
@@ -184,7 +201,7 @@ function HomePage() {
         if (!id) return
         if (id === newChat) return
         dispatch({ type: ActionTypes.GET_CONVERSATIONID, payload: id })
-        dispatch({ type: ActionTypes.GET_MESSAGES, payload: id })
+        dispatch({ type: ActionTypes.GET_MESSAGES, payload: id, page: 1 })
     }, [dispatch, id]);
 
     return (
@@ -238,7 +255,14 @@ function HomePage() {
                             <CircularProgress />
                         </Box>
                     ) : (
-                        messages.map(renderMessageItem)
+                        <>
+                            {messages.map(renderMessageItem)}
+                            {loadMore && (
+                                <div className={styles.loadMore}>
+                                    <CircularProgress size={24} />
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
                 {id && <ChatInput onSubmit={sendMessage} />}

@@ -7,6 +7,7 @@ const defaultState = {
     selectedConversation: null,
     conversationIdLoading: true,
     messages: [],
+    loadMore: false,
     messagesLoading: false,
     sendMessagesLoading: false,
 };
@@ -82,17 +83,30 @@ export default function chatReducer(state = defaultState, action) {
         case ActionTypes.GET_MESSAGES:
             return {
                 ...state,
-                messagesLoading: true,
+                loadMore: action.page > 1,
+                messagesLoading: action.page === 1,
             };
-        case ActionTypes.GET_MESSAGES_SUCCESS:
+        case ActionTypes.GET_MESSAGES_SUCCESS: {
+
+            if (action.page > 1) {
+                return {
+                    ...state,
+                    loadMore: false,
+                    messages: [...state.messages, ...action.payload]
+                }
+            }
+
             return {
                 ...state,
+                loadMore: false,
                 messagesLoading: false,
                 messages: action.payload,
             };
+        }
         case ActionTypes.GET_MESSAGES_FAILED:
             return {
                 ...state,
+                loadMore: false,
                 messagesLoading: false,
             };
         case ActionTypes.RESET_MESSAGES:

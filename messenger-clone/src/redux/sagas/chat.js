@@ -1,5 +1,5 @@
 import * as ActionTypes from '../actionTypes'
-import { takeLeading, put, select, debounce } from 'redux-saga/effects';
+import { takeLeading, put, select, debounce, delay } from 'redux-saga/effects';
 
 import { axiosClient, routes } from '../../constants'
 import { push } from 'connected-react-router';
@@ -66,11 +66,13 @@ function* getConversationIdAction(action) {
 function* getMessageAction(action) {
     try {
 
-        const { payload } = action;
+        const { payload, page, callback } = action;
 
-        const { data } = yield axiosClient.get(`/chat/${payload}/message`);
+        const { data } = yield axiosClient.get(`/chat/${payload}/message?page=${page}&limit=${15}`);
+        if (page > 1) yield delay(1000)
+        callback?.(data.results);
 
-        yield put({ type: ActionTypes.GET_MESSAGES_SUCCESS, payload: data.results });
+        yield put({ type: ActionTypes.GET_MESSAGES_SUCCESS, payload: data.results, page });
 
     } catch (error) {
         const errorMessage = error.response?.data?.message ?? error.message;

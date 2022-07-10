@@ -6,6 +6,9 @@ import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 import PreviewFile from '../PreviewFile';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 import { readFile } from '../../utils';
 import styles from './style.module.css'
