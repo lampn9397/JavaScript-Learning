@@ -166,7 +166,7 @@ export const sendMessage = async (req, res, next) => {
 
     const { text, type: messageType = messageTypes.MESSAGE } = req.body;
 
-    if (!text && (!files || !files.length)) {
+    if (!text && (!files || !files.length) && messageType !== messageTypes.LIKE) {
       return next(Error(req.t('error.failed_to_send_message')));
     }
 
