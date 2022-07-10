@@ -164,7 +164,7 @@ export const sendMessage = async (req, res, next) => {
 
     const { id } = req.params;
 
-    const { text, type = messageTypes.MESSAGE } = req.body;
+    const { text, type: messageType = messageTypes.MESSAGE } = req.body;
 
     if (!text && (!files || !files.length)) {
       return next(Error(req.t('error.failed_to_send_message')));
@@ -172,7 +172,7 @@ export const sendMessage = async (req, res, next) => {
 
     const message = await Message.create({
       text,
-      type,
+      type: messageType,
       user: user._id,
       conversationId: id,
       files: (files ?? []).map((x) => {
@@ -218,7 +218,7 @@ export const createConversation = async (req, res, next) => {
   try {
     const { user, files } = req;
 
-    const { text, receiver } = req.body;
+    const { text, receiver, type: messageType = messageTypes.MESSAGE } = req.body;
 
     const users = [user._id, receiver];
 
@@ -228,6 +228,7 @@ export const createConversation = async (req, res, next) => {
       text,
       conversationId,
       user: user._id,
+      type: messageType,
       files: (files ?? []).map((x) => {
         let type = 'CHAT_FILE';
 
