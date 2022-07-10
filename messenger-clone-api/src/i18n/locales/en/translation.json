@@ -31,7 +31,7 @@
     "incorrect_login": "Incorrect username or password.",
     "user_existed": "User existed.",
     "invalid_avatar_image": "Invalid avatar image.",
-    "no_message_or_file_provided": "Failed to send message."
+    "failed_to_send_message": "Failed to send message."
   },
   "result": {
     "update_successfully": "Update successfully."
