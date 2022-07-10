@@ -16,6 +16,11 @@ export const fileGetter = (value) => {
   };
 }
 
+export const messageTypes = {
+  MESSAGE: 'MESSAGE',
+  LIKE: 'LIKE',
+};
+
 const schema = new Schema({
   text: {
     trim: true,
@@ -34,6 +39,10 @@ const schema = new Schema({
     required: true,
     ref: 'conversations',
     type: Schema.Types.ObjectId,
+  },
+  type: {
+    enum: Object.values(messageTypes),
+    default: messageTypes.MESSAGE,
   }
 }, {
   timestamps: true,

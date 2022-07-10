@@ -5,7 +5,7 @@ import * as Helpers from '../../../utils/helpers';
 import { getConversationTitle } from './middlewares';
 import Conversation from '../../../models/Conversation';
 import { SocketEvents } from '../../../services/socket';
-import Message, { fileGetter } from '../../../models/Message';
+import Message, { fileGetter, messageTypes } from '../../../models/Message';
 
 const conversationPipelines = (query) => {
   return query
@@ -164,7 +164,7 @@ export const sendMessage = async (req, res, next) => {
 
     const { id } = req.params;
 
-    const { text } = req.body;
+    const { text, type = messageTypes.MESSAGE } = req.body;
 
     if (!text && (!files || !files.length)) {
       return next(Error(req.t('error.failed_to_send_message')));
@@ -172,6 +172,7 @@ export const sendMessage = async (req, res, next) => {
 
     const message = await Message.create({
       text,
+      type,
       user: user._id,
       conversationId: id,
       files: (files ?? []).map((x) => {
