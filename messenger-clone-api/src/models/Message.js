@@ -41,7 +41,8 @@ const schema = new Schema({
     type: Schema.Types.ObjectId,
   },
   type: {
-    enum: Object.values(messageTypes),
+    type: String,
+    enum: Object.keys(messageTypes),
     default: messageTypes.MESSAGE,
   }
 }, {
