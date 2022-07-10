@@ -1,0 +1,30 @@
+.userContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.avatarContainer {
+    margin-right: 8px;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    padding: 5px 0px 5px 0px;
+}
+
+.lastMessageContainer {
+    display: flex;
+    font-size: 13px;
+    color: rgb(112, 113, 113);
+}
+
+.lastMessageUsername {
+    margin-right: 2px;
+}
+
+.dotSpace {
+    margin-right: 5px;
+    margin-left: 5px;
+}

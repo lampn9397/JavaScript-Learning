@@ -6,6 +6,9 @@ import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 import PreviewFile from '../PreviewFile';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 import { readFile } from '../../utils';
 import styles from './style.module.css'
@@ -53,7 +56,7 @@ export default function ChatInput(props) {
 
 
     const onChangeInputFiles = React.useCallback(async (event) => {
-        console.log(event.target.files)
+
         const filePreview = []
 
         const fileSend = [];

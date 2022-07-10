@@ -1,6 +1,5 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
-import moment from 'moment';
 import { AiOutlineSearch } from 'react-icons/ai'
 import InputAdornment from '@mui/material/InputAdornment';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,11 +11,13 @@ import { io } from "socket.io-client";
 
 import styles from '../HomePage/style.module.css'
 import i18n from '../../utils/i18n';
-import { host, routes, SocketEvents, localStorageKey } from '../../constants';
+import { host, routes, SocketEvents, localStorageKey, newChat, FileTypes } from '../../constants';
 import * as ActionTypes from '../../redux/actionTypes'
-import BadgeAvatars from '../../components/BadgeAvatars';
 import ChatInput from '../../components/ChatInput';
 import MessageItem from '../../components/MessageItem';
+import ProfileContainer from '../../components/ProfileContainer';
+import SearchItem from '../../components/SearchItem';
+
 
 
 function HomePage() {
@@ -29,6 +30,8 @@ function HomePage() {
 
     const conversations = useSelector((state) => state.conversations.conversations)
 
+    const loadMore = useSelector((state) => state.conversations.loadMore)
+    console.log(loadMore)
     const searchConversations = useSelector((state) => state.conversations.searchConversation)
 
     const selectedConversation = useSelector((state) => state.conversations.selectedConversation)
@@ -40,6 +43,12 @@ function HomePage() {
     const conversationIdLoading = useSelector((state) => state.conversations.conversationIdLoading)
 
     const messagesLoading = useSelector((state) => state.conversations.messagesLoading)
+    console.log(messagesLoading)
+    const page = React.useRef(1)
+
+    const lastPage = React.useRef(false)
+
+    const callChatMessageAPI = React.useRef(false)
 
     const { id } = useParams();
 
@@ -51,6 +60,21 @@ function HomePage() {
         history.push(routes.HOME(item._id).path)
     }, [history])
 
+    const onClickSearchUser = React.useCallback((item) => {
+        history.push(routes.HOME(newChat).path)
+        dispatch({
+            type: ActionTypes.GET_CONVERSATIONID_SUCCESS, payload: {
+                "_id": Date.now(),
+                "title": `${item.firstName} ${item.lastName}`,
+                "users": [
+                    user,
+                    item,
+                ]
+            }
+        })
+        dispatch({ type: ActionTypes.RESET_MESSAGES })
+    }, [dispatch, history, user])
+
     const otherUser = selectedConversation?.users.find((userItem) => userItem._id !== user._id)
 
     function renderConversationItem(item) {
@@ -59,23 +83,45 @@ function HomePage() {
 
         const otherConversation = item.lastMessage.user._id !== user._id
 
-        const lastMessageUsername = otherConversation ? item.lastMessage.user.firstName : i18n.t('auth.you')
+        let lastMessageUsername = otherConversation ? item.lastMessage.user.firstName : i18n.t('auth.you')
+
+        let lastMessageText = item.lastMessage.text
+
+
+        if (item.lastMessage.files.length) {
+
+            const lastFile = item.lastMessage.files[item.lastMessage.files.length - 1];
+
+            const lastMessageFiles = item.lastMessage.files.filter((fileItem) => fileItem.type === lastFile.type)
+
+            const i18nParam = {
+                sender: lastMessageUsername,
+                number: lastMessageFiles.length,
+                fileType: i18n.t('auth.file')
+            }
+
+            if (lastFile.type === FileTypes.CHAT_IMAGE) {
+                i18nParam.fileType = i18n.t('auth.image');
+            } else if (lastFile.type === FileTypes.CHAT_VIDEO) {
+                i18nParam.fileType = i18n.t('auth.video');
+            }
+
+            lastMessageText = i18n.t('auth.lastFileSend', i18nParam)
+
+            lastMessageUsername = '';
+
+        }
 
         return (
-            <div className={styles.userContainer} key={item._id} onClick={onClickConversation(item)}>
-                <div className={styles.avatarContainer}>
-                    <BadgeAvatars avatar={itemOtherUser.avatar} />
-                </div>
-                <div className={styles.userInfo}>
-                    <div>{item.title}</div>
-                    <div className={styles.lastMessageContainer}>
-                        <div className={styles.lastMessageUsername}>{lastMessageUsername} :</div>
-                        <div className={styles.lastMessage}>{item.lastMessage.text}</div>
-                        <div className={styles.dotSpace}>·</div>
-                        <div>{moment(item.lastMessage.createdAt).fromNow()}</div>
-                    </div>
-                </div>
-            </div>
+            <SearchItem
+                key={item._id}
+                onClick={onClickConversation(item)}
+                avatar={itemOtherUser.avatar}
+                title={item.title}
+                lastMessageUsername={lastMessageUsername}
+                lastMessage={lastMessageText}
+                lastMessageAt={item.lastMessage.createdAt}
+            />
         )
     }
 
@@ -90,12 +136,42 @@ function HomePage() {
         setState((prevState) => ({ ...prevState, searchKey: event.target.value }))
     }, [dispatch])
 
+    const onScrollMessage = React.useCallback((event) => {
+
+        const scrollPosition = event.target.scrollHeight - (event.target.scrollTop * (-1))
+
+        const isEndReached = scrollPosition <= event.target.clientHeight + 10;
+
+        if (isEndReached && !lastPage.current && !callChatMessageAPI.current) {
+
+            callChatMessageAPI.current = true;
+
+            dispatch({
+                type: ActionTypes.GET_MESSAGES,
+                payload: id,
+                page: ++page.current,
+                callback: (data) => {
+                    lastPage.current = data.length === 0;
+                    callChatMessageAPI.current = false;
+                }
+            });
+        }
+
+    }, [dispatch, id])
+
     const sendMessage = React.useCallback((fileSend, inputMessage) => {
+        if (id === newChat) {
+            dispatch({
+                type: ActionTypes.NEW_CHAT,
+                payload: { text: inputMessage, files: fileSend, userId: otherUser._id }
+            })
+            return
+        }
         dispatch({
             type: ActionTypes.SEND_MESSAGES,
             payload: { text: inputMessage, files: fileSend, conversationId: selectedConversation._id }
         })
-    }, [dispatch, selectedConversation])
+    }, [dispatch, id, otherUser, selectedConversation?._id])
 
     React.useEffect(() => {
 
@@ -123,8 +199,9 @@ function HomePage() {
 
     React.useEffect(() => {
         if (!id) return
+        if (id === newChat) return
         dispatch({ type: ActionTypes.GET_CONVERSATIONID, payload: id })
-        dispatch({ type: ActionTypes.GET_MESSAGES, payload: id })
+        dispatch({ type: ActionTypes.GET_MESSAGES, payload: id, page: 1 })
     }, [dispatch, id]);
 
     return (
@@ -150,7 +227,11 @@ function HomePage() {
                     <Box sx={{ display: 'flex' }} className={styles.conversationsLoading}>
                         <CircularProgress />
                     </Box>
-                ) : (state.searchKey.length ? searchConversations : conversations).map(renderConversationItem)}
+                ) : (
+                    <div className={styles.listConversationContainer}>
+                        {(state.searchKey.length ? searchConversations : conversations).map(renderConversationItem)}
+                    </div>
+                )}
 
             </div>
             <div className={styles.messageContainer}>
@@ -168,18 +249,26 @@ function HomePage() {
                         )}
                     </div>
                 </div>
-                <div className={styles.listMessage}>
+                <div className={styles.listMessage} onScroll={onScrollMessage} >
                     {messagesLoading ? (
                         <Box className={styles.messagesLoading}>
                             <CircularProgress />
                         </Box>
                     ) : (
-                        messages.map(renderMessageItem)
+                        <>
+                            {messages.map(renderMessageItem)}
+                            {loadMore && (
+                                <div className={styles.loadMore}>
+                                    <CircularProgress size={24} />
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
-                <ChatInput onSubmit={sendMessage} />
+                {id && <ChatInput onSubmit={sendMessage} />}
             </div>
             <div className={styles.profileContainer}>
+                <ProfileContainer onClickSearchUser={onClickSearchUser} />
             </div>
         </div>
     )

@@ -40,6 +40,9 @@
 
 .profileContainer {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 10px 10px 10px;
 }
 
 .avatar {
@@ -174,4 +177,15 @@
 
 .lastMessageUsername {
     margin-right: 2px;
+}
+
+.listConversationContainer {
+    height: calc(100vh - 165px);
+    overflow-y: scroll;
+}
+
+.loadMore {
+    padding: 6px;
+    display: flex;
+    justify-content: center;
 }

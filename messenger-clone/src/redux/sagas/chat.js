@@ -1,7 +1,8 @@
 import * as ActionTypes from '../actionTypes'
-import { takeLeading, put, select, debounce } from 'redux-saga/effects';
+import { takeLeading, put, select, debounce, delay } from 'redux-saga/effects';
 
-import { axiosClient } from '../../constants'
+import { axiosClient, routes } from '../../constants'
+import { push } from 'connected-react-router';
 
 function* getConversationsAction() {
     try {
@@ -22,6 +23,8 @@ function* searchConversationsAction(action) {
     try {
 
         const { payload } = action;
+
+        if (!action.payload) return
 
         const { data } = yield axiosClient.get(`/chat/?q=${payload}`);
 
@@ -63,11 +66,13 @@ function* getConversationIdAction(action) {
 function* getMessageAction(action) {
     try {
 
-        const { payload } = action;
+        const { payload, page, callback } = action;
 
-        const { data } = yield axiosClient.get(`/chat/${payload}/message`);
+        const { data } = yield axiosClient.get(`/chat/${payload}/message?page=${page}&limit=${15}`);
+        if (page > 1) yield delay(1000)
+        callback?.(data.results);
 
-        yield put({ type: ActionTypes.GET_MESSAGES_SUCCESS, payload: data.results });
+        yield put({ type: ActionTypes.GET_MESSAGES_SUCCESS, payload: data.results, page });
 
     } catch (error) {
         const errorMessage = error.response?.data?.message ?? error.message;
@@ -91,7 +96,7 @@ function* sendMessageAction(action) {
             formData.append('files', payload.files[index])
         }
 
-        const { data } = yield axiosClient.post(`/chat/${payload.conversationId}/message`, formData);
+        yield axiosClient.post(`/chat/${payload.conversationId}/message`, formData);
 
         // yield put({ type: ActionTypes.SEND_MESSAGES_SUCCESS, payload: data.results });
 
@@ -103,12 +108,42 @@ function* sendMessageAction(action) {
         alert(errorMessage);
     }
 }
+function* newChatAction(action) {
+    try {
+
+        const { payload } = action;
+
+        const formData = new FormData();
+
+        formData.append('text', payload.text)
+
+        for (let index = 0; index < payload.files.length; index++) {
+            formData.append('files', payload.files[index])
+        }
+
+        formData.append('receiver', payload.userId)
+
+        const { data } = yield axiosClient.post('/chat', formData);
+
+        yield put(push(routes.HOME(data.results._id).path))
+
+        yield put({ type: ActionTypes.NEW_CHAT_SUCCESS, payload: data.results })
+
+    } catch (error) {
+        const errorMessage = error.response?.data?.message ?? error.message;
+
+        yield put({ type: ActionTypes.NEW_CHAT_FAILED });
+
+        alert(errorMessage);
+    }
+}
 
 export default function* chat() {
     yield takeLeading(ActionTypes.GET_CONVERSATIONS, getConversationsAction);
     yield takeLeading(ActionTypes.GET_CONVERSATIONID, getConversationIdAction);
     yield takeLeading(ActionTypes.GET_MESSAGES, getMessageAction);
     yield takeLeading(ActionTypes.SEND_MESSAGES, sendMessageAction);
+    yield takeLeading(ActionTypes.NEW_CHAT, newChatAction);
 
     yield debounce(1000, ActionTypes.SEARCHCONVERSATIONS, searchConversationsAction)
 }
