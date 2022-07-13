@@ -10,7 +10,7 @@ export const SocketEvents = {
 
 export const createSocketServer = (server) => {
   const { JWT_SECRET } = process.env;
-  
+
   const io = new Server(server, {
     cors: {
       origin: '*',
@@ -42,8 +42,20 @@ export const createSocketServer = (server) => {
     const { token } = socket.handshake.auth;
 
     const result = jwt.verify(token, JWT_SECRET);
-    
+
     socket.join(`user_${result.id}`);
+
+    User.updateOne({ _id: result.id }, {
+      online: true,
+      lastLogin: new Date(),
+    });
+
+    socket.on('disconnect', () => {
+      User.updateOne({ _id: result.id }, {
+        online: false,
+        lastLogin: new Date(),
+      });
+    });
   });
 
   return io;
