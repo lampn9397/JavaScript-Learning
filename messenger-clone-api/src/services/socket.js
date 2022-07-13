@@ -45,16 +45,16 @@ export const createSocketServer = (server) => {
 
     socket.join(`user_${result.id}`);
 
-    User.updateOne({ _id: result.id }, {
+    User.findOneAndUpdate(result.id, {
       online: true,
       lastLogin: new Date(),
-    });
+    }).then((r) => console.log(r));
 
     socket.on('disconnect', () => {
-      User.updateOne({ _id: result.id }, {
+      User.findOneAndUpdate(result.id, {
         online: false,
         lastLogin: new Date(),
-      });
+      }).then((r) => console.log(r));
     });
   });
 
