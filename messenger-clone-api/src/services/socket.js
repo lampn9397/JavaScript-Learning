@@ -36,7 +36,7 @@ export const createSocketServer = (server) => {
     next();
   });
 
-  io.on("connection", (socket) => {
+  io.on("connection", async (socket) => {
     console.log('A client is connected > ', socket.id);
 
     const { token } = socket.handshake.auth;
@@ -45,16 +45,16 @@ export const createSocketServer = (server) => {
 
     socket.join(`user_${result.id}`);
 
-    User.findOneAndUpdate(result.id, {
+    await User.updateOne({ _id: result.id }, {
       online: true,
       lastLogin: new Date(),
-    }).then((r) => console.log(r));
+    });
 
-    socket.on('disconnect', () => {
-      User.findOneAndUpdate(result.id, {
+    socket.on('disconnect', async () => {
+      await User.updateOne({ _id: result.id }, {
         online: false,
         lastLogin: new Date(),
-      }).then((r) => console.log(r));
+      });
     });
   });
 
