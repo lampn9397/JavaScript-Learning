@@ -92,6 +92,8 @@ function* sendMessageAction(action) {
 
         formData.append('text', payload.text)
 
+        if (payload.type) formData.append('type', payload.type)
+
         for (let index = 0; index < payload.files.length; index++) {
             formData.append('files', payload.files[index])
         }
@@ -116,6 +118,8 @@ function* newChatAction(action) {
         const formData = new FormData();
 
         formData.append('text', payload.text)
+
+        if (payload.type) formData.append('type', payload.type)
 
         for (let index = 0; index < payload.files.length; index++) {
             formData.append('files', payload.files[index])

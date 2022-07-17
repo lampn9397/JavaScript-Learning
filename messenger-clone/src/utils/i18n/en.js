@@ -38,7 +38,8 @@ const en = {
         lastFileSend: "{{sender}} have sent {{number}} {{fileType}}",
         image: "image",
         file: "file",
-        video: "video"
+        video: "video",
+        onlineStatus: 'online',
     },
 
     chat: {

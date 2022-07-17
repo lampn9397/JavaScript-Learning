@@ -44,6 +44,7 @@ export const publicRoutes = {
 }
 
 export const host = 'http://127.0.0.1:3001';
+// export const host = 'https://f715-42-116-84-14.ngrok.io';
 
 export const axiosClient = axios.create({
     baseURL: `${host}/api`
@@ -59,6 +60,11 @@ export const FileTypes = {
     CHAT_VIDEO: 'CHAT_VIDEO',
     CHAT_FILE: 'CHAT_FILE',
     USER_AVATAR: 'USER_AVATAR',
+};
+
+export const messageTypes = {
+    MESSAGE: 'MESSAGE',
+    LIKE: 'LIKE',
 };
 
 export const newChat = 'newChat'

@@ -38,7 +38,8 @@ const vi = {
         lastFileSend: "{{sender}} đã gửi {{number}} {{fileType}}",
         image: "ảnh",
         file: "tệp",
-        video: "video"
+        video: "video",
+        onlineStatus: 'Đang Hoạt Động',
     },
 
     chat: {

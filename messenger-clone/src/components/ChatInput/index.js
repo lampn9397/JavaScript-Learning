@@ -6,18 +6,16 @@ import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 import PreviewFile from '../PreviewFile';
 import classNames from 'classnames';
-import { useSelector } from 'react-redux';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
 
 import { readFile } from '../../utils';
 import styles from './style.module.css'
+import { messageTypes } from '../../constants';
 
 export default function ChatInput(props) {
 
     const [state, setState] = React.useState({
         inputMessage: "",
-        attachFiles: { filePreview: [], fileSend: [] }
+        attachFiles: { filePreview: [], fileSend: [] },
     })
 
     const inputRef = React.useRef()
@@ -36,6 +34,10 @@ export default function ChatInput(props) {
     const onChangeInputMessage = React.useCallback((event) => {
         setState((prevState) => ({ ...prevState, inputMessage: event.target.value }))
     }, [])
+
+    const onClickThumpUp = React.useCallback(() => {
+        props.onSubmit([], '', messageTypes.LIKE)
+    }, [props])
 
     const onKeyDownInputMessage = React.useCallback((event) => {
         if (event.key === "Enter") {
@@ -123,7 +125,7 @@ export default function ChatInput(props) {
                     </div>
                 ) : (
                     <div className={styles.iconContainer}>
-                        <ThumbUpIcon color='primary' onClick={onSubmit} />
+                        <ThumbUpIcon color='primary' onClick={onClickThumpUp} />
                     </div>
                 )
             }
