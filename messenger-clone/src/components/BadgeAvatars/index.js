@@ -6,12 +6,10 @@ import Stack from '@mui/material/Stack';
 import PropTypes from 'prop-types';
 
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
+const StyledBadge = styled(Badge)(({ theme, onlineColor }) => ({
     '& .MuiBadge-badge': {
-        backgroundColor: '#44b700',
-        color: '#44b700',
+        backgroundColor: onlineColor,
         boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-
     },
     '@keyframes ripple': {
         '0%': {
@@ -25,21 +23,35 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     },
 }));
 export default function BadgeAvatars({
-    className,
     avatar,
     badgeVisible,
+    online,
+    avatarclassName,
 }) {
     return (
         <Stack direction="row" spacing={2}>
             {badgeVisible ? (
-                <StyledBadge
-                    overlap="circular"
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                    variant="dot"
-                    className={className}
-                >
-                    <Avatar alt="" src={avatar} />
-                </StyledBadge>
+                <>
+                    {online ? (
+                        <StyledBadge
+                            overlap="circular"
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                            variant="dot"
+                            onlineColor='#009933'
+                        >
+                            <Avatar alt="" src={avatar} className={avatarclassName} />
+                        </StyledBadge>
+                    ) : (
+                        <StyledBadge
+                            overlap="circular"
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                            variant="dot"
+                            onlineColor='#C0C0C0'
+                        >
+                            <Avatar alt="" src={avatar} />
+                        </StyledBadge>
+                    )}
+                </>
             ) : (
                 <Avatar alt="" src={avatar} />
             )}
@@ -51,9 +63,12 @@ BadgeAvatars.propTypes = {
     className: PropTypes.string,
     avatar: PropTypes.string.isRequired,
     badgeVisible: PropTypes.bool,
+    online: PropTypes.bool,
+    avatarclassName: PropTypes.string,
 }
 
 BadgeAvatars.defaultProps = {
-    className: '',
     badgeVisible: true,
+    online: false,
+    avatarclassName: '',
 }

@@ -14,12 +14,13 @@ export default function SearchItem({
     lastMessage,
     lastMessageAt,
     badgeVisible,
+    online,
 }) {
 
     return (
         <div className={styles.userContainer} onClick={onClick}>
             <div className={styles.avatarContainer}>
-                <BadgeAvatars avatar={avatar} badgeVisible={badgeVisible} />
+                <BadgeAvatars avatar={avatar} badgeVisible={badgeVisible} online={online} />
             </div>
             <div className={styles.userInfo}>
                 <div>{title}</div>
@@ -46,7 +47,8 @@ SearchItem.propTypes = {
     lastMessageUsername: PropTypes.string,
     lastMessage: PropTypes.string,
     lastMessageAt: PropTypes.string,
-    badgeVisible: PropTypes.bool
+    badgeVisible: PropTypes.bool,
+    online: PropTypes.bool,
 }
 
 SearchItem.defaultProps = {
@@ -56,4 +58,5 @@ SearchItem.defaultProps = {
     lastMessage: '',
     lastMessageAt: '',
     badgeVisible: true,
+    online: false,
 }

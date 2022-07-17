@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import { useHistory, useParams } from 'react-router-dom';
 import { io } from "socket.io-client";
+import moment from 'moment';
 
 import styles from '../HomePage/style.module.css'
 import i18n from '../../utils/i18n';
@@ -17,6 +18,7 @@ import ChatInput from '../../components/ChatInput';
 import MessageItem from '../../components/MessageItem';
 import ProfileContainer from '../../components/ProfileContainer';
 import SearchItem from '../../components/SearchItem';
+import BadgeAvatars from '../../components/BadgeAvatars';
 
 
 
@@ -31,7 +33,7 @@ function HomePage() {
     const conversations = useSelector((state) => state.conversations.conversations)
 
     const loadMore = useSelector((state) => state.conversations.loadMore)
-    console.log(loadMore)
+
     const searchConversations = useSelector((state) => state.conversations.searchConversation)
 
     const selectedConversation = useSelector((state) => state.conversations.selectedConversation)
@@ -43,7 +45,7 @@ function HomePage() {
     const conversationIdLoading = useSelector((state) => state.conversations.conversationIdLoading)
 
     const messagesLoading = useSelector((state) => state.conversations.messagesLoading)
-    console.log(messagesLoading)
+
     const page = React.useRef(1)
 
     const lastPage = React.useRef(false)
@@ -121,6 +123,7 @@ function HomePage() {
                 lastMessageUsername={lastMessageUsername}
                 lastMessage={lastMessageText}
                 lastMessageAt={item.lastMessage.createdAt}
+                online={itemOtherUser.online}
             />
         )
     }
@@ -159,17 +162,17 @@ function HomePage() {
 
     }, [dispatch, id])
 
-    const sendMessage = React.useCallback((fileSend, inputMessage) => {
+    const sendMessage = React.useCallback((fileSend, inputMessage, type) => {
         if (id === newChat) {
             dispatch({
                 type: ActionTypes.NEW_CHAT,
-                payload: { text: inputMessage, files: fileSend, userId: otherUser._id }
+                payload: { text: inputMessage, files: fileSend, userId: otherUser._id, type }
             })
             return
         }
         dispatch({
             type: ActionTypes.SEND_MESSAGES,
-            payload: { text: inputMessage, files: fileSend, conversationId: selectedConversation._id }
+            payload: { text: inputMessage, files: fileSend, conversationId: selectedConversation._id, type }
         })
     }, [dispatch, id, otherUser, selectedConversation?._id])
 
@@ -240,12 +243,24 @@ function HomePage() {
                         {conversationIdLoading ? (
                             <Skeleton variant="circular" width={40} height={40} style={{ marginRight: 5 }} />
                         ) : (
-                            <img className={styles.userSmallAvatar} src={otherUser?.avatar} alt="" />
+                            <BadgeAvatars badgeVisible={true} avatar={otherUser?.avatar} online={otherUser?.online} avatarclassName={styles.avatarclassName} />
                         )}
                         {conversationIdLoading ? (
                             <Skeleton variant="text" width={60} height={20} />
                         ) : (
-                            <div>{selectedConversation?.title}</div>
+                            <>
+                                {otherUser?.online ? (
+                                    <div className={`${styles.selectedUserInfo}`}>
+                                        <div className={`${styles.selectedConversationTitle}`}> {selectedConversation?.title} </div>
+                                        <div className={`${styles.onlineStatus}`}>{i18n.t('auth.onlineStatus')}</div>
+                                    </div>
+                                ) : (
+                                    <div className={`${styles.selectedUserInfo}`}>
+                                        <div className={`${styles.selectedConversationTitle}`}> {selectedConversation?.title} </div>
+                                        <div className={`${styles.onlineStatus}`}>{moment(otherUser?.lastLogin).fromNow()}</div>
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
                 </div>

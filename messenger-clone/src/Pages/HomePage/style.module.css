@@ -189,3 +189,26 @@
     display: flex;
     justify-content: center;
 }
+
+.avatarclassName {
+    height: 45px;
+    width: 45px;
+}
+
+.selectedUserInfo {
+    margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.selectedConversationTitle {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.onlineStatus {
+    font-size: 12px;
+    color: #847b7b;
+    ;
+}
