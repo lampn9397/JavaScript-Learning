@@ -19,6 +19,27 @@ export const createSocketServer = (server) => {
     },
   });
 
+  const sendUserStatusToOthers = async (userId) => {
+    const conversations = await Conversation.find({ users: userId })
+      .populate('users', 'firstName lastName avatar online lastLogin')
+      .populate({
+        path: 'lastMessage',
+        populate: {
+          path: 'user',
+          select: 'firstName lastName avatar'
+        }
+      })
+      .lean({ getters: true });
+  
+    conversations.forEach((c, index) => {
+      const title = getConversationTitle(c, { user: { _id: userId } });
+  
+      c.users.filter((x) => x._id !== userId).forEach((u) => {
+        io.in(`user_${u._id}`).emit(SocketEvents.NEW_CONVERSATION, { ...c, title });
+      });
+    })
+  }
+
   // Authentication middleware
   io.use(async (socket, next) => {
     const { token } = socket.handshake.auth;
@@ -39,8 +60,6 @@ export const createSocketServer = (server) => {
   });
 
   io.on("connection", async (socket) => {
-    console.log('A client is connected > ', socket.id);
-
     const { token } = socket.handshake.auth;
 
     const result = jwt.verify(token, JWT_SECRET);
@@ -52,6 +71,8 @@ export const createSocketServer = (server) => {
         online: false,
         lastLogin: new Date(),
       });
+
+      await sendUserStatusToOthers(result.id);
     });
 
     await User.updateOne({ _id: result.id }, {
@@ -59,24 +80,7 @@ export const createSocketServer = (server) => {
       lastLogin: new Date(),
     });
 
-    const conversations = await Conversation.find({ users: result.id })
-      .populate('users', 'firstName lastName avatar online lastLogin')
-      .populate({
-        path: 'lastMessage',
-        populate: {
-          path: 'user',
-          select: 'firstName lastName avatar'
-        }
-      })
-      .lean({ getters: true });
-
-    conversations.forEach((c, index) => {
-      const title = getConversationTitle(item, req);
-
-      c.users.filter((x) => x._id !== result.id).forEach((u) => {
-        io.in(`user_${u._id}`).emit(SocketEvents.NEW_CONVERSATION, { ...c, title });
-      });
-    })
+    await sendUserStatusToOthers(result.id);
   });
 
   return io;
