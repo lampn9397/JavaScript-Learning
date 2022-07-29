@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { chatMulter, checkObjectId, checkUserPermissionToChat } from './middlewares';
-import { getConversations, sendMessage, getMessages, createConversation } from './controllers';
+import { getConversations, sendMessage, getMessages, createConversation, updatetConversation } from './controllers';
 
 const router = express.Router();
 
@@ -17,7 +17,11 @@ router.route('/:id')
     checkObjectId('id', 'params'),
     checkUserPermissionToChat('id', 'params'),
     getConversations,
-  )
+  ).put(
+    checkObjectId('id', 'params'),
+    checkUserPermissionToChat('id', 'params'),
+    updatetConversation
+  );
 
 router.route('/:id/message')
   .get(

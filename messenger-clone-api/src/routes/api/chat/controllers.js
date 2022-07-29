@@ -218,9 +218,21 @@ export const createConversation = async (req, res, next) => {
   try {
     const { user, files } = req;
 
-    const { text, receiver, type: messageType = messageTypes.MESSAGE } = req.body;
+    const {
+      text,
+      receiver,
+      type: messageType = messageTypes.MESSAGE,
+    } = req.body;
 
-    const users = [user._id, receiver];
+    const isArray = receiver instanceof Array;
+
+    const users = [user._id];
+
+    if (isArray) {
+      users.push(...receiver);
+    } else {
+      users.push(receiver);
+    }
 
     const conversationId = new mongoose.Types.ObjectId();
 
@@ -269,6 +281,42 @@ export const createConversation = async (req, res, next) => {
       io.in(`user_${item._id}`).emit(SocketEvents.NEW_MESSAGE, clonedMessage);
 
       // EMIT CONVERSATION UPDATE
+      const title = getConversationTitle(conversation, { user: item });
+
+      io.in(`user_${item._id}`).emit(SocketEvents.NEW_CONVERSATION, { ...conversation, title });
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const updatetConversation = async (req, res, next) => {
+  try {
+    const { params, body } = req;
+
+    const updateFields = {};
+
+    if (body.title) {
+      updateFields.title = body.title;
+    }
+
+    if (body.users) {
+      updateFields.users = [req.user._id, ...body.users];
+    }
+
+    if (body.nicknames) {
+      updateFields.nicknames = body.nicknames;
+    }
+
+    const conversation = await Conversation.findByIdAndUpdate(params.id, updateFields, {
+      new: true,
+    }).lean({ getters: true });
+
+    res.json(Helpers.createResponse({
+      results: conversation,
+    }))
+
+    conversation.users.forEach((item) => {
       const title = getConversationTitle(conversation, { user: item });
 
       io.in(`user_${item._id}`).emit(SocketEvents.NEW_CONVERSATION, { ...conversation, title });
