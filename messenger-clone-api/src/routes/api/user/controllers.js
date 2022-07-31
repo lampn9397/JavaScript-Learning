@@ -27,7 +27,7 @@ export const getUser = async (req, res, next) => {
         ],
       };
 
-      if (!includeFriend) {
+      if (!includeFriend || includeFriend !== 'true') {
         const privateConversations = await Conversation.find({
           $and: [
             { users: user._id },
