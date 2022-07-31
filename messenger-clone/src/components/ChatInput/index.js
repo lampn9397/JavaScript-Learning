@@ -17,6 +17,7 @@ export default function ChatInput({
     inputMessage,
     attachFilesEnable,
     likeEnable,
+    disableChatInput,
 }) {
 
     const [state, setState] = React.useState({
@@ -121,6 +122,7 @@ export default function ChatInput({
                     }}
                     id="outlined-size-small"
                     size="small"
+                    disabled={disableChatInput}
                     placeholder="Aa"
                     value={state.inputMessage}
                     onChange={onChangeInputMessage}
@@ -145,9 +147,11 @@ ChatInput.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     attachFilesEnable: PropTypes.bool,
     likeEnable: PropTypes.bool,
+    disableChatInput: PropTypes.bool,
 }
 
 ChatInput.defaultProps = {
     attachFilesEnable: true,
     likeEnable: true,
+    disableChatInput: false
 }
