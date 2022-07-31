@@ -310,7 +310,7 @@ function HomePage() {
                         </Box>
                     ) : (
                         <>
-                            {messages.map(renderMessageItem)}
+                            {selectedConversation && messages.map(renderMessageItem)}
                             {loadMore && (
                                 <div className={styles.loadMore}>
                                     <CircularProgress size={24} />

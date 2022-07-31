@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 import { axiosClient } from '../../constants'
 import ClearIcon from '@mui/icons-material/Clear';
+import { debounce } from 'lodash';
 
 import styles from './style.module.css'
 import i18n from '../../utils/i18n';
@@ -31,7 +32,7 @@ const style = {
 
 export default function SearchUserModal({
     open,
-    onClose,
+    onClose: onCloseProps,
 }) {
 
     const dispatch = useDispatch();
@@ -42,7 +43,16 @@ export default function SearchUserModal({
         searchUserLoading: false,
     })
 
-    const onChangeSearchProfile = React.useCallback(async (event) => {
+    const onClose = React.useCallback(() => {
+        onCloseProps()
+        setState((prevState) => ({
+            ...prevState,
+            searchProfile: [],
+            searchProfileKey: "",
+        }))
+    }, [onCloseProps])
+
+    const onChangeSearchProfile = async (event) => {
         setState((prevState) => ({
             ...prevState,
             searchUserLoading: true,
@@ -54,7 +64,7 @@ export default function SearchUserModal({
             searchProfile: data.results,
             searchUserLoading: false,
         }))
-    }, [])
+    }
 
     const onClickAddIcon = React.useCallback((item) => () => {
         setState((prevState) => {
@@ -70,15 +80,19 @@ export default function SearchUserModal({
         })
     }, [])
 
+    const selectedUsers = state.searchProfile.filter((selectedUser) => selectedUser.selected)
+
     const sendMessage = React.useCallback((file, inputMessage) => {
 
-        const selectedUsers = state.searchProfile.filter((selectedUser) => selectedUser.selected)
+        if (selectedUsers.length < 2) return
 
         dispatch({
             type: ActionTypes.CREATE_CONVERSATIONS,
             payload: { text: inputMessage, selectedUsers }
         })
-    }, [dispatch, state.searchProfile])
+
+        onClose()
+    }, [dispatch, onClose, selectedUsers])
 
     return (
         <Modal
@@ -128,7 +142,7 @@ export default function SearchUserModal({
                         ))}
                     </div>
                 )}
-                <ChatInput attachFilesEnable={false} likeEnable={false} onSubmit={sendMessage} />
+                <ChatInput attachFilesEnable={false} likeEnable={false} onSubmit={sendMessage} disableChatInput={selectedUsers < 2} />
             </Box>
         </Modal>
     )
