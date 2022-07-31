@@ -110,6 +110,31 @@ function* sendMessageAction(action) {
         alert(errorMessage);
     }
 }
+
+function* createGroupChat(action) {
+    try {
+
+        const { payload } = action;
+
+        const formData = new FormData();
+
+        formData.append('text', payload.text);
+
+        for (let index = 0; index < payload.selectedUsers.length; index++) {
+            formData.append('receiver', payload.selectedUsers[index]._id);
+        }
+
+        yield axiosClient.post('/chat', formData);
+
+    } catch (error) {
+        const errorMessage = error.response?.data?.message ?? error.message;
+
+        yield put({ type: ActionTypes.CREATE_CONVERSATIONS_FAILED });
+
+        alert(errorMessage);
+    }
+}
+
 function* newChatAction(action) {
     try {
 
@@ -148,6 +173,7 @@ export default function* chat() {
     yield takeLeading(ActionTypes.GET_MESSAGES, getMessageAction);
     yield takeLeading(ActionTypes.SEND_MESSAGES, sendMessageAction);
     yield takeLeading(ActionTypes.NEW_CHAT, newChatAction);
+    yield takeLeading(ActionTypes.CREATE_CONVERSATIONS, createGroupChat);
 
     yield debounce(1000, ActionTypes.SEARCHCONVERSATIONS, searchConversationsAction)
 }

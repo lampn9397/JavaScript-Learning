@@ -10,6 +10,7 @@ const defaultState = {
     loadMore: false,
     messagesLoading: false,
     sendMessagesLoading: false,
+
 };
 
 export default function chatReducer(state = defaultState, action) {
@@ -32,7 +33,13 @@ export default function chatReducer(state = defaultState, action) {
             };
         case ActionTypes.UPDATE_CONVERSATION: {
 
-            let conversations = [...state.conversations]
+            let conversations = [...state.conversations];
+
+            let { selectedConversation } = state;
+
+            if (selectedConversation && selectedConversation._id === action.payload._id) {
+                selectedConversation = action.payload;
+            }
 
             const index = conversations.findIndex((item) => item._id === action.payload._id)
 
@@ -44,7 +51,8 @@ export default function chatReducer(state = defaultState, action) {
 
             return {
                 ...state,
-                conversations
+                conversations,
+                selectedConversation,
             };
         }
         case ActionTypes.SEARCHCONVERSATIONS:

@@ -44,7 +44,7 @@ export const publicRoutes = {
 }
 
 export const host = 'http://127.0.0.1:3001';
-// export const host = 'https://f715-42-116-84-14.ngrok.io';
+// export const host = 'https://240e-42-113-33-159.ngrok.io';
 
 export const axiosClient = axios.create({
     baseURL: `${host}/api`

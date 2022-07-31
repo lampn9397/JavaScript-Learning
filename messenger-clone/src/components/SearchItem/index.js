@@ -1,6 +1,8 @@
 import * as React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import AddIcon from '@mui/icons-material/Add';
+import DoneIcon from '@mui/icons-material/Done';
 
 import styles from './style.module.css'
 import BadgeAvatars from '../../components/BadgeAvatars';
@@ -15,8 +17,10 @@ export default function SearchItem({
     lastMessageAt,
     badgeVisible,
     online,
+    addUserEnable,
+    onClickAddIcon,
+    checkItemSelected,
 }) {
-
     return (
         <div className={styles.userContainer} onClick={onClick}>
             <div className={styles.avatarContainer}>
@@ -35,6 +39,15 @@ export default function SearchItem({
                     )}
                 </div>
             </div>
+            {addUserEnable && (
+                <>
+                    {checkItemSelected ? (
+                        <DoneIcon onClick={onClickAddIcon} color='primary' />
+                    ) : (
+                        <AddIcon onClick={onClickAddIcon} color='primary' />
+                    )}
+                </>
+            )}
         </div>
     )
 }
@@ -49,6 +62,9 @@ SearchItem.propTypes = {
     lastMessageAt: PropTypes.string,
     badgeVisible: PropTypes.bool,
     online: PropTypes.bool,
+    addUserEnable: PropTypes.bool,
+    onClickAddIcon: PropTypes.func,
+    checkItemSelected: PropTypes.bool,
 }
 
 SearchItem.defaultProps = {
@@ -59,4 +75,7 @@ SearchItem.defaultProps = {
     lastMessageAt: '',
     badgeVisible: true,
     online: false,
+    addUserEnable: false,
+    onClickAddIcon: () => undefined,
+    checkItemSelected: false,
 }

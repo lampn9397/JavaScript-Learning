@@ -1,21 +1,28 @@
 import * as React from 'react';
 import ArticleIcon from '@mui/icons-material/Article';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import PropTypes from 'prop-types';
 
 import styles from './style.module.css'
 import { FileTypes, fullScreenImageRef } from '../../constants';
+import BadgeAvatars from '../BadgeAvatars';
 
-export default function MessageItem(props) {
+export default function MessageItem({
+    item: message,
+    user,
+    avatar,
+    online,
+}) {
 
     const onClickImage = React.useCallback((item) => () => {
-        fullScreenImageRef.current.show(item, props.item.files)
+        fullScreenImageRef.current.show(item, message.files)
 
-    }, [props.item.files])
+    }, [message.files])
 
     const renderItemFile = React.useCallback(() => {
         return (
             <div>
-                {props.item.files.map((item, index) => {
+                {message.files.map((item, index) => {
                     if (item.type === FileTypes.CHAT_IMAGE) {
                         return (
                             <React.Fragment key={index}>
@@ -48,19 +55,24 @@ export default function MessageItem(props) {
                 })}
             </div>
         )
-    }, [onClickImage, props.item.files])
+    }, [onClickImage, message.files])
 
-    if (props.item.user !== props.user._id) {
+    if (message.user !== user._id) {
         return (
             <div className={styles.otherMessageContainer} >
-                {props.item.type === 'LIKE' ? (
+                {message.type === 'LIKE' ? (
                     <div className={styles.iconContainer}>
                         <ThumbUpIcon color='primary' />
                     </div>
                 ) : (
                     <>
-                        {props.item.text !== '' && <div className={styles.otherMessages}>{props.item.text}</div>}
-                        {renderItemFile()}
+                        <div className={`${styles.messageWithAvatar}`}>
+                            <div style={{ marginRight: 5 }}>
+                                <BadgeAvatars badgeVisible={true} avatarClassName={`${styles.avatar}`} avatar={avatar} online={online} />
+                            </div>
+                            {message.text !== '' && <div className={styles.otherMessages}>{message.text}</div>}
+                            {renderItemFile()}
+                        </div>
                     </>
                 )}
             </div>
@@ -69,16 +81,27 @@ export default function MessageItem(props) {
 
     return (
         <div className={styles.myMessageContainer} >
-            {props.item.type === 'LIKE' ? (
+            {message.type === 'LIKE' ? (
                 <div className={styles.iconContainer}>
                     <ThumbUpIcon color='primary' />
                 </div>
             ) : (
                 <>
-                    {props.item.text !== '' && <div className={styles.myMessages}>{props.item.text}</div>}
+                    {message.text !== '' && <div className={styles.myMessages}>{message.text}</div>}
                     {renderItemFile()}
                 </>
             )}
         </div>
     )
+}
+
+MessageItem.propTypes = {
+    item: PropTypes.instanceOf(Object).isRequired,
+    user: PropTypes.instanceOf(Object).isRequired,
+    avatar: PropTypes.string.isRequired,
+    online: PropTypes.bool,
+}
+
+MessageItem.defaultProps = {
+    online: false,
 }

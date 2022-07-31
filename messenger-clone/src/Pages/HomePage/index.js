@@ -9,6 +9,8 @@ import Skeleton from '@mui/material/Skeleton';
 import { useHistory, useParams } from 'react-router-dom';
 import { io } from "socket.io-client";
 import moment from 'moment';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import CreateIcon from '@mui/icons-material/Create';
 
 import styles from '../HomePage/style.module.css'
 import i18n from '../../utils/i18n';
@@ -19,6 +21,7 @@ import MessageItem from '../../components/MessageItem';
 import ProfileContainer from '../../components/ProfileContainer';
 import SearchItem from '../../components/SearchItem';
 import BadgeAvatars from '../../components/BadgeAvatars';
+import SearchUserModal from '../../components/SearchUserModal';
 
 
 
@@ -56,11 +59,20 @@ function HomePage() {
 
     const [state, setState] = React.useState({
         searchKey: "",
+        openSearchUserModal: false,
     })
 
     const onClickConversation = React.useCallback((item) => () => {
         history.push(routes.HOME(item._id).path)
     }, [history])
+
+    const onClickGrAdd = React.useCallback(() => {
+        setState((prevState) => ({ ...prevState, openSearchUserModal: true }))
+    }, [])
+
+    const onCloseSearchUserModal = React.useCallback(() => {
+        setState((prevState) => ({ ...prevState, openSearchUserModal: false }))
+    }, [])
 
     const onClickSearchUser = React.useCallback((item) => {
         history.push(routes.HOME(newChat).path)
@@ -89,6 +101,15 @@ function HomePage() {
 
         let lastMessageText = item.lastMessage.text
 
+        let avatar = itemOtherUser.avatar;
+
+        const isGroupChat = item.users.length > 2;
+
+        if (isGroupChat) {
+            avatar = item.users
+                .filter((userItem) => userItem._id !== user._id)
+                .map((userItem) => userItem.avatar)
+        }
 
         if (item.lastMessage.files.length) {
 
@@ -118,19 +139,23 @@ function HomePage() {
             <SearchItem
                 key={item._id}
                 onClick={onClickConversation(item)}
-                avatar={itemOtherUser.avatar}
+                avatar={avatar}
                 title={item.title}
                 lastMessageUsername={lastMessageUsername}
                 lastMessage={lastMessageText}
                 lastMessageAt={item.lastMessage.createdAt}
                 online={itemOtherUser.online}
+                badgeVisible={!isGroupChat}
             />
         )
     }
 
     function renderMessageItem(item) {
+
+        const userByMessage = selectedConversation?.users.find((user) => user._id === item.user)
+
         return (
-            <MessageItem item={item} user={user} key={item._id} />
+            <MessageItem item={item} user={user} key={item._id} avatar={userByMessage?.avatar} online={userByMessage?.online} />
         )
     }
 
@@ -241,14 +266,18 @@ function HomePage() {
                 <div className={styles.messageHeaderContainer}>
                     <div className={styles.userInfor}>
                         {conversationIdLoading ? (
-                            <Skeleton variant="circular" width={40} height={40} style={{ marginRight: 5 }} />
-                        ) : (
-                            <BadgeAvatars badgeVisible={true} avatar={otherUser?.avatar} online={otherUser?.online} avatarclassName={styles.avatarclassName} />
-                        )}
-                        {conversationIdLoading ? (
-                            <Skeleton variant="text" width={60} height={20} />
+                            <>
+                                <Skeleton variant="circular" width={40} height={40} style={{ marginRight: 5 }} />
+                                <Skeleton variant="text" width={60} height={20} />
+                            </>
                         ) : (
                             <>
+                                <BadgeAvatars
+                                    badgeVisible={true}
+                                    avatar={otherUser?.avatar}
+                                    online={otherUser?.online}
+                                    avatarClassName={styles.avatarClassName}
+                                />
                                 {otherUser?.online ? (
                                     <div className={`${styles.selectedUserInfo}`}>
                                         <div className={`${styles.selectedConversationTitle}`}> {selectedConversation?.title} </div>
@@ -263,6 +292,16 @@ function HomePage() {
                             </>
                         )}
                     </div>
+                    <SearchUserModal open={state.openSearchUserModal} onClose={onCloseSearchUserModal} />
+                    {selectedConversation ? (
+                        <div className={`${styles.backGroundIcon}`}>
+                            <GroupAddIcon onClick={onClickGrAdd} color='primary' />
+                        </div>
+                    ) : (
+                        <div className={`${styles.backGroundIcon}`}>
+                            <CreateIcon onClick={onClickGrAdd} color='primary' />
+                        </div>
+                    )}
                 </div>
                 <div className={styles.listMessage} onScroll={onScrollMessage} >
                     {messagesLoading ? (

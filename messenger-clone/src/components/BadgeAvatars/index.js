@@ -22,38 +22,48 @@ const StyledBadge = styled(Badge)(({ theme, onlineColor }) => ({
         },
     },
 }));
+
+const SmallAvatar = styled(Avatar)(({ theme }) => ({
+    width: 22,
+    height: 22,
+    border: `2px solid ${theme.palette.background.paper}`,
+}));
 export default function BadgeAvatars({
     avatar,
     badgeVisible,
     online,
-    avatarclassName,
+    avatarClassName,
 }) {
+
+    const isArrayAvatar = avatar instanceof Array;
+
     return (
         <Stack direction="row" spacing={2}>
             {badgeVisible ? (
+                <StyledBadge
+                    overlap="circular"
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    variant="dot"
+                    onlineColor={online ? '#009933' : '#C0C0C0'}
+                >
+                    <Avatar alt="" src={avatar} className={avatarClassName} />
+                </StyledBadge>
+            ) : (
                 <>
-                    {online ? (
-                        <StyledBadge
+                    {isArrayAvatar ? (
+                        <Badge
                             overlap="circular"
                             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                            variant="dot"
-                            onlineColor='#009933'
+                            badgeContent={
+                                <SmallAvatar alt="" src={avatar[0]} />
+                            }
                         >
-                            <Avatar alt="" src={avatar} className={avatarclassName} />
-                        </StyledBadge>
+                            <Avatar alt="" src={avatar[1]} />
+                        </Badge>
                     ) : (
-                        <StyledBadge
-                            overlap="circular"
-                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                            variant="dot"
-                            onlineColor='#C0C0C0'
-                        >
-                            <Avatar alt="" src={avatar} />
-                        </StyledBadge>
+                        <Avatar alt="" src={avatar} />
                     )}
                 </>
-            ) : (
-                <Avatar alt="" src={avatar} />
             )}
         </Stack>
     );
@@ -61,14 +71,16 @@ export default function BadgeAvatars({
 
 BadgeAvatars.propTypes = {
     className: PropTypes.string,
-    avatar: PropTypes.string.isRequired,
+    avatar: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Array)]).isRequired,
     badgeVisible: PropTypes.bool,
     online: PropTypes.bool,
-    avatarclassName: PropTypes.string,
+    avatarClassName: PropTypes.string,
+    groupAvatarEnable: PropTypes.bool,
 }
 
 BadgeAvatars.defaultProps = {
     badgeVisible: true,
     online: false,
-    avatarclassName: '',
+    avatarClassName: '',
+    groupAvatarEnable: false,
 }
