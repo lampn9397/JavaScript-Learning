@@ -4,25 +4,50 @@ import User, { avatarGetter } from '../../../models/User';
 import { jwtOptions } from '../../../app';
 import * as Helpers from '../../../utils/helpers';
 import { FileTypes } from '../../../models/File';
+import Conversation from '../../../models/Conversation';
 
 export const getUser = async (req, res, next) => {
   try {
     let results;
 
-    const { q } = req.query;
+    const { user } = req;
+
+    const { q, includeFriend } = req.query;
 
     if (typeof q === 'string') {
-      results = await User.find({
-        match: {
-          $or: [
-            { firstName: { $regex: q, $options: 'i' } },
-            { lastName: { $regex: q, $options: 'i' } },
+      const filter = {
+        $and: [
+          { _id: { $ne: user._id, } }, // Exclude requesting user  
+          {
+            $or: [
+              { firstName: { $regex: q, $options: 'i' } },
+              { lastName: { $regex: q, $options: 'i' } },
+            ]
+          },
+        ],
+      };
+
+      if (!includeFriend) {
+        const privateConversations = await Conversation.find({
+          $and: [
+            { users: user._id },
+            { users: { $size: 2 } },
           ]
-        }
-      }, '-password')
+        }).lean({ getters: true });
+
+        const friends = privateConversations.map((c) => {
+          const targetUser = c.users.find((x) => x._id === user._id);
+
+          return targetUser._id;
+        });
+
+        filter.$and.push({ _id: { $nin: friends } }); // Exlude friends
+      }
+
+      results = await User.find(filter, '-password')
         .lean({ getters: true });
     } else {
-      results = await User.findById(req.user._id, '-password')
+      results = await User.findById(user._id, '-password')
         .lean({ getters: true });
     }
 
