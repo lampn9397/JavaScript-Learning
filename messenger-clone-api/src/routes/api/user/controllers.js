@@ -36,7 +36,7 @@ export const getUser = async (req, res, next) => {
         }).lean({ getters: true });
 
         const friends = privateConversations.map((c) => {
-          const targetUser = c.users.find((x) => x._id === user._id);
+          const targetUser = c.users.find((x) => x._id !== user._id);
 
           return targetUser._id;
         });
