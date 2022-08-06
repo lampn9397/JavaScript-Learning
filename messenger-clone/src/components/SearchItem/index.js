@@ -42,12 +42,17 @@ export default function SearchItem({
             {addUserEnable && (
                 <>
                     {checkItemSelected ? (
-                        <DoneIcon onClick={onClickAddIcon} color='primary' />
+                        <div className={`${styles.iconHover}`}>
+                            <DoneIcon onClick={onClickAddIcon} color='primary' />
+                        </div>
                     ) : (
-                        <AddIcon onClick={onClickAddIcon} color='primary' />
+                        <div className={`${styles.iconHover}`}>
+                            <AddIcon onClick={onClickAddIcon} color='primary' />
+                        </div>
                     )}
                 </>
-            )}
+            )
+            }
         </div>
     )
 }

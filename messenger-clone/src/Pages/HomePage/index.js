@@ -89,7 +89,24 @@ function HomePage() {
         dispatch({ type: ActionTypes.RESET_MESSAGES })
     }, [dispatch, history, user])
 
-    const otherUser = selectedConversation?.users.find((userItem) => userItem._id !== user._id)
+    let otherUser = selectedConversation?.users.find((userItem) => userItem._id !== user._id)
+
+    const isGroupChat = selectedConversation?.users.length > 2
+
+    let otherUsers = [];
+    if (isGroupChat) {
+        otherUsers = selectedConversation?.users
+            .filter((userItem) => userItem._id !== user._id)
+            .map((userItem) => userItem.avatar)
+    }
+
+    let selectedConversationTitle = [];
+
+    if (isGroupChat) {
+        selectedConversationTitle = selectedConversation?.users
+            .filter((userItem) => userItem._id !== user._id)
+            .map((userLastName) => `${userLastName.lastName}, `)
+    }
 
     function renderConversationItem(item) {
 
@@ -273,22 +290,23 @@ function HomePage() {
                         ) : (
                             <>
                                 <BadgeAvatars
-                                    badgeVisible={true}
-                                    avatar={otherUser?.avatar}
+                                    badgeVisible={!isGroupChat}
+                                    avatar={isGroupChat ? otherUsers : otherUser?.avatar}
                                     online={otherUser?.online}
                                     avatarClassName={styles.avatarClassName}
                                 />
-                                {otherUser?.online ? (
-                                    <div className={`${styles.selectedUserInfo}`}>
-                                        <div className={`${styles.selectedConversationTitle}`}> {selectedConversation?.title} </div>
-                                        <div className={`${styles.onlineStatus}`}>{i18n.t('auth.onlineStatus')}</div>
-                                    </div>
-                                ) : (
-                                    <div className={`${styles.selectedUserInfo}`}>
-                                        <div className={`${styles.selectedConversationTitle}`}> {selectedConversation?.title} </div>
-                                        <div className={`${styles.onlineStatus}`}>{moment(otherUser?.lastLogin).fromNow()}</div>
-                                    </div>
-                                )}
+                                <div className={`${styles.selectedUserInfo}`}>
+                                    <div className={`${styles.selectedConversationTitle}`}>{isGroupChat ? selectedConversationTitle : selectedConversation?.title}</div>
+                                    {!isGroupChat && (
+                                        <>
+                                            {otherUser?.online ? (
+                                                <div className={`${styles.onlineStatus}`}>{i18n.t('auth.onlineStatus')}</div>
+                                            ) : (
+                                                <div className={`${styles.onlineStatus}`}>{moment(otherUser?.lastLogin).fromNow()}</div>
+                                            )}
+                                        </>
+                                    )}
+                                </div>
                             </>
                         )}
                     </div>

@@ -41,6 +41,7 @@ export default function SearchUserModal({
         searchProfileKey: "",
         searchProfile: [],
         searchUserLoading: false,
+        selectedUsers: [],
     })
 
     const onClose = React.useCallback(() => {
@@ -49,6 +50,7 @@ export default function SearchUserModal({
             ...prevState,
             searchProfile: [],
             searchProfileKey: "",
+            selectedUsers: [],
         }))
     }, [onCloseProps])
 
@@ -58,7 +60,7 @@ export default function SearchUserModal({
             searchUserLoading: true,
             searchProfileKey: event.target.value,
         }))
-        const { data } = await axiosClient.get(`/user?q=${event.target.value}`);
+        const { data } = await axiosClient.get(`/user?q=${event.target.value}&includeFriend=${true}`);
         setState((prevState) => ({
             ...prevState,
             searchProfile: data.results,
@@ -72,27 +74,41 @@ export default function SearchUserModal({
 
             const index = searchProfile.findIndex((user) => user._id === item._id)
 
-            searchProfile[index].selected = !searchProfile[index].selected
+            const selectedUsers = JSON.parse(JSON.stringify(prevState.selectedUsers))
+
+            const indexSelectedUser = selectedUsers.findIndex((indexUser) => indexUser._id === item._id)
+
+            if (indexSelectedUser === -1) selectedUsers.push(item)
+
+            else selectedUsers.splice(indexSelectedUser, 1)
+
             return ({
                 ...prevState,
-                searchProfile
+                searchProfile,
+                selectedUsers,
             })
         })
     }, [])
 
-    const selectedUsers = state.searchProfile.filter((selectedUser) => selectedUser.selected)
+    const checkItemSelected = React.useCallback((item) => (
+        state.selectedUsers.some((user) => user._id === item._id)
+    ), [state.selectedUsers])
 
     const sendMessage = React.useCallback((file, inputMessage) => {
 
-        if (selectedUsers.length < 2) return
+        if (state.selectedUsers.length < 2) return
 
         dispatch({
             type: ActionTypes.CREATE_CONVERSATIONS,
-            payload: { text: inputMessage, selectedUsers }
+            payload: { text: inputMessage, selectedUsers: state.selectedUsers }
         })
 
         onClose()
-    }, [dispatch, onClose, selectedUsers])
+    }, [dispatch, onClose, state.selectedUsers])
+
+    const searchSelectedUser = state.selectedUsers.concat(state.searchProfile.filter((item) => {
+        return !state.selectedUsers.some((user) => user._id === item._id)
+    }))
 
     return (
         <Modal
@@ -129,7 +145,7 @@ export default function SearchUserModal({
                     </Box>
                 ) : (
                     <div className={styles.listUserContainer}>
-                        {state.searchProfile.map((item, index) => (
+                        {searchSelectedUser.map((item, index) => (
                             <SearchItem key={item._id}
                                 avatar={item.avatar}
                                 badgeVisible={false}
@@ -137,12 +153,12 @@ export default function SearchUserModal({
                                 lastMessageAtVisible={false}
                                 addUserEnable
                                 onClickAddIcon={onClickAddIcon(item, index)}
-                                checkItemSelected={item.selected}
+                                checkItemSelected={checkItemSelected(item)}
                             />
                         ))}
                     </div>
                 )}
-                <ChatInput attachFilesEnable={false} likeEnable={false} onSubmit={sendMessage} disableChatInput={selectedUsers < 2} />
+                <ChatInput attachFilesEnable={false} likeEnable={false} onSubmit={sendMessage} disableChatInput={state.selectedUsers.length < 2} />
             </Box>
         </Modal>
     )
