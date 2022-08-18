@@ -308,9 +308,9 @@ export const updatetConversation = async (req, res, next) => {
       updateFields.nicknames = body.nicknames;
     }
 
-    const conversation = await Conversation.findByIdAndUpdate(params.id, updateFields, {
-      new: true,
-    }).lean({ getters: true });
+    await Conversation.updateOne({ _id: params.id }, updateFields);
+
+    const conversation = await Conversation.findById(params.id).lean({ getters: true });
 
     res.json(Helpers.createResponse({
       results: conversation,
