@@ -40,6 +40,7 @@ const en = {
         file: "file",
         video: "video",
         onlineStatus: 'online',
+        confirm: 'confirm',
     },
 
     chat: {

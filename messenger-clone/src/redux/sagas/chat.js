@@ -134,6 +134,23 @@ function* createGroupChat(action) {
         alert(errorMessage);
     }
 }
+function* updateGroupChat(action) {
+    try {
+
+        const idConversation = yield select((state) => state.conversations.selectedConversation._id)
+
+        const { payload } = action;
+
+        yield axiosClient.put(`/chat/${idConversation}`, { users: payload.users });
+
+    } catch (error) {
+        const errorMessage = error.response?.data?.message ?? error.message;
+
+        yield put({ type: ActionTypes.UPDATE_GROUPCHAT_FAILED });
+
+        alert(errorMessage);
+    }
+}
 
 function* newChatAction(action) {
     try {
@@ -174,6 +191,7 @@ export default function* chat() {
     yield takeLeading(ActionTypes.SEND_MESSAGES, sendMessageAction);
     yield takeLeading(ActionTypes.NEW_CHAT, newChatAction);
     yield takeLeading(ActionTypes.CREATE_CONVERSATIONS, createGroupChat);
+    yield takeLeading(ActionTypes.UPDATE_GROUPCHAT, updateGroupChat);
 
     yield debounce(1000, ActionTypes.SEARCHCONVERSATIONS, searchConversationsAction)
 }

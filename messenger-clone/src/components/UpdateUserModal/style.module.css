@@ -1,0 +1,39 @@
+.searchInput {
+    border-radius: 50px 50px 50px 50px !important;
+    background-color: rgb(240, 242, 245);
+    margin-right: 10px;
+    margin-left: 5px;
+    margin-bottom: 20px;
+}
+
+.customTextField {
+    width: 100%;
+}
+
+.listUserContainer {
+    height: calc(568px - 68px - 60px - 40px);
+    overflow-y: scroll;
+}
+
+.clearIconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px !important;
+    background-color: white;
+    position: absolute;
+    top: -44px;
+    right: -44px;
+    z-index: 10;
+}
+
+.clearIconContainer:hover {
+    background-color: rgb(239, 241, 245);
+    cursor: pointer;
+}
+
+.header {
+    position: relative;
+}

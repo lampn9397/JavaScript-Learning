@@ -120,6 +120,7 @@ function ProfilePage() {
                         variant="outlined" value={state.firstName}
                         onChange={onChange("firstName")}
                         disabled={updateUserLoading}
+                        inputProps={{ maxLength: 20 }}
                     />
                     <TextField fullWidth
                         error={state.lastNameError}
@@ -128,6 +129,7 @@ function ProfilePage() {
                         variant="outlined" value={state.lastName}
                         onChange={onChange("lastName")}
                         disabled={updateUserLoading}
+                        inputProps={{ maxLength: 30 }}
                     />
                 </div>
                 <TextField
