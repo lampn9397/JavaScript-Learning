@@ -11,6 +11,7 @@
 .listUserContainer {
     height: calc(100vh - 135px);
     overflow-y: scroll;
+    padding-right: 5px;
 }
 
 .conversationsLoading {

@@ -22,6 +22,7 @@ import ProfileContainer from '../../components/ProfileContainer';
 import SearchItem from '../../components/SearchItem';
 import BadgeAvatars from '../../components/BadgeAvatars';
 import SearchUserModal from '../../components/SearchUserModal';
+import UpdateUserModal from '../../components/UpdateUserModal';
 
 
 
@@ -55,11 +56,14 @@ function HomePage() {
 
     const callChatMessageAPI = React.useRef(false)
 
+    const otherUsers = selectedConversation?.users.filter((userItem) => userItem._id !== user._id)
+
     const { id } = useParams();
 
     const [state, setState] = React.useState({
         searchKey: "",
         openSearchUserModal: false,
+        openUpdateUserModal: false,
     })
 
     const onClickConversation = React.useCallback((item) => () => {
@@ -67,11 +71,19 @@ function HomePage() {
     }, [history])
 
     const onClickGrAdd = React.useCallback(() => {
+        setState((prevState) => ({ ...prevState, openUpdateUserModal: true }))
+    }, [])
+
+    const onClickGrCreate = React.useCallback(() => {
         setState((prevState) => ({ ...prevState, openSearchUserModal: true }))
     }, [])
 
     const onCloseSearchUserModal = React.useCallback(() => {
         setState((prevState) => ({ ...prevState, openSearchUserModal: false }))
+    }, [])
+
+    const onCloseUpdateUserModal = React.useCallback(() => {
+        setState((prevState) => ({ ...prevState, openUpdateUserModal: false }))
     }, [])
 
     const onClickSearchUser = React.useCallback((item) => {
@@ -93,19 +105,13 @@ function HomePage() {
 
     const isGroupChat = selectedConversation?.users.length > 2
 
-    let otherUsers = [];
-    if (isGroupChat) {
-        otherUsers = selectedConversation?.users
-            .filter((userItem) => userItem._id !== user._id)
-            .map((userItem) => userItem.avatar)
-    }
-
     let selectedConversationTitle = [];
 
     if (isGroupChat) {
         selectedConversationTitle = selectedConversation?.users
             .filter((userItem) => userItem._id !== user._id)
-            .map((userLastName) => `${userLastName.lastName}, `)
+            .map((userLastName) => userLastName.lastName)
+            .join(', ')
     }
 
     function renderConversationItem(item) {
@@ -114,7 +120,11 @@ function HomePage() {
 
         const otherConversation = item.lastMessage.user._id !== user._id
 
-        let lastMessageUsername = otherConversation ? item.lastMessage.user.firstName : i18n.t('auth.you')
+        const firstUserName = item.lastMessage.user.firstName.split(' ')
+
+        const lastOneWordName = firstUserName[firstUserName.length - 1]
+
+        let lastMessageUsername = otherConversation ? lastOneWordName : i18n.t('auth.you')
 
         let lastMessageText = item.lastMessage.text
 
@@ -163,6 +173,7 @@ function HomePage() {
                 lastMessageAt={item.lastMessage.createdAt}
                 online={itemOtherUser.online}
                 badgeVisible={!isGroupChat}
+                lastMessageType={item.lastMessage.type}
             />
         )
     }
@@ -291,7 +302,7 @@ function HomePage() {
                             <>
                                 <BadgeAvatars
                                     badgeVisible={!isGroupChat}
-                                    avatar={isGroupChat ? otherUsers : otherUser?.avatar}
+                                    avatar={isGroupChat ? otherUsers.map((userItem) => userItem.avatar) : otherUser?.avatar}
                                     online={otherUser?.online}
                                     avatarClassName={styles.avatarClassName}
                                 />
@@ -310,14 +321,15 @@ function HomePage() {
                             </>
                         )}
                     </div>
-                    <SearchUserModal open={state.openSearchUserModal} onClose={onCloseSearchUserModal} />
+                    <SearchUserModal open={state.openSearchUserModal} onClose={onCloseSearchUserModal} initSelectedUsers={otherUsers} />
+                    <UpdateUserModal open={state.openUpdateUserModal} onClose={onCloseUpdateUserModal} initSelectedUsers={otherUsers} conversationId={id} />
                     {selectedConversation ? (
                         <div className={`${styles.backGroundIcon}`}>
                             <GroupAddIcon onClick={onClickGrAdd} color='primary' />
                         </div>
                     ) : (
                         <div className={`${styles.backGroundIcon}`}>
-                            <CreateIcon onClick={onClickGrAdd} color='primary' />
+                            <CreateIcon onClick={onClickGrCreate} color='primary' />
                         </div>
                     )}
                 </div>

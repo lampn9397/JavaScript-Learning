@@ -40,6 +40,7 @@ const vi = {
         file: "tệp",
         video: "video",
         onlineStatus: 'Đang Hoạt Động',
+        confirm: 'Xác Nhận',
     },
 
     chat: {

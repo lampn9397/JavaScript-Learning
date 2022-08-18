@@ -9,12 +9,12 @@ import { useDispatch } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 import { axiosClient } from '../../constants'
 import ClearIcon from '@mui/icons-material/Clear';
+import Button from '@mui/material/Button';
 
 import styles from './style.module.css'
 import i18n from '../../utils/i18n';
 import * as ActionTypes from '../../redux/actionTypes'
 import SearchItem from '../SearchItem';
-import ChatInput from '../../components/ChatInput';
 
 const style = {
     position: 'absolute',
@@ -29,10 +29,11 @@ const style = {
     p: 4,
 };
 
-export default function SearchUserModal({
+export default function UpdateUserModal({
     open,
     onClose: onCloseProps,
     initSelectedUsers,
+    conversationId,
 }) {
 
     const dispatch = useDispatch();
@@ -44,6 +45,7 @@ export default function SearchUserModal({
         selectedUsers: [],
 
     })
+
 
     const onClose = React.useCallback(() => {
         onCloseProps()
@@ -93,23 +95,31 @@ export default function SearchUserModal({
         state.selectedUsers.some((user) => user._id === item._id)
     ), [state.selectedUsers])
 
-    const sendMessage = React.useCallback((file, inputMessage) => {
-        if (!initSelectedUsers)
-            dispatch({
-                type: ActionTypes.UPDATE_CONVERSATION,
-                payload: { text: inputMessage, selectedUsers: state.selectedUsers }
-            })
-        if (state.selectedUsers.length < 2) return
-        dispatch({
-            type: ActionTypes.CREATE_CONVERSATIONS,
-            payload: { text: inputMessage, selectedUsers: state.selectedUsers }
-        })
-        onClose()
-    }, [dispatch, initSelectedUsers, onClose, state.selectedUsers])
-
     const searchSelectedUser = state.selectedUsers.concat(state.searchProfile.filter((item) => {
         return !state.selectedUsers.some((user) => user._id === item._id)
     }))
+
+    const checkDisable = React.useMemo(() => {
+        if (state.selectedUsers.length < 2) return true
+
+        if (state.selectedUsers.length !== initSelectedUsers.length) return false
+
+        for (const userItem of state.selectedUsers) {
+            const isExistUser = initSelectedUsers.some((user) => user._id === userItem._id)
+
+            if (!isExistUser) return false
+        }
+
+        return true
+    }, [state.selectedUsers, initSelectedUsers])
+
+    const onClickConfirm = React.useCallback(() => {
+        const users = state.selectedUsers.map((userItem) => userItem._id)
+        dispatch({
+            type: ActionTypes.UPDATE_GROUPCHAT,
+            payload: { users }
+        })
+    }, [dispatch, state.selectedUsers])
 
     React.useEffect(() => {
         if (open && initSelectedUsers) {
@@ -173,18 +183,19 @@ export default function SearchUserModal({
                         })}
                     </div>
                 )}
-                <ChatInput attachFilesEnable={false} likeEnable={false} onSubmit={sendMessage} disableChatInput={state.selectedUsers.length < 2} />
+                <Button variant="contained" fullWidth disabled={checkDisable} onClick={onClickConfirm}>{i18n.t('auth.confirm')}</Button>
             </Box>
         </Modal>
     )
 }
 
-SearchUserModal.propTypes = {
+UpdateUserModal.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     initSelectedUsers: PropTypes.instanceOf(Array),
+    conversationId: PropTypes.string.isRequired,
 }
 
-SearchUserModal.defaultProps = {
+UpdateUserModal.defaultProps = {
     initSelectedUsers: [],
 }

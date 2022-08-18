@@ -4,7 +4,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import PropTypes from 'prop-types';
 
 import styles from './style.module.css'
-import { FileTypes, fullScreenImageRef } from '../../constants';
+import { FileTypes, fullScreenImageRef, messageTypes } from '../../constants';
 import BadgeAvatars from '../BadgeAvatars';
 
 export default function MessageItem({
@@ -60,7 +60,7 @@ export default function MessageItem({
     if (message.user !== user._id) {
         return (
             <div className={styles.otherMessageContainer} >
-                {message.type === 'LIKE' ? (
+                {message.type === messageTypes.LIKE ? (
                     <div className={styles.iconContainer}>
                         <ThumbUpIcon color='primary' />
                     </div>
@@ -70,7 +70,7 @@ export default function MessageItem({
                             <div style={{ marginRight: 5 }}>
                                 <BadgeAvatars badgeVisible={true} avatarClassName={`${styles.avatar}`} avatar={avatar} online={online} />
                             </div>
-                            {message.text !== '' && <div className={styles.otherMessages}>{message.text}</div>}
+                            {message.text !== '' && <div className={`${styles.message} ${styles.otherMessagesColor}`}>{message.text}</div>}
                             {renderItemFile()}
                         </div>
                     </>
@@ -81,13 +81,13 @@ export default function MessageItem({
 
     return (
         <div className={styles.myMessageContainer} >
-            {message.type === 'LIKE' ? (
+            {message.type === messageTypes.LIKE ? (
                 <div className={styles.iconContainer}>
                     <ThumbUpIcon color='primary' />
                 </div>
             ) : (
                 <>
-                    {message.text !== '' && <div className={styles.myMessages}>{message.text}</div>}
+                    {message.text !== '' && <div className={`${styles.message} ${styles.myMessagesColor}`}>{message.text}</div>}
                     {renderItemFile()}
                 </>
             )}

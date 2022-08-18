@@ -9,6 +9,7 @@
     flex: 1;
     border-right: 1px solid rgb(237, 235, 235);
     padding: 10px 10px 10px 10px;
+    max-width: 25%;
 }
 
 .searchInput {
