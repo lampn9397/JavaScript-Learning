@@ -188,13 +188,8 @@ export const sendMessage = async (req, res, next) => {
       }),
     });
 
-    // const clonedMessage = message.toJSON();
-
-    // clonedMessage.files = clonedMessage.files.map(fileGetter);
-
     const clonedMessage = await Message
       .findById(message._id)
-      // .sort('-createdAt')
       .select('-conversationId')
       .lean({ getters: true });
 
