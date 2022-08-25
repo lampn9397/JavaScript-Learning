@@ -188,16 +188,22 @@ export const sendMessage = async (req, res, next) => {
       }),
     });
 
-    const clonedMessage = message.toJSON();
+    // const clonedMessage = message.toJSON();
 
-    clonedMessage.files = clonedMessage.files.map(fileGetter);
+    // clonedMessage.files = clonedMessage.files.map(fileGetter);
+
+    const clonedMessage = await Message
+      .findById(message._id)
+      // .sort('-createdAt')
+      .select('-conversationId')
+      .lean({ getters: true });
 
     res.json(Helpers.createResponse({
       results: clonedMessage
     }));
 
     const conversation = await conversationPipelines(Conversation.findByIdAndUpdate(id, {
-      lastMessage: clonedMessage._id
+      lastMessage: message._id
     }, { new: true })).lean({ getters: true });
 
     conversation.users.forEach((item) => {
