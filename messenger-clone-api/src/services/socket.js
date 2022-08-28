@@ -4,10 +4,12 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import Conversation from '../models/Conversation';
 import { getConversationTitle } from '../routes/api/chat/middlewares';
+import Message from '../models/Message';
 
 export const SocketEvents = {
   NEW_MESSAGE: 'new-message',
   NEW_CONVERSATION: 'new-conversation',
+  READ_MESSAGE: 'read-message',
 };
 
 export const createSocketServer = (server) => {
@@ -30,10 +32,10 @@ export const createSocketServer = (server) => {
         }
       })
       .lean({ getters: true });
-  
+
     conversations.forEach((c, index) => {
       const title = getConversationTitle(c, { user: { _id: userId } });
-  
+
       c.users.filter((x) => x._id !== userId).forEach((u) => {
         io.in(`user_${u._id}`).emit(SocketEvents.NEW_CONVERSATION, { ...c, title });
       });
@@ -62,25 +64,43 @@ export const createSocketServer = (server) => {
   io.on("connection", async (socket) => {
     const { token } = socket.handshake.auth;
 
-    const result = jwt.verify(token, JWT_SECRET);
+    const user = jwt.verify(token, JWT_SECRET);
 
-    socket.join(`user_${result.id}`);
+    socket.join(`user_${user.id}`);
 
     socket.on('disconnect', async () => {
-      await User.updateOne({ _id: result.id }, {
+      await User.updateOne({ _id: user.id }, {
         online: false,
         lastLogin: new Date(),
       });
 
-      await sendUserStatusToOthers(result.id);
+      await sendUserStatusToOthers(user.id);
+    })
+
+    socket.on(SocketEvents.READ_MESSAGE, async (messageId) => {
+      const update = {
+        $addToSet: { readUsers: friend }
+      };
+
+      const message = await Message
+        .findByIdAndUpdate(messageId, update, { new: true })
+        .populate('readUsers', 'firstName lastName avatar')
+        .lean({ getters: true });
+
+      const conversation = conversationPipelines(Conversation.findById(message._id))
+        .lean({ getters: true });
+
+      conversation.users.forEach((item) => {
+        io.in(`user_${item._id}`).emit(SocketEvents.READ_MESSAGE, message);
+      });
     });
 
-    await User.updateOne({ _id: result.id }, {
+    await User.updateOne({ _id: user.id }, {
       online: true,
       lastLogin: new Date(),
     });
 
-    await sendUserStatusToOthers(result.id);
+    await sendUserStatusToOthers(user.id);
   });
 
   return io;

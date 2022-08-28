@@ -7,7 +7,7 @@ import Conversation from '../../../models/Conversation';
 import { SocketEvents } from '../../../services/socket';
 import Message, { fileGetter, messageTypes } from '../../../models/Message';
 
-const conversationPipelines = (query) => {
+export const conversationPipelines = (query) => {
   return query
     // .select('-nicknames')
     .populate('users', 'firstName lastName avatar online lastLogin')
@@ -147,6 +147,7 @@ export const getMessages = async (req, res, next) => {
     const messages = await Message
       .find(filter, null, options)
       // .sort('-createdAt')
+      .populate('readUsers', 'firstName lastName avatar')
       .select('-conversationId')
       .lean({ getters: true });
 

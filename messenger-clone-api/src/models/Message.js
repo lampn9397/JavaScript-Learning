@@ -44,7 +44,14 @@ const schema = new Schema({
     type: String,
     enum: Object.keys(messageTypes),
     default: messageTypes.MESSAGE,
-  }
+  },
+  readUsers: {
+    type: [{
+      ref: 'users',
+      type: Schema.Types.ObjectId,
+    }],
+    default: [],
+  },
 }, {
   timestamps: true,
   versionKey: false,
