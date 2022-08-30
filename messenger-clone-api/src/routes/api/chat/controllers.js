@@ -13,10 +13,13 @@ export const conversationPipelines = (query) => {
     .populate('users', 'firstName lastName avatar online lastLogin')
     .populate({
       path: 'lastMessage',
-      populate: {
+      populate: [{
         path: 'user',
         select: 'firstName lastName avatar'
-      }
+      }, {
+        path: 'readUsers',
+        select: 'firstName lastName avatar'
+      }]
     })
 }
 
@@ -102,6 +105,23 @@ export const getConversations = async (req, res, next) => {
           },
         },
         { $unwind: '$lastMessage.user' },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'lastMessage.readUsers',
+            foreignField: '_id',
+            as: 'lastMessage.readUsers',
+            pipeline: [
+              {
+                $project: {
+                  'firstName': 1,
+                  'lastName': 1,
+                  avatar: { $concat: [Helpers.getImageRootUrl(), '/', { $toLower: '$avatar.type' }, '/', '$avatar.name'] },
+                }
+              }
+            ]
+          },
+        },
         {
           $project: {
             createdAt: 0,

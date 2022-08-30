@@ -84,19 +84,13 @@ export const createSocketServer = (server) => {
 
       const message = await Message
         .findByIdAndUpdate(messageId, update, { new: true })
+        .populate('user', 'firstName lastName avatar')
         .populate('readUsers', 'firstName lastName avatar')
         .lean({ getters: true });
 
       const conversation = await Conversation
         .findById(message.conversationId)
         .populate('users', 'firstName lastName avatar online lastLogin')
-        .populate({
-          path: 'lastMessage',
-          populate: {
-            path: 'user',
-            select: 'firstName lastName avatar'
-          }
-        })
         .lean({ getters: true });
 
       conversation.users.forEach((item) => {
