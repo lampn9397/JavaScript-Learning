@@ -191,7 +191,8 @@ export const sendMessage = async (req, res, next) => {
 
     const clonedMessage = await Message
       .findById(message._id)
-      .populate('user', 'firstName lastName')
+      .populate('user', 'firstName lastName avatar')
+      .populate('readUsers', 'firstName lastName avatar')
       .select('-conversationId')
       .lean({ getters: true });
 
