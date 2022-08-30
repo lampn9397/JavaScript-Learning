@@ -7,14 +7,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import { useHistory, useParams } from 'react-router-dom';
-import { io } from "socket.io-client";
 import moment from 'moment';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import CreateIcon from '@mui/icons-material/Create';
 
 import styles from '../HomePage/style.module.css'
 import i18n from '../../utils/i18n';
-import { host, routes, SocketEvents, localStorageKey, newChat, FileTypes } from '../../constants';
+import { routes, newChat, FileTypes } from '../../constants';
 import * as ActionTypes from '../../redux/actionTypes'
 import ChatInput from '../../components/ChatInput';
 import MessageItem from '../../components/MessageItem';
@@ -23,8 +22,6 @@ import SearchItem from '../../components/SearchItem';
 import BadgeAvatars from '../../components/BadgeAvatars';
 import SearchUserModal from '../../components/SearchUserModal';
 import UpdateUserModal from '../../components/UpdateUserModal';
-
-
 
 function HomePage() {
 
@@ -118,13 +115,13 @@ function HomePage() {
 
         const itemOtherUser = item.users.find((userItem) => userItem._id !== user._id)
 
-        const otherConversation = item.lastMessage.user._id !== user._id
+        const notMyLastMessage = item.lastMessage.user._id !== user._id
 
         const firstUserName = item.lastMessage.user.firstName.split(' ')
 
         const lastOneWordName = firstUserName[firstUserName.length - 1]
 
-        let lastMessageUsername = otherConversation ? lastOneWordName : i18n.t('auth.you')
+        let lastMessageUsername = notMyLastMessage ? lastOneWordName : i18n.t('auth.you')
 
         let lastMessageText = item.lastMessage.text
 
@@ -132,10 +129,19 @@ function HomePage() {
 
         const isGroupChat = item.users.length > 2;
 
+        let conversationTitle = ''
+
         if (isGroupChat) {
             avatar = item.users
                 .filter((userItem) => userItem._id !== user._id)
                 .map((userItem) => userItem.avatar)
+
+            conversationTitle = item.users
+                .filter((userItem) => userItem._id !== user._id)
+                .map((userItem) => userItem.firstName)
+                .join(', ')
+        } else {
+            lastMessageUsername = notMyLastMessage ? '' : i18n.t('auth.you')
         }
 
         if (item.lastMessage.files.length) {
@@ -167,23 +173,31 @@ function HomePage() {
                 key={item._id}
                 onClick={onClickConversation(item)}
                 avatar={avatar}
-                title={item.title}
+                title={isGroupChat ? conversationTitle : item.title}
                 lastMessageUsername={lastMessageUsername}
                 lastMessage={lastMessageText}
                 lastMessageAt={item.lastMessage.createdAt}
                 online={itemOtherUser.online}
                 badgeVisible={!isGroupChat}
                 lastMessageType={item.lastMessage.type}
+                unReadMessage={true}
             />
         )
     }
 
     function renderMessageItem(item) {
 
-        const userByMessage = selectedConversation?.users.find((user) => user._id === item.user)
+        const userByMessage = selectedConversation?.users.find((user) => user._id === item.user || user._id === item.user._id)
 
         return (
-            <MessageItem item={item} user={user} key={item._id} avatar={userByMessage?.avatar} online={userByMessage?.online} />
+            <MessageItem
+                item={item}
+                user={user}
+                key={item._id}
+                avatar={userByMessage?.avatar}
+                online={userByMessage?.online}
+                readUsers={item.readUsers ?? []}
+            />
         )
     }
 
@@ -231,25 +245,7 @@ function HomePage() {
 
     React.useEffect(() => {
 
-        const token = localStorage.getItem(localStorageKey.token);
-
-        const socket = io(host, { auth: { token } });
-
-        socket.on(SocketEvents.NEW_MESSAGE, (message) => {
-            dispatch({ type: ActionTypes.SEND_MESSAGES_SUCCESS, payload: message });
-        })
-
-        socket.on(SocketEvents.NEW_CONVERSATION, (conversation) => {
-            dispatch({ type: ActionTypes.UPDATE_CONVERSATION, payload: conversation });
-        })
-
         dispatch({ type: ActionTypes.GET_CONVERSATIONS });
-
-        return () => {
-            socket.off(SocketEvents.NEW_MESSAGE);
-            socket.off(SocketEvents.NEW_CONVERSATION);
-            socket.disconnect();
-        }; //function component cleanup
 
     }, [dispatch]);
 
@@ -259,6 +255,12 @@ function HomePage() {
         dispatch({ type: ActionTypes.GET_CONVERSATIONID, payload: id })
         dispatch({ type: ActionTypes.GET_MESSAGES, payload: id, page: 1 })
     }, [dispatch, id]);
+
+    React.useEffect(() => {
+        if (selectedConversation && selectedConversation.lastMessage.user._id !== user._id) {
+            dispatch({ type: ActionTypes.READ_MESSAGE, payload: selectedConversation.lastMessage._id })
+        }
+    }, [dispatch, selectedConversation, user._id])
 
     return (
         <div className={styles.homePageContainer}>

@@ -122,6 +122,13 @@ export default function chatReducer(state = defaultState, action) {
                 ...state,
                 messages: [],
             };
+        case ActionTypes.CLEAR_MESSAGES:
+            return {
+                ...state,
+                messages: [],
+                selectedConversation: null,
+                conversationIdLoading: true
+            };
         case ActionTypes.SEND_MESSAGES:
             return {
                 ...state,

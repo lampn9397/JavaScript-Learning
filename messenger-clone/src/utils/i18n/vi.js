@@ -41,6 +41,7 @@ const vi = {
         video: "video",
         onlineStatus: 'Đang Hoạt Động',
         confirm: 'Xác Nhận',
+        sent: 'Đã gửi tin nhắn'
     },
 
     chat: {

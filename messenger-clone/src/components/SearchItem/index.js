@@ -24,6 +24,7 @@ export default function SearchItem({
     onClickAddIcon,
     checkItemSelected,
     lastMessageType,
+    unReadMessage,
 }) {
     return (
         <div className={styles.userContainer} onClick={onClick}>
@@ -34,16 +35,25 @@ export default function SearchItem({
                 [styles.userInfo]: true,
                 [styles.userInfoWithIcon]: addUserEnable,
             })}>
-                <div className={`${styles.conversationTitle}`}>{title}</div>
+                <div className={classNames({
+                    [styles.conversationTitle]: true,
+                    [styles.readTitle]: unReadMessage
+                })}>{title}</div>
                 <div className={styles.lastMessageContainer}>
-                    <div className={styles.lastMessageUsername}>{lastMessageUsername}</div>
+                    <div className={classNames({
+                        [styles.lastMessageUsername]: true,
+                        [styles.readMessage]: unReadMessage
+                    })}>{lastMessageUsername}</div>
                     {lastMessageUsername && <div>:&nbsp;</div>}
                     {lastMessageVisible && (
                         <>
                             {lastMessageType === messageTypes.LIKE ? (
                                 <ThumbUpIcon color='primary' fontSize='small' />
                             ) : (
-                                <div className={styles.lastMessage}>{lastMessage}</div>
+                                <div className={classNames({
+                                    [styles.lastMessage]: true,
+                                    [styles.readMessage]: unReadMessage
+                                })}>{lastMessage}</div>
                             )}
                             <div className={styles.dotSpace}>·</div>
                             <div className={`${styles.lastMessageAt}`}> {moment(lastMessageAt).fromNow()}</div>
@@ -72,7 +82,7 @@ export default function SearchItem({
 SearchItem.propTypes = {
     lastMessageAtVisible: PropTypes.bool,
     onClick: PropTypes.func,
-    avatar: PropTypes.string.isRequired,
+    avatar: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Array)]).isRequired,
     title: PropTypes.string.isRequired,
     lastMessageUsername: PropTypes.string,
     lastMessage: PropTypes.string,
@@ -82,6 +92,7 @@ SearchItem.propTypes = {
     addUserEnable: PropTypes.bool,
     onClickAddIcon: PropTypes.func,
     checkItemSelected: PropTypes.bool,
+    unReadMessage: PropTypes.bool,
 }
 
 SearchItem.defaultProps = {
@@ -95,4 +106,5 @@ SearchItem.defaultProps = {
     addUserEnable: false,
     onClickAddIcon: () => undefined,
     checkItemSelected: false,
+    unReadMessage: false,
 }

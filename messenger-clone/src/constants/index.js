@@ -1,10 +1,13 @@
+import * as React from 'react';
+import { io } from "socket.io-client";
+import axios from 'axios';
+
 import HomePage from "../Pages/HomePage";
 import MenuPage from "../Pages/MenuPage";
 import LoginPage from "../Pages/LoginPage";
-import axios from 'axios';
 import RegisterPage from "../Pages/RegisterPage";
 import ProfilePage from "../Pages/ProfilePage";
-import * as React from 'react';
+
 
 export const routes = {
     MenuPage: {
@@ -69,8 +72,19 @@ export const messageTypes = {
 
 export const newChat = 'newChat'
 
+export const reactApp = 'React App'
+
 export const SocketEvents = {
     NEW_MESSAGE: 'new-message',
     NEW_CONVERSATION: 'new-conversation',
+    READ_MESSAGE: 'read-message',
 };
+
 export const fullScreenImageRef = React.createRef()
+
+export const appSnackBarRef = React.createRef()
+
+export const socket = io(host, {
+    autoConnect: false
+});
+

@@ -5,7 +5,7 @@ import Select from '@mui/material/Select';
 import styles from './style.module.css'
 import i18n, { languageOption } from '../../utils/i18n';
 import images from '../../assets';
-import { localStorageKey } from '../../constants';
+import { localStorageKey, axiosClient } from '../../constants';
 
 export default function Header() {
 
@@ -20,6 +20,8 @@ export default function Header() {
         localStorage.setItem(localStorageKey.language, event.target.value);
 
         setState((prevState) => ({ ...prevState, [fieldName]: event.target.value }))
+
+        axiosClient.defaults.headers['Accept-Language'] = event.target.value;
     }
 
 

@@ -5,6 +5,7 @@ import moment from 'moment';
 import { axiosClient, localStorageKey } from '../../constants'
 import { push } from 'connected-react-router';
 import i18n from '../../utils/i18n'
+import { apiErrorHandle } from '../../utils';
 
 function* checkLogin() {
 
@@ -33,7 +34,7 @@ function* loginAction(action) {
         yield getUserInfo()
 
     } catch (error) {
-
+        apiErrorHandle(error)
     }
 }
 
@@ -43,17 +44,17 @@ function* getUserInfo() {
 
         i18n.changeLanguage(data.results.language);
 
+        axiosClient.defaults.headers['Accept-Language'] = data.results.language;
+
         moment.locale(data.results.language);
 
         yield put(push('/'))
 
         yield put({ type: ActionTypes.GET_USERINFO_SUCCESS, payload: data.results });
     } catch (error) {
-        const errorMessage = error.response?.data?.message ?? error.message;
+        apiErrorHandle(error)
 
         yield put({ type: ActionTypes.GET_USERINFO_FAILED });
-
-        alert(errorMessage);
     }
 }
 function* searchUser(action) {
@@ -67,11 +68,9 @@ function* searchUser(action) {
 
         yield put({ type: ActionTypes.SEARCH_USER_SUCCESS, payload: data.results });
     } catch (error) {
-        const errorMessage = error.response?.data?.message ?? error.message;
+        apiErrorHandle(error)
 
         yield put({ type: ActionTypes.SEARCH_USER_FAILED });
-
-        alert(errorMessage);
     }
 }
 
@@ -88,11 +87,10 @@ function* registerUser(action) {
         callback();
 
     } catch (error) {
-        const errorMessage = error.response?.data?.message ?? error.message;
+        apiErrorHandle(error)
 
         yield put({ type: ActionTypes.REGISTER_ACCOUNT_FAILED });
 
-        alert(errorMessage);
     }
 }
 
@@ -129,18 +127,22 @@ function* updaterUser(action) {
         callback();
 
     } catch (error) {
-        const errorMessage = error.response?.data?.message ?? error.message;
+        apiErrorHandle(error)
 
         yield put({ type: ActionTypes.UPDATE_USERINFO_FAILED });
 
-        alert(errorMessage);
     }
 }
 
 function* checkLogout() {
+
+    const language = localStorage.getItem(localStorageKey.language)
+
     localStorage.removeItem(localStorageKey.token);
+
     yield put({ type: ActionTypes.LOGOUT_DONE });
 
+    i18n.changeLanguage(language);
 }
 
 export default function* user() {

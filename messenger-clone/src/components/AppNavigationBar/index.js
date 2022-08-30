@@ -36,7 +36,8 @@ export default function AppNavigationBar() {
 
     const onClickReturnHome = React.useCallback(() => {
         history.push(routes.HOME('').path)
-    }, [history])
+        dispatch({ type: ActionTypes.CLEAR_MESSAGES })
+    }, [dispatch, history])
 
     const onClickLogout = React.useCallback(() => {
         dispatch({ type: ActionTypes.LOGOUT })

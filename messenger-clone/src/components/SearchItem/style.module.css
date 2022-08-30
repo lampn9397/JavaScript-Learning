@@ -70,3 +70,12 @@
     overflow: hidden;
     white-space: nowrap;
 }
+
+.readTitle {
+    font-weight: 600;
+}
+
+.readMessage {
+    color: #1976d2;
+    font-weight: 600;
+}

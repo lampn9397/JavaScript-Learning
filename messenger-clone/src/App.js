@@ -8,11 +8,12 @@ import * as ActionTypes from './redux/actionTypes'
 import { withTranslation } from 'react-i18next';
 
 import styles from './App.module.css'
-import { fullScreenImageRef, publicRoutes, routes } from './constants'
+import { fullScreenImageRef, publicRoutes, routes, reactApp } from './constants'
 import { history } from './redux/store';
 import AppNavigationBar from './components/AppNavigationBar';
 import Header from './components/Header';
 import FullScreenImage from './components/FullScreenImage';
+import SocketContext from './components/SocketContext';
 
 function App() {
 
@@ -24,6 +25,10 @@ function App() {
 
   React.useEffect(() => {
     dispatch({ type: ActionTypes.CHECK_LOGIN });
+    window.onfocus = () => {
+      clearInterval(window.timerId)
+      document.title = reactApp
+    };
   }, [dispatch])
 
   const renderRouteItem = React.useCallback((routeArray) => (key) => {
@@ -81,6 +86,7 @@ function App() {
   return (
     <ConnectedRouter history={history}>
       <AppNavigationBar />
+      <SocketContext />
       <FullScreenImage ref={fullScreenImageRef} />
       <Switch>
         {Object.keys(routes).map(renderRouteItem(routes))}

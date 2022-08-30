@@ -81,7 +81,15 @@ export default function UpdateUserModal({
 
             if (indexSelectedUser === -1) selectedUsers.push(item)
 
-            else selectedUsers.splice(indexSelectedUser, 1)
+            else {
+                const isExistInInitSelectedUsers = initSelectedUsers.some((userItem) => userItem._id === item._id)
+
+                if (isExistInInitSelectedUsers) {
+                    selectedUsers[indexSelectedUser].selected = !selectedUsers[indexSelectedUser].selected
+                } else {
+                    selectedUsers.splice(indexSelectedUser, 1)
+                }
+            }
 
             return ({
                 ...prevState,
@@ -89,37 +97,52 @@ export default function UpdateUserModal({
                 selectedUsers,
             })
         })
-    }, [])
+    }, [initSelectedUsers])
 
-    const checkItemSelected = React.useCallback((item) => (
-        state.selectedUsers.some((user) => user._id === item._id)
-    ), [state.selectedUsers])
+    const checkItemSelected = React.useCallback((item) => {
+
+        if (typeof (item.selected) === 'boolean') {
+            return item.selected
+        }
+
+        return state.selectedUsers.some((user) => user._id === item._id)
+
+    }, [state.selectedUsers])
 
     const searchSelectedUser = state.selectedUsers.concat(state.searchProfile.filter((item) => {
         return !state.selectedUsers.some((user) => user._id === item._id)
     }))
 
+    const selectedUsers = React.useMemo(() => (
+        state.selectedUsers.filter((userItem) => userItem.selected !== false)
+    ), [state.selectedUsers])
+
     const checkDisable = React.useMemo(() => {
-        if (state.selectedUsers.length < 2) return true
 
-        if (state.selectedUsers.length !== initSelectedUsers.length) return false
+        if (selectedUsers.length < 2) return true
 
-        for (const userItem of state.selectedUsers) {
+        if (selectedUsers.length !== initSelectedUsers.length) return false
+
+        for (const userItem of selectedUsers) {
             const isExistUser = initSelectedUsers.some((user) => user._id === userItem._id)
 
             if (!isExistUser) return false
         }
 
+
+
         return true
-    }, [state.selectedUsers, initSelectedUsers])
+    }, [selectedUsers, initSelectedUsers])
 
     const onClickConfirm = React.useCallback(() => {
-        const users = state.selectedUsers.map((userItem) => userItem._id)
+
+        const users = selectedUsers.map((userItem) => userItem._id)
+
         dispatch({
             type: ActionTypes.UPDATE_GROUPCHAT,
             payload: { users }
         })
-    }, [dispatch, state.selectedUsers])
+    }, [dispatch, selectedUsers])
 
     React.useEffect(() => {
         if (open && initSelectedUsers) {
@@ -175,7 +198,7 @@ export default function UpdateUserModal({
                                     badgeVisible={false}
                                     title={`${item.firstName} ${item.lastName}`}
                                     lastMessageAtVisible={false}
-                                    addUserEnable={!isInitSelectedUser}
+                                    addUserEnable
                                     onClickAddIcon={onClickAddIcon(item, index)}
                                     checkItemSelected={checkItemSelected(item)}
                                 />

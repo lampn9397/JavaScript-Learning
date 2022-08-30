@@ -78,3 +78,21 @@
     height: 25px !important;
     width: 25px !important;
 }
+
+.readUserAvatarContainer {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.readUserAvatar {
+    height: 18px;
+    width: 18px;
+    border-radius: 9px;
+    margin-right: 5px;
+}
+
+.otherReadUsersContainer {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}

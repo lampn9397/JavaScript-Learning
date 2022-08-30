@@ -9,6 +9,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store, { sagaMiddleware } from './redux/store';
 import rootSaga from './redux/sagas';
+import AppSnackBar from './components/AppSnackBar';
+import { appSnackBarRef } from './constants';
 
 moment.updateLocale('en', {
   relativeTime: {
@@ -28,6 +30,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
+      <AppSnackBar ref={appSnackBarRef} />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

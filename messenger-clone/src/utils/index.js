@@ -1,3 +1,5 @@
+import { appSnackBarRef } from "../constants";
+
 export const readFile = (file) => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -13,4 +15,11 @@ export const ValidateEmail = (mail) => {
         return (true)
     }
     return (false)
+}
+export const apiErrorHandle = (error) => {
+    const errorMessage = error.response?.data?.message ?? error.message;
+
+    appSnackBarRef.current.open(errorMessage)
+
+    return errorMessage
 }

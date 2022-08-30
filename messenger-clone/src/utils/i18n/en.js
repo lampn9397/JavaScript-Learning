@@ -41,6 +41,7 @@ const en = {
         video: "video",
         onlineStatus: 'online',
         confirm: 'confirm',
+        sent: 'sent'
     },
 
     chat: {

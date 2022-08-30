@@ -3,6 +3,7 @@ import { takeLeading, put, select, debounce, delay } from 'redux-saga/effects';
 
 import { axiosClient, routes } from '../../constants'
 import { push } from 'connected-react-router';
+import { apiErrorHandle } from '../../utils';
 
 function* getConversationsAction() {
     try {
@@ -11,11 +12,10 @@ function* getConversationsAction() {
         yield put({ type: ActionTypes.GET_CONVERSATIONS_SUCCESS, payload: data.results });
 
     } catch (error) {
-        const errorMessage = error.response?.data?.message ?? error.message;
+        apiErrorHandle(error)
 
         yield put({ type: ActionTypes.GET_CONVERSATIONS_FAILED });
 
-        alert(errorMessage);
     }
 }
 
@@ -31,11 +31,10 @@ function* searchConversationsAction(action) {
         yield put({ type: ActionTypes.SEARCHCONVERSATIONS_SUCCESS, payload: data.results });
 
     } catch (error) {
-        const errorMessage = error.response?.data?.message ?? error.message;
+        apiErrorHandle(error)
 
         yield put({ type: ActionTypes.SEARCHCONVERSATIONS_FAILED });
 
-        alert(errorMessage);
     }
 }
 
@@ -56,11 +55,10 @@ function* getConversationIdAction(action) {
             yield put({ type: ActionTypes.GET_CONVERSATIONID_SUCCESS, payload: conversation })
         }
     } catch (error) {
-        const errorMessage = error.response?.data?.message ?? error.message;
+        apiErrorHandle(error)
 
         yield put({ type: ActionTypes.GET_CONVERSATIONID_FAILED });
 
-        alert(errorMessage);
     }
 }
 function* getMessageAction(action) {
@@ -75,11 +73,10 @@ function* getMessageAction(action) {
         yield put({ type: ActionTypes.GET_MESSAGES_SUCCESS, payload: data.results, page });
 
     } catch (error) {
-        const errorMessage = error.response?.data?.message ?? error.message;
+        apiErrorHandle(error)
 
         yield put({ type: ActionTypes.GET_MESSAGES_FAILED });
 
-        alert(errorMessage);
     }
 }
 
@@ -103,11 +100,10 @@ function* sendMessageAction(action) {
         // yield put({ type: ActionTypes.SEND_MESSAGES_SUCCESS, payload: data.results });
 
     } catch (error) {
-        const errorMessage = error.response?.data?.message ?? error.message;
+        apiErrorHandle(error)
 
         yield put({ type: ActionTypes.SEND_MESSAGES_FAILED });
 
-        alert(errorMessage);
     }
 }
 
@@ -127,11 +123,10 @@ function* createGroupChat(action) {
         yield axiosClient.post('/chat', formData);
 
     } catch (error) {
-        const errorMessage = error.response?.data?.message ?? error.message;
+        apiErrorHandle(error)
 
         yield put({ type: ActionTypes.CREATE_CONVERSATIONS_FAILED });
 
-        alert(errorMessage);
     }
 }
 function* updateGroupChat(action) {
@@ -144,11 +139,10 @@ function* updateGroupChat(action) {
         yield axiosClient.put(`/chat/${idConversation}`, { users: payload.users });
 
     } catch (error) {
-        const errorMessage = error.response?.data?.message ?? error.message;
+        apiErrorHandle(error)
 
         yield put({ type: ActionTypes.UPDATE_GROUPCHAT_FAILED });
 
-        alert(errorMessage);
     }
 }
 
@@ -176,11 +170,9 @@ function* newChatAction(action) {
         yield put({ type: ActionTypes.NEW_CHAT_SUCCESS, payload: data.results })
 
     } catch (error) {
-        const errorMessage = error.response?.data?.message ?? error.message;
+        apiErrorHandle(error)
 
         yield put({ type: ActionTypes.NEW_CHAT_FAILED });
-
-        alert(errorMessage);
     }
 }
 
