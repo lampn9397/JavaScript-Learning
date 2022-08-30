@@ -2,9 +2,10 @@ import { Server } from 'socket.io';
 import jwt from 'jsonwebtoken';
 
 import User from '../models/User';
+import Message from '../models/Message';
 import Conversation from '../models/Conversation';
 import { getConversationTitle } from '../routes/api/chat/middlewares';
-import Message from '../models/Message';
+import { conversationPipelines } from '../routes/api/chat/controllers';
 
 export const SocketEvents = {
   NEW_MESSAGE: 'new-message',
@@ -87,7 +88,7 @@ export const createSocketServer = (server) => {
         .populate('readUsers', 'firstName lastName avatar')
         .lean({ getters: true });
 
-      const conversation = conversationPipelines(Conversation.findById(message._id))
+      const conversation = conversationPipelines(Conversation.findById(message.conversationId))
         .lean({ getters: true });
 
       conversation.users.forEach((item) => {
