@@ -5,7 +5,6 @@ import User from '../models/User';
 import Message from '../models/Message';
 import Conversation from '../models/Conversation';
 import { getConversationTitle } from '../routes/api/chat/middlewares';
-import { conversationPipelines } from '../routes/api/chat/controllers';
 
 export const SocketEvents = {
   NEW_MESSAGE: 'new-message',
@@ -88,7 +87,16 @@ export const createSocketServer = (server) => {
         .populate('readUsers', 'firstName lastName avatar')
         .lean({ getters: true });
 
-      const conversation = conversationPipelines(Conversation.findById(message.conversationId))
+      const conversation = Conversation
+        .findById(message.conversationId)
+        .populate('users', 'firstName lastName avatar online lastLogin')
+        .populate({
+          path: 'lastMessage',
+          populate: {
+            path: 'user',
+            select: 'firstName lastName avatar'
+          }
+        })
         .lean({ getters: true });
 
       conversation.users.forEach((item) => {
