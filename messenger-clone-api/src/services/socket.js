@@ -87,7 +87,7 @@ export const createSocketServer = (server) => {
         .populate('readUsers', 'firstName lastName avatar')
         .lean({ getters: true });
 
-      const conversation = Conversation
+      const conversation = await Conversation
         .findById(message.conversationId)
         .populate('users', 'firstName lastName avatar online lastLogin')
         .populate({
