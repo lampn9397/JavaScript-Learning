@@ -79,7 +79,7 @@ export const createSocketServer = (server) => {
 
     socket.on(SocketEvents.READ_MESSAGE, async (messageId) => {
       const update = {
-        $addToSet: { readUsers: friend }
+        $addToSet: { readUsers: user.id }
       };
 
       const message = await Message
