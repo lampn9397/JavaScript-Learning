@@ -7,7 +7,6 @@ function readMessage(action) {
     const { payload } = action
 
     socket.emit(SocketEvents.READ_MESSAGE, payload);
-    console.log(payload)
 }
 
 export default function* socketSaga() {

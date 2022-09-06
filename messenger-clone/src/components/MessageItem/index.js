@@ -1,11 +1,13 @@
 import * as React from 'react';
 import ArticleIcon from '@mui/icons-material/Article';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import PropTypes from 'prop-types';
 
 import styles from './style.module.css'
 import { FileTypes, fullScreenImageRef, messageTypes } from '../../constants';
 import BadgeAvatars from '../BadgeAvatars';
+import EmojiEmotions from '@mui/icons-material/EmojiEmotions';
 
 export default function MessageItem({
     item: message,
@@ -28,7 +30,7 @@ export default function MessageItem({
                 ))}
             </div>
         )
-    }, [])
+    }, [readUsers])
 
     const renderItemFile = React.useCallback(() => {
         return (
@@ -70,18 +72,22 @@ export default function MessageItem({
 
     if (message.user === user._id || message.user._id === user._id) {
         return (
-            <div className={styles.myMessageContainer} >
-                {message.type === messageTypes.LIKE ? (
-                    <div className={styles.iconContainer}>
-                        <ThumbUpIcon color='primary' />
-                    </div>
-                ) : (
-                    <>
-                        {message.text !== '' && <div className={`${styles.message} ${styles.myMessagesColor}`}>{message.text}</div>}
-                        {renderItemFile()}
-                        {renderReadUsers()}
-                    </>
-                )}
+            <div className={styles.myMessageWrapper}>
+                <EmojiEmotions />
+                <div className={styles.myMessageContainer} >
+                    {message.type === messageTypes.LIKE ? (
+                        <div className={styles.iconContainer}>
+                            <ThumbUpIcon color='primary' fontSize='large' />
+                            {renderReadUsers()}
+                        </div>
+                    ) : (
+                        <>
+                            {message.text !== '' && <div className={`${styles.message} ${styles.myMessagesColor}`}>{message.text}</div>}
+                            {renderItemFile()}
+                            {renderReadUsers()}
+                        </>
+                    )}
+                </div>
             </div>
         )
     }

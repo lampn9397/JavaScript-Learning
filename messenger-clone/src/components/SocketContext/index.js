@@ -40,7 +40,7 @@ export default function SocketContext() {
         })
 
         socket.on(SocketEvents.READ_MESSAGE, (message) => {
-            console.log(message)
+            dispatch({ type: ActionTypes.READ_MESSAGE_SUCCESS, payload: message })
         })
 
         socket.on(SocketEvents.NEW_CONVERSATION, (conversation) => {

@@ -62,13 +62,14 @@ function* getConversationIdAction(action) {
     }
 }
 function* getMessageAction(action) {
+    const { payload, page, callback } = action;
+    let messages = []
     try {
-
-        const { payload, page, callback } = action;
-
         const { data } = yield axiosClient.get(`/chat/${payload}/message?page=${page}&limit=${15}`);
+
+        messages = data.results
+
         if (page > 1) yield delay(1000)
-        callback?.(data.results);
 
         yield put({ type: ActionTypes.GET_MESSAGES_SUCCESS, payload: data.results, page });
 
@@ -78,6 +79,7 @@ function* getMessageAction(action) {
         yield put({ type: ActionTypes.GET_MESSAGES_FAILED });
 
     }
+    callback?.(messages);
 }
 
 function* sendMessageAction(action) {

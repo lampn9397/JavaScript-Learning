@@ -72,6 +72,31 @@ export default function chatReducer(state = defaultState, action) {
                 ...state,
                 conversationsLoading: false,
             };
+        case ActionTypes.READ_MESSAGE_SUCCESS: {
+
+            const conversations = [...state.conversations]
+
+            const conversationIndex = conversations.findIndex((item) => item._id === action.payload.conversationId)
+
+            if (conversationIndex !== -1) {
+                conversations[conversationIndex].lastMessage = action.payload
+            }
+
+            const messages = JSON.parse(JSON.stringify(state.messages))
+
+            const messageIndex = messages.findIndex((item) => item._id === action.payload._id)
+
+            if (messageIndex !== -1) {
+
+                messages[messageIndex] = action.payload
+            }
+
+            return {
+                ...state,
+                conversations,
+                messages,
+            };
+        }
         case ActionTypes.GET_CONVERSATIONID:
             return {
                 ...state,

@@ -41,6 +41,32 @@ function HomePage() {
 
     const messages = useSelector((state) => state.conversations.messages)
 
+    const readMessageUsers = React.useMemo(() => {
+
+        if (!selectedConversation) return []
+
+        const users = selectedConversation.users.filter((item) => item._id !== user._id)
+
+        return users.map((item) => {
+            let lastMessage;
+
+            if (messages[0]?.user === item._id || messages[0]?.user._id === item._id) {
+
+                lastMessage = messages[0]
+
+            } else {
+
+                lastMessage = messages.find((messageItem) => (
+                    messageItem.readUsers?.some((userItem) => userItem._id === item._id)
+                ))
+
+            }
+
+            return { user: item, lastMessage }
+        })
+
+    }, [messages, selectedConversation, user._id])
+
     const conversationsLoading = useSelector((state) => state.conversations.conversationsLoading)
 
     const conversationIdLoading = useSelector((state) => state.conversations.conversationIdLoading)
@@ -64,6 +90,9 @@ function HomePage() {
     })
 
     const onClickConversation = React.useCallback((item) => () => {
+        lastPage.current = false
+        page.current = 1
+        callChatMessageAPI.current = false
         history.push(routes.HOME(item._id).path)
     }, [history])
 
@@ -129,6 +158,15 @@ function HomePage() {
 
         const isGroupChat = item.users.length > 2;
 
+        let unReadMessage = false
+
+        if (item.lastMessage.user._id !== user._id) {
+
+            unReadMessage = !item.lastMessage.readUsers?.some((userItem) => userItem._id === user._id) ?? false
+
+        }
+
+
         let conversationTitle = ''
 
         if (isGroupChat) {
@@ -180,7 +218,7 @@ function HomePage() {
                 online={itemOtherUser.online}
                 badgeVisible={!isGroupChat}
                 lastMessageType={item.lastMessage.type}
-                unReadMessage={true}
+                unReadMessage={unReadMessage}
             />
         )
     }
@@ -189,6 +227,14 @@ function HomePage() {
 
         const userByMessage = selectedConversation?.users.find((user) => user._id === item.user || user._id === item.user._id)
 
+        const readUsers = []
+
+        for (const userItem of readMessageUsers) {
+            if (userItem.lastMessage?._id === item._id) {
+                readUsers.push(userItem.user)
+            }
+        }
+
         return (
             <MessageItem
                 item={item}
@@ -196,7 +242,7 @@ function HomePage() {
                 key={item._id}
                 avatar={userByMessage?.avatar}
                 online={userByMessage?.online}
-                readUsers={item.readUsers ?? []}
+                readUsers={readUsers}
             />
         )
     }
@@ -212,17 +258,18 @@ function HomePage() {
 
         const isEndReached = scrollPosition <= event.target.clientHeight + 10;
 
-        if (isEndReached && !lastPage.current && !callChatMessageAPI.current) {
+        if (isEndReached && !lastPage.current) {
 
             callChatMessageAPI.current = true;
 
             dispatch({
                 type: ActionTypes.GET_MESSAGES,
                 payload: id,
-                page: ++page.current,
+                page: page.current + 1,
                 callback: (data) => {
                     lastPage.current = data.length === 0;
                     callChatMessageAPI.current = false;
+                    ++page.current
                 }
             });
         }
