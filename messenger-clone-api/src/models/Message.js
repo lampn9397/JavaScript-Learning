@@ -21,6 +21,27 @@ export const messageTypes = {
   LIKE: 'LIKE',
 };
 
+export const REACTION_TYPES = {
+  LIKE: 'LIKE',
+  LOVE: 'LOVE',
+  ANGRY: 'ANGRY',
+  SAD: 'SAD',
+}
+
+const reactionScheme = new Schema({
+  user: {
+    ref: 'users',
+    type: Schema.Types.ObjectId,
+  },
+  type: {
+    type: String,
+    enum: {
+      values: Object.keys(REACTION_TYPES),
+      message: 'mongoose_error.model.message.reaction_enum',
+    },
+  }
+});
+
 const schema = new Schema({
   text: {
     trim: true,
@@ -52,6 +73,7 @@ const schema = new Schema({
     }],
     default: [],
   },
+  reactions: [reactionScheme]
 }, {
   timestamps: true,
   versionKey: false,

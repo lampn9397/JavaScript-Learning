@@ -10,7 +10,8 @@
         "nickname_required": "Nickname is required."
       },
       "message": {
-        "message_required": "Message is required."
+        "message_required": "Message is required.",
+        "reaction_enum": "Invalid react type."
       },
       "user": {
         "username_required": "Username is required.",

@@ -10,7 +10,8 @@
         "nickname_required": "Trường nickname là bắt buộc."
       },
       "message": {
-        "message_required": "Trường message là bắt buộc."
+        "message_required": "Trường message là bắt buộc.",
+        "reaction_enum": "Type không hợp lệ."
       },
       "user": {
         "username_required": "Tên tài khoản là bắt buộc.",
