@@ -47,6 +47,11 @@ export default function SocketContext() {
             dispatch({ type: ActionTypes.UPDATE_CONVERSATION, payload: conversation });
         })
 
+        socket.on(SocketEvents.UPDATE_MESSAGE, (message) => {
+            console.log(message)
+            dispatch({ type: ActionTypes.UPDATE_REACTION_SUCCESS, payload: message });
+        })
+
         return () => {
             socket.off(SocketEvents.NEW_MESSAGE);
             socket.off(SocketEvents.NEW_CONVERSATION);

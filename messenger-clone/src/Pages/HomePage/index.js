@@ -112,6 +112,16 @@ function HomePage() {
         setState((prevState) => ({ ...prevState, openUpdateUserModal: false }))
     }, [])
 
+    const onReaction = React.useCallback((item) => (emojiType) => {
+        dispatch({
+            type: ActionTypes.UPDATE_REACTION,
+            payload: {
+                messageId: item._id,
+                reaction: emojiType
+            }
+        })
+    }, [dispatch])
+
     const onClickSearchUser = React.useCallback((item) => {
         history.push(routes.HOME(newChat).path)
         dispatch({
@@ -243,6 +253,7 @@ function HomePage() {
                 avatar={userByMessage?.avatar}
                 online={userByMessage?.online}
                 readUsers={readUsers}
+                onReaction={onReaction(item)}
             />
         )
     }

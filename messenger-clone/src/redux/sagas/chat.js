@@ -147,6 +147,20 @@ function* updateGroupChat(action) {
 
     }
 }
+function* updateReaction(action) {
+    try {
+
+        const { payload } = action;
+
+        yield axiosClient.put(`/chat/message/${payload.messageId}`, { reaction: payload.reaction });
+
+    } catch (error) {
+        apiErrorHandle(error)
+
+        yield put({ type: ActionTypes.UPDATE_REACTION_FAIL });
+
+    }
+}
 
 function* newChatAction(action) {
     try {
@@ -186,6 +200,7 @@ export default function* chat() {
     yield takeLeading(ActionTypes.NEW_CHAT, newChatAction);
     yield takeLeading(ActionTypes.CREATE_CONVERSATIONS, createGroupChat);
     yield takeLeading(ActionTypes.UPDATE_GROUPCHAT, updateGroupChat);
+    yield takeLeading(ActionTypes.UPDATE_REACTION, updateReaction);
 
     yield debounce(1000, ActionTypes.SEARCHCONVERSATIONS, searchConversationsAction)
 }

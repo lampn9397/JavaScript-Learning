@@ -55,6 +55,21 @@ export default function chatReducer(state = defaultState, action) {
                 selectedConversation,
             };
         }
+        case ActionTypes.UPDATE_REACTION_SUCCESS: {
+
+            let messages = [...state.messages];
+
+            const index = messages.findIndex((item) => item._id === action.payload._id)
+
+            if (index === -1) return state
+
+            messages[index] = action.payload
+
+            return {
+                ...state,
+                messages,
+            };
+        }
         case ActionTypes.SEARCHCONVERSATIONS:
             return {
                 ...state,

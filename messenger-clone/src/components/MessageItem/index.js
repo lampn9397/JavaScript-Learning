@@ -1,13 +1,13 @@
 import * as React from 'react';
 import ArticleIcon from '@mui/icons-material/Article';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import PropTypes from 'prop-types';
 
 import styles from './style.module.css'
 import { FileTypes, fullScreenImageRef, messageTypes } from '../../constants';
 import BadgeAvatars from '../BadgeAvatars';
-import EmojiEmotions from '@mui/icons-material/EmojiEmotions';
+import MessageItemReaction from '../MessageItemReaction';
+
 
 export default function MessageItem({
     item: message,
@@ -15,6 +15,7 @@ export default function MessageItem({
     avatar,
     online,
     readUsers,
+    onReaction,
 }) {
 
     const onClickImage = React.useCallback((item) => () => {
@@ -73,45 +74,48 @@ export default function MessageItem({
     if (message.user === user._id || message.user._id === user._id) {
         return (
             <div className={styles.myMessageWrapper}>
-                <EmojiEmotions />
                 <div className={styles.myMessageContainer} >
+                    <MessageItemReaction className={styles.messageItemReaction} popUpClassName={styles.myMessagePopUp} onReaction={onReaction} />
                     {message.type === messageTypes.LIKE ? (
                         <div className={styles.iconContainer}>
                             <ThumbUpIcon color='primary' fontSize='large' />
-                            {renderReadUsers()}
                         </div>
                     ) : (
                         <>
                             {message.text !== '' && <div className={`${styles.message} ${styles.myMessagesColor}`}>{message.text}</div>}
                             {renderItemFile()}
-                            {renderReadUsers()}
                         </>
                     )}
                 </div>
+                {renderReadUsers()}
             </div>
         )
     }
 
     return (
         <div className={styles.otherMessageContainer} >
-            {message.type === messageTypes.LIKE ? (
-                <div className={styles.iconContainer}>
-                    <ThumbUpIcon color='primary' />
-                </div>
-            ) : (
-                <>
-                    <div className={`${styles.messageWithAvatar}`}>
-                        <div style={{ marginRight: 5 }}>
-                            <BadgeAvatars badgeVisible={true} avatarClassName={`${styles.avatar}`} avatar={avatar} online={online} />
+            <div className={styles.myMessageWrapper}>
+                {message.type === messageTypes.LIKE ? (
+                    <div className={styles.iconContainer}>
+                        <ThumbUpIcon color='primary' className={styles.icon} />
+                        <MessageItemReaction className={styles.messageItemReaction} popUpClassName={styles.otherMessagePopUp} />
+                    </div>
+                ) : (
+                    <>
+                        <div className={`${styles.messageWithAvatar}`}>
+                            <div style={{ marginRight: 5 }}>
+                                <BadgeAvatars badgeVisible={true} avatarClassName={`${styles.avatar}`} avatar={avatar} online={online} />
+                            </div>
+                            {message.text !== '' && <div className={`${styles.message} ${styles.otherMessagesColor}`}>{message.text}</div>}
+                            {renderItemFile()}
+                            <MessageItemReaction className={styles.messageItemReaction} popUpClassName={styles.otherMessagePopUp} />
                         </div>
-                        {message.text !== '' && <div className={`${styles.message} ${styles.otherMessagesColor}`}>{message.text}</div>}
-                        {renderItemFile()}
-                    </div>
-                    <div className={`${styles.otherReadUsersContainer}`}>
-                        {renderReadUsers()}
-                    </div>
-                </>
-            )}
+                    </>
+                )}
+                <div className={`${styles.otherReadUsersContainer}`}>
+                    {renderReadUsers()}
+                </div>
+            </div>
         </div>
     )
 
@@ -123,9 +127,11 @@ MessageItem.propTypes = {
     avatar: PropTypes.string.isRequired,
     online: PropTypes.bool,
     readUsers: PropTypes.instanceOf(Array),
+    onReaction: PropTypes.func,
 }
 
 MessageItem.defaultProps = {
     online: false,
     readUsers: [],
+    onReaction: () => undefined
 }

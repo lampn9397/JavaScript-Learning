@@ -78,6 +78,7 @@ export const SocketEvents = {
     NEW_MESSAGE: 'new-message',
     NEW_CONVERSATION: 'new-conversation',
     READ_MESSAGE: 'read-message',
+    UPDATE_MESSAGE: 'update-message',
 };
 
 export const fullScreenImageRef = React.createRef()
@@ -88,3 +89,9 @@ export const socket = io(host, {
     autoConnect: false
 });
 
+export const REACTION_TYPES = {
+    LIKE: 'LIKE',
+    LOVE: 'LOVE',
+    ANGRY: 'ANGRY',
+    SAD: 'SAD',
+}
