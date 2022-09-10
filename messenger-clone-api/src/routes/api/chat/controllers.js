@@ -246,27 +246,33 @@ export const updateMessage = async (req, res, next) => {
 
     if (body.reaction) {
       updateFields = [{
-        $set: {
+        // $set: {
+        // reactions: {
+        //   $cond: [
+        //     { $elemMatch: { user: user._id } },
+        //     {
+        //       $filter: {
+        //         input: "$reactions",
+        //         cond: {
+        //           $elemMatch: {
+        //             user: { $ne: user._id },
+        //           }
+        //         }
+        //       }
+        //     },
+        //     {
+        //       $concatArrays: ["$reactions", [{
+        //         user: user._id,
+        //         type: body.reaction
+        //       }]]
+        //     }
+        //   ]
+        // }
+        // }
+        $push: {
           reactions: {
-            $cond: [
-              { $elemMatch: { user: user._id } },
-              {
-                $filter: {
-                  input: "$reactions",
-                  cond: {
-                    $elemMatch: {
-                      user: { $ne: user._id },
-                    }
-                  }
-                }
-              },
-              {
-                $concatArrays: ["$reactions", [{
-                  user: user._id,
-                  type: body.reaction
-                }]]
-              }
-            ]
+            user: user._id,
+            type: body.reaction
           }
         }
       }];
