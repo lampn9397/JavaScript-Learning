@@ -280,17 +280,22 @@ export const updateMessage = async (req, res, next) => {
 
     const message = await Message.findByIdAndUpdate(params.id, updateFields, { new: true })
       .populate('readUsers', 'firstName lastName avatar')
-      .select('-conversationId')
+      // .select('-conversationId')
       .lean({ getters: true });
 
+      const clonedMessage = {
+        ...message,
+        conversationId: undefined,
+      };
+
     res.json(Helpers.createResponse({
-      results: message
+      results: clonedMessage
     }));
 
     const conversation = await Conversation.findById(message.conversationId);
 
     conversation.users.forEach((user) => {
-      io.in(`user_${user}`).emit(SocketEvents.UPDATE_MESSAGE, message);
+      io.in(`user_${user}`).emit(SocketEvents.UPDATE_MESSAGE, clonedMessage);
     });
   } catch (error) {
     next(error);
