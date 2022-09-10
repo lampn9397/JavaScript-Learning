@@ -269,8 +269,8 @@ export const updateMessage = async (req, res, next) => {
         //   ]
         // }
         // }
-        $push: {
-          reactions: {
+        reactions: {
+          $push: {
             user: user._id,
             type: body.reaction
           }
@@ -283,10 +283,10 @@ export const updateMessage = async (req, res, next) => {
       // .select('-conversationId')
       .lean({ getters: true });
 
-      const clonedMessage = {
-        ...message,
-        conversationId: undefined,
-      };
+    const clonedMessage = {
+      ...message,
+      conversationId: undefined,
+    };
 
     res.json(Helpers.createResponse({
       results: clonedMessage
