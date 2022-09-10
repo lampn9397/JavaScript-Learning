@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { chatMulter, checkObjectId, checkUserPermissionToChat } from './middlewares';
-import { getConversations, sendMessage, getMessages, createConversation, updatetConversation } from './controllers';
+import { getConversations, sendMessage, getMessages, createConversation, updatetConversation, updateMessage } from './controllers';
 
 const router = express.Router();
 
@@ -11,6 +11,12 @@ router.route('/')
     chatMulter.array('files'),
     createConversation,
   );
+
+router.route('/message/:id')
+    .put(
+      checkObjectId('id', 'params'),
+      updateMessage
+    )
 
 router.route('/:id')
   .get(

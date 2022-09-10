@@ -8,6 +8,7 @@ import { getConversationTitle } from '../routes/api/chat/middlewares';
 
 export const SocketEvents = {
   NEW_MESSAGE: 'new-message',
+  UPDATE_MESSAGE: 'update-message',
   NEW_CONVERSATION: 'new-conversation',
   READ_MESSAGE: 'read-message',
 };

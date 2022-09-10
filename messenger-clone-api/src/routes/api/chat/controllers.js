@@ -238,6 +238,59 @@ export const sendMessage = async (req, res, next) => {
   }
 };
 
+export const updateMessage = async (req, res, next) => {
+  try {
+    const { params, body, user } = req;
+
+    let updateFields = {};
+
+    if (body.reaction) {
+      updateFields = [{
+        $set: {
+          reactions: {
+            $cond: [
+              { $elemMatch: { user: user._id } },
+              {
+                $filter: {
+                  input: "$reactions",
+                  cond: {
+                    $elemMatch: {
+                      user: { $ne: user._id },
+                    }
+                  }
+                }
+              },
+              {
+                $concatArrays: ["$reactions", [{
+                  user: user._id,
+                  type: body.reaction
+                }]]
+              }
+            ]
+          }
+        }
+      }];
+    }
+
+    const message = await Message.findByIdAndUpdate(params.id, updateFields, { new: true })
+      .populate('readUsers', 'firstName lastName avatar')
+      .select('-conversationId')
+      .lean({ getters: true });
+
+    res.json(Helpers.createResponse({
+      results: message
+    }));
+
+    const conversation = await Conversation.findById(message.conversationId);
+
+    conversation.users.forEach((user) => {
+      io.in(`user_${user}`).emit(SocketEvents.UPDATE_MESSAGE, message);
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export const createConversation = async (req, res, next) => {
   try {
     const { user, files } = req;
