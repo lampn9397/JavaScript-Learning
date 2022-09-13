@@ -245,7 +245,7 @@ export const updateMessage = async (req, res, next) => {
     let updateFields = {};
 
     if (body.reaction) {
-      updateFields = [{
+      updateFields = {
         // $set: {
         // reactions: {
         //   $cond: [
@@ -275,7 +275,7 @@ export const updateMessage = async (req, res, next) => {
             type: body.reaction
           }
         }
-      }];
+      };
     }
 
     const message = await Message.findByIdAndUpdate(params.id, updateFields, { new: true })
