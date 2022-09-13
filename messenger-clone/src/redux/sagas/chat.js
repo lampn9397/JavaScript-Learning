@@ -87,17 +87,48 @@ function* sendMessageAction(action) {
 
         const { payload } = action;
 
-        const formData = new FormData();
+        if (payload.type) {
+            const formData = new FormData();
 
-        formData.append('text', payload.text)
+            formData.append('type', payload.type)
 
-        if (payload.type) formData.append('type', payload.type)
+            yield axiosClient.post(`/chat/${payload.conversationId}/message`, formData);
 
-        for (let index = 0; index < payload.files.length; index++) {
-            formData.append('files', payload.files[index])
+            return
         }
 
-        yield axiosClient.post(`/chat/${payload.conversationId}/message`, formData);
+        if (payload.text) {
+            const formData = new FormData();
+
+            formData.append('text', payload.text)
+
+            yield axiosClient.post(`/chat/${payload.conversationId}/message`, formData);
+        }
+
+        if (payload.files.length) {
+
+            const imgFormData = new FormData();
+
+            const otherFiles = [];
+
+            for (let index = 0; index < payload.files.length; index++) {
+                if (payload.files[index].type.startsWith('image/')) {
+                    imgFormData.append('files', payload.files[index])
+                } else {
+                    otherFiles.push(payload.files[index])
+                }
+            }
+            if (imgFormData.get('files')) {
+                yield axiosClient.post(`/chat/${payload.conversationId}/message`, imgFormData);
+            }
+            for (let index = 0; index < otherFiles.length; index++) {
+                const formData = new FormData();
+
+                formData.append('files', otherFiles[index])
+
+                yield axiosClient.post(`/chat/${payload.conversationId}/message`, formData);
+            }
+        }
 
         // yield put({ type: ActionTypes.SEND_MESSAGES_SUCCESS, payload: data.results });
 

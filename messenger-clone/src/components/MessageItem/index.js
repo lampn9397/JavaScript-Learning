@@ -7,7 +7,8 @@ import styles from './style.module.css'
 import { FileTypes, fullScreenImageRef, messageTypes } from '../../constants';
 import BadgeAvatars from '../BadgeAvatars';
 import MessageItemReaction from '../MessageItemReaction';
-
+import { REACTION_TYPES } from '../../constants';
+import images from '../../assets';
 
 export default function MessageItem({
     item: message,
@@ -36,6 +37,7 @@ export default function MessageItem({
     const renderItemFile = React.useCallback(() => {
         return (
             <div>
+
                 {message.files.map((item, index) => {
                     if (item.type === FileTypes.CHAT_IMAGE) {
                         return (
@@ -74,18 +76,24 @@ export default function MessageItem({
     if (message.user === user._id || message.user._id === user._id) {
         return (
             <div className={styles.myMessageWrapper}>
-                <div className={styles.myMessageContainer} >
-                    <MessageItemReaction className={styles.messageItemReaction} popUpClassName={styles.myMessagePopUp} onReaction={onReaction} />
-                    {message.type === messageTypes.LIKE ? (
-                        <div className={styles.iconContainer}>
-                            <ThumbUpIcon color='primary' fontSize='large' />
-                        </div>
-                    ) : (
-                        <>
-                            {message.text !== '' && <div className={`${styles.message} ${styles.myMessagesColor}`}>{message.text}</div>}
-                            {renderItemFile()}
-                        </>
-                    )}
+                <div className={styles.myMessageItemFileContainer}>
+                    <div className={styles.myMessageContainer} >
+                        <MessageItemReaction className={styles.messageItemReaction} popUpClassName={styles.myMessagePopUp} onReaction={onReaction} />
+                        {message.type === messageTypes.LIKE ? (
+                            <div className={styles.iconContainer}>
+                                <ThumbUpIcon color='primary' fontSize='large' />
+                            </div>
+                        ) : (
+                            <>
+                                {message.text && <div className={`${styles.message} ${styles.myMessagesColor}`}>{message.text}</div>}
+                                {/* <div className={styles.reactionContainer}>
+                                <img src={images.like} className={styles.reaction} alt='' />
+                                <img src={images.like} className={styles.reaction} alt='' />
+                            </div> */}
+                            </>
+                        )}
+                    </div>
+                    {renderItemFile()}
                 </div>
                 {renderReadUsers()}
             </div>
@@ -98,7 +106,7 @@ export default function MessageItem({
                 {message.type === messageTypes.LIKE ? (
                     <div className={styles.iconContainer}>
                         <ThumbUpIcon color='primary' className={styles.icon} />
-                        <MessageItemReaction className={styles.messageItemReaction} popUpClassName={styles.otherMessagePopUp} />
+                        <MessageItemReaction className={styles.messageItemReaction} popUpClassName={styles.otherMessagePopUp} onReaction={onReaction} />
                     </div>
                 ) : (
                     <>
@@ -106,9 +114,9 @@ export default function MessageItem({
                             <div style={{ marginRight: 5 }}>
                                 <BadgeAvatars badgeVisible={true} avatarClassName={`${styles.avatar}`} avatar={avatar} online={online} />
                             </div>
-                            {message.text !== '' && <div className={`${styles.message} ${styles.otherMessagesColor}`}>{message.text}</div>}
+                            {message.text && <div className={`${styles.message} ${styles.otherMessagesColor}`}>{message.text}</div>}
                             {renderItemFile()}
-                            <MessageItemReaction className={styles.messageItemReaction} popUpClassName={styles.otherMessagePopUp} />
+                            <MessageItemReaction className={styles.messageItemReaction} popUpClassName={styles.otherMessagePopUp} onReaction={onReaction} />
                         </div>
                     </>
                 )}

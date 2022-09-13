@@ -28,6 +28,7 @@
     border-radius: 18px;
     line-height: 20px;
     font-size: .9375rem;
+    position: relative;
 }
 
 .myMessagesColor {
@@ -124,4 +125,26 @@
 
 .myMessagePopUp {
     right: -45px
+}
+
+.reaction {
+    height: 14px;
+    width: 14px;
+}
+
+
+.reactionContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    height: 18px;
+    box-shadow: -6px 3px 10px 4px rgb(0 0 0 / 20%);
+    border-radius: 18px;
+    padding: 1px;
+    position: absolute;
+}
+
+.myMessageItemFileContainer {
+    display: flex;
 }
