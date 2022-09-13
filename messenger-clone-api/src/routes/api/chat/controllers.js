@@ -242,6 +242,8 @@ export const updateMessage = async (req, res, next) => {
   try {
     const { params, body, user } = req;
 
+    console.log(body);
+
     let updateFields = {};
 
     if (body.reaction) {
@@ -269,8 +271,8 @@ export const updateMessage = async (req, res, next) => {
         //   ]
         // }
         // }
-        reactions: {
-          $push: {
+        $addToSet: {
+          reactions: {
             user: user._id,
             type: body.reaction
           }
