@@ -35,6 +35,8 @@ function HomePage() {
 
     const loadMore = useSelector((state) => state.conversations.loadMore)
 
+    const reactionPopUpMessageId = useSelector((state) => state.conversations.reactionPopUpMessageId)
+
     const searchConversations = useSelector((state) => state.conversations.searchConversation)
 
     const selectedConversation = useSelector((state) => state.conversations.selectedConversation)
@@ -119,6 +121,13 @@ function HomePage() {
                 messageId: item._id,
                 reaction: emojiType
             }
+        })
+    }, [dispatch])
+
+    const onClickShowPopUp = React.useCallback((item) => () => {
+        dispatch({
+            type: ActionTypes.SHOW_REACTION_POPUP,
+            payload: item._id
         })
     }, [dispatch])
 
@@ -239,6 +248,8 @@ function HomePage() {
 
         const readUsers = []
 
+        const reactionPopUpVisible = reactionPopUpMessageId === item._id
+
         for (const userItem of readMessageUsers) {
             if (userItem.lastMessage?._id === item._id) {
                 readUsers.push(userItem.user)
@@ -254,6 +265,8 @@ function HomePage() {
                 online={userByMessage?.online}
                 readUsers={readUsers}
                 onReaction={onReaction(item)}
+                onClickShowPopUp={onClickShowPopUp(item)}
+                reactionPopUpVisible={reactionPopUpVisible}
             />
         )
     }
@@ -303,8 +316,20 @@ function HomePage() {
 
     React.useEffect(() => {
 
+        const onClickBody = () => {
+            // dispatch({
+            //     type: ActionTypes.SHOW_REACTION_POPUP,
+            //     payload: null,
+            // })
+        }
+
+        document.body.addEventListener("click", onClickBody)
+
         dispatch({ type: ActionTypes.GET_CONVERSATIONS });
 
+        return () => {
+            document.body.removeEventListener("click", onClickBody)
+        }
     }, [dispatch]);
 
     React.useEffect(() => {

@@ -10,7 +10,7 @@ const defaultState = {
     loadMore: false,
     messagesLoading: false,
     sendMessagesLoading: false,
-
+    reactionPopUpMessageId: null,
 };
 
 export default function chatReducer(state = defaultState, action) {
@@ -185,6 +185,13 @@ export default function chatReducer(state = defaultState, action) {
                 ...state,
                 sendMessagesLoading: false,
             };
+        case ActionTypes.SHOW_REACTION_POPUP: {
+            // const reactionPopUpMessageId = state.reactionPopUpMessageId ? null : action.payload
+            return {
+                ...state,
+                reactionPopUpMessageId: action.payload,
+            };
+        }
         case ActionTypes.LOGOUT_DONE:
             return defaultState
         default:

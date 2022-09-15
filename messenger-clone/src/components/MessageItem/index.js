@@ -2,6 +2,7 @@ import * as React from 'react';
 import ArticleIcon from '@mui/icons-material/Article';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import styles from './style.module.css'
 import { FileTypes, fullScreenImageRef, messageTypes } from '../../constants';
@@ -17,7 +18,11 @@ export default function MessageItem({
     online,
     readUsers,
     onReaction,
+    onClickShowPopUp,
+    reactionPopUpVisible,
 }) {
+
+    const isMyMessage = message.user === user._id || message.user._id === user._id
 
     const onClickImage = React.useCallback((item) => () => {
         fullScreenImageRef.current.show(item, message.files)
@@ -36,8 +41,10 @@ export default function MessageItem({
 
     const renderItemFile = React.useCallback(() => {
         return (
-            <div>
-
+            <div className={classNames({
+                [styles.fileContainer]: true,
+                [styles.myMessageFileContainer]: isMyMessage,
+            })}>
                 {message.files.map((item, index) => {
                     if (item.type === FileTypes.CHAT_IMAGE) {
                         return (
@@ -71,14 +78,20 @@ export default function MessageItem({
                 })}
             </div>
         )
-    }, [onClickImage, message.files])
+    }, [onClickImage, message.files, isMyMessage])
 
-    if (message.user === user._id || message.user._id === user._id) {
+    if (isMyMessage) {
         return (
             <div className={styles.myMessageWrapper}>
                 <div className={styles.myMessageItemFileContainer}>
                     <div className={styles.myMessageContainer} >
-                        <MessageItemReaction className={styles.messageItemReaction} popUpClassName={styles.myMessagePopUp} onReaction={onReaction} />
+                        <MessageItemReaction
+                            className={styles.messageItemReaction}
+                            popUpClassName={styles.myMessagePopUp}
+                            onReaction={onReaction}
+                            onClickShowPopUp={onClickShowPopUp}
+                            reactionPopUpVisible={reactionPopUpVisible}
+                        />
                         {message.type === messageTypes.LIKE ? (
                             <div className={styles.iconContainer}>
                                 <ThumbUpIcon color='primary' fontSize='large' />
@@ -106,7 +119,12 @@ export default function MessageItem({
                 {message.type === messageTypes.LIKE ? (
                     <div className={styles.iconContainer}>
                         <ThumbUpIcon color='primary' className={styles.icon} />
-                        <MessageItemReaction className={styles.messageItemReaction} popUpClassName={styles.otherMessagePopUp} onReaction={onReaction} />
+                        <MessageItemReaction
+                            className={styles.messageItemReaction}
+                            popUpClassName={styles.otherMessagePopUp}
+                            onReaction={onReaction}
+                            reactionPopUpVisible={reactionPopUpVisible}
+                        />
                     </div>
                 ) : (
                     <>
@@ -116,7 +134,12 @@ export default function MessageItem({
                             </div>
                             {message.text && <div className={`${styles.message} ${styles.otherMessagesColor}`}>{message.text}</div>}
                             {renderItemFile()}
-                            <MessageItemReaction className={styles.messageItemReaction} popUpClassName={styles.otherMessagePopUp} onReaction={onReaction} />
+                            <MessageItemReaction
+                                className={styles.messageItemReaction}
+                                popUpClassName={styles.otherMessagePopUp}
+                                onReaction={onReaction}
+                                reactionPopUpVisible={reactionPopUpVisible}
+                            />
                         </div>
                     </>
                 )}
@@ -136,10 +159,13 @@ MessageItem.propTypes = {
     online: PropTypes.bool,
     readUsers: PropTypes.instanceOf(Array),
     onReaction: PropTypes.func,
+    onClickShowPopUp: PropTypes.func,
+    reactionPopUpVisible: PropTypes.bool,
 }
 
 MessageItem.defaultProps = {
     online: false,
     readUsers: [],
-    onReaction: () => undefined
+    onReaction: () => undefined,
+    reactionPopUpVisible: false,
 }

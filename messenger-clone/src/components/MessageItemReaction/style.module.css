@@ -52,3 +52,7 @@
 .moreEmojis:hover {
     background-color: rgb(218, 219, 220);
 }
+
+.popUpEmojClass {
+    opacity: 1;
+}

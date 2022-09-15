@@ -15,7 +15,6 @@
 .myMessageContainer {
     display: flex;
     align-items: center;
-    max-width: 70%;
 }
 
 .message {
@@ -147,4 +146,16 @@
 
 .myMessageItemFileContainer {
     display: flex;
+    justify-content: flex-end;
+    max-width: 70%;
+}
+
+.fileContainer {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 80%;
+}
+
+.myMessageFileContainer {
+    justify-content: flex-end;
 }

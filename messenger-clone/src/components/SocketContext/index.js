@@ -48,7 +48,6 @@ export default function SocketContext() {
         })
 
         socket.on(SocketEvents.UPDATE_MESSAGE, (message) => {
-            console.log(message)
             dispatch({ type: ActionTypes.UPDATE_REACTION_SUCCESS, payload: message });
         })
 
