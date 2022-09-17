@@ -242,42 +242,28 @@ export const updateMessage = async (req, res, next) => {
   try {
     const { params, body, user } = req;
 
-    console.log(body);
-
     let updateFields = {};
 
     if (body.reaction) {
-      updateFields = {
-        // $set: {
-        // reactions: {
-        //   $cond: [
-        //     { $elemMatch: { user: user._id } },
-        //     {
-        //       $filter: {
-        //         input: "$reactions",
-        //         cond: {
-        //           $elemMatch: {
-        //             user: { $ne: user._id },
-        //           }
-        //         }
-        //       }
-        //     },
-        //     {
-        //       $concatArrays: ["$reactions", [{
-        //         user: user._id,
-        //         type: body.reaction
-        //       }]]
-        //     }
-        //   ]
-        // }
-        // }
-        $addToSet: {
-          reactions: {
-            user: user._id,
-            type: body.reaction
-          }
-        }
-      };
+      const message = await Message.findById(params.id);
+
+      if (!message) return res.status(404).end();
+
+      const reactions = [...message.reactions];
+
+      const reactionIndex = reactions.findIndex((x) => x.user === user._id);
+
+      console.log(reactionIndex)
+
+      if (reactionIndex === -1) {
+        reactions.push({ user: user._id, type: body.reaction });
+      } else if (reactions[reactionIndex].type === body.reaction) {
+        reactions.splice(reactionIndex, 1);
+      } else {
+        reactions[reactionIndex].type = body.reaction;
+      }
+
+      updateFields = { reactions };
     }
 
     const message = await Message.findByIdAndUpdate(params.id, updateFields, { new: true })
