@@ -253,8 +253,6 @@ export const updateMessage = async (req, res, next) => {
 
       const reactionIndex = reactions.findIndex((x) => x.user === user._id);
 
-      console.log(reactionIndex)
-
       if (reactionIndex === -1) {
         reactions.push({ user: user._id, type: body.reaction });
       } else if (reactions[reactionIndex].type === body.reaction) {
