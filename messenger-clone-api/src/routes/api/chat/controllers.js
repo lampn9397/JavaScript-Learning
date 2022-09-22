@@ -251,7 +251,7 @@ export const updateMessage = async (req, res, next) => {
 
       const reactions = [...message.reactions];
 
-      const reactionIndex = reactions.findIndex((x) => x.user === user._id);
+      const reactionIndex = reactions.findIndex((x) => x.user.equals(user._id));
 
       if (reactionIndex === -1) {
         reactions.push({ user: user._id, type: body.reaction });
