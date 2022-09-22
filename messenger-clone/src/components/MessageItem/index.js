@@ -20,9 +20,27 @@ export default function MessageItem({
     onReaction,
     onClickShowPopUp,
     reactionPopUpVisible,
+    reactions
 }) {
 
     const isMyMessage = message.user === user._id || message.user._id === user._id
+
+    const reactionList = React.useMemo(() => {
+        const reactionListValue = [];
+
+        if (!reactions) return []
+
+        for (const reactionItem of reactions) {
+            const reactionIndex = reactionListValue.findIndex((item) => item.type === reactionItem.type)
+
+            if (reactionIndex === -1) {
+                reactionListValue.push({ type: reactionItem.type, users: [reactionItem.user] })
+            } else {
+                reactionListValue[reactionIndex].users.push(reactionItem.user)
+            }
+        }
+        return reactionListValue
+    }, [reactions])
 
     const onClickImage = React.useCallback((item) => () => {
         fullScreenImageRef.current.show(item, message.files)
@@ -30,21 +48,41 @@ export default function MessageItem({
     }, [message.files])
 
     const renderReadUsers = React.useCallback(() => {
+        if (!readUsers?.length) return null
         return (
-            <div className={`${styles.readUserAvatarContainer}`}>
+            <div className={classNames({
+                [styles.readUserAvatarContainer]: true,
+                [styles.readUserAvatarContainerMargin]: reactionList.length,
+
+            })}>
                 {readUsers?.map((item, index) => (
                     <img src={item.avatar} key={index} className={`${styles.readUserAvatar}`} alt='' />
                 ))}
             </div>
         )
-    }, [readUsers])
+    }, [reactionList.length, readUsers])
+
+    const listMessageReactions = React.useCallback(() => {
+        if (reactionList.length === 0) return null;
+        return (
+            <div className={
+                styles.messageReactions}>
+                {reactionList.map((item, index) => (
+                    <img src={images[item.type.toLowerCase()]} alt='' className={`${styles.reactions}`} key={index} />
+                ))}
+            </div>
+        )
+    }, [reactionList])
 
     const renderItemFile = React.useCallback(() => {
+        if (!message.files.length) return null;
         return (
             <div className={classNames({
                 [styles.fileContainer]: true,
                 [styles.myMessageFileContainer]: isMyMessage,
+                [styles.otherMessageFileRelative]: !isMyMessage,
             })}>
+                {!isMyMessage && listMessageReactions()}
                 {message.files.map((item, index) => {
                     if (item.type === FileTypes.CHAT_IMAGE) {
                         return (
@@ -78,13 +116,22 @@ export default function MessageItem({
                 })}
             </div>
         )
-    }, [onClickImage, message.files, isMyMessage])
+    }, [isMyMessage, listMessageReactions, message.files, onClickImage])
 
     if (isMyMessage) {
         return (
-            <div className={styles.myMessageWrapper}>
-                <div className={styles.myMessageItemFileContainer}>
-                    <div className={styles.myMessageContainer} >
+            <div className={classNames({
+                [styles.myMessageWrapper]: true,
+                [styles.reactionMargin]: reactionList.length,
+            })}>
+                <div className={classNames({
+                    [styles.myMessageItemFileContainer]: true,
+                    [styles.setRelative]: message.files.length,
+                })}>
+                    <div className={classNames({
+                        [styles.myMessageContainer]: true,
+                        [styles.unSetRelative]: message.files.length,
+                    })} >
                         <MessageItemReaction
                             className={styles.messageItemReaction}
                             popUpClassName={styles.myMessagePopUp}
@@ -99,10 +146,7 @@ export default function MessageItem({
                         ) : (
                             <>
                                 {message.text && <div className={`${styles.message} ${styles.myMessagesColor}`}>{message.text}</div>}
-                                {/* <div className={styles.reactionContainer}>
-                                <img src={images.like} className={styles.reaction} alt='' />
-                                <img src={images.like} className={styles.reaction} alt='' />
-                            </div> */}
+                                {listMessageReactions()}
                             </>
                         )}
                     </div>
@@ -115,7 +159,10 @@ export default function MessageItem({
 
     return (
         <div className={styles.otherMessageContainer} >
-            <div className={styles.myMessageWrapper}>
+            <div className={classNames({
+                [styles.otherMessageWrapper]: true,
+                [styles.reactionMargin]: reactionList.length,
+            })}>
                 {message.type === messageTypes.LIKE ? (
                     <div className={styles.iconContainer}>
                         <ThumbUpIcon color='primary' className={styles.icon} />
@@ -123,6 +170,7 @@ export default function MessageItem({
                             className={styles.messageItemReaction}
                             popUpClassName={styles.otherMessagePopUp}
                             onReaction={onReaction}
+                            onClickShowPopUp={onClickShowPopUp}
                             reactionPopUpVisible={reactionPopUpVisible}
                         />
                     </div>
@@ -132,12 +180,18 @@ export default function MessageItem({
                             <div style={{ marginRight: 5 }}>
                                 <BadgeAvatars badgeVisible={true} avatarClassName={`${styles.avatar}`} avatar={avatar} online={online} />
                             </div>
-                            {message.text && <div className={`${styles.message} ${styles.otherMessagesColor}`}>{message.text}</div>}
+                            {message.text && (
+                                <div className={`${styles.message} ${styles.otherMessagesColor}`}>
+                                    {listMessageReactions()}
+                                    {message.text}
+                                </div>
+                            )}
                             {renderItemFile()}
                             <MessageItemReaction
                                 className={styles.messageItemReaction}
                                 popUpClassName={styles.otherMessagePopUp}
                                 onReaction={onReaction}
+                                onClickShowPopUp={onClickShowPopUp}
                                 reactionPopUpVisible={reactionPopUpVisible}
                             />
                         </div>
@@ -161,11 +215,13 @@ MessageItem.propTypes = {
     onReaction: PropTypes.func,
     onClickShowPopUp: PropTypes.func,
     reactionPopUpVisible: PropTypes.bool,
+    reactions: PropTypes.instanceOf(Array),
 }
 
 MessageItem.defaultProps = {
     online: false,
     readUsers: [],
     onReaction: () => undefined,
+    reactions: [],
     reactionPopUpVisible: false,
 }

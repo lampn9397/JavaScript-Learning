@@ -15,6 +15,7 @@
 .myMessageContainer {
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .message {
@@ -54,6 +55,7 @@
     cursor: pointer;
     color: black;
     text-decoration: none;
+    margin-left: 18px;
 }
 
 .filesIcon {
@@ -108,9 +110,14 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    margin-top: 2px;
 }
 
 .myMessageWrapper:hover .messageItemReaction {
+    opacity: 1;
+}
+
+.otherMessageWrapper:hover .messageItemReaction {
     opacity: 1;
 }
 
@@ -158,4 +165,50 @@
 
 .myMessageFileContainer {
     justify-content: flex-end;
+}
+
+.messageReactions {
+    height: 16px;
+    background-color: white;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 6px 3px 6px;
+    box-shadow: -2px 4px 5px 4px rgb(0 0 0 / 20%);
+    position: absolute;
+    bottom: -12px;
+    right: 0px;
+}
+
+.otherMessageWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.reactions {
+    height: 16px;
+    width: 16px;
+}
+
+.reactionMargin {
+    margin-bottom: 18px;
+}
+
+.readUserAvatarContainerMargin {
+    margin-top: 18px;
+}
+
+.unSetRelative {
+    position: unset;
+}
+
+.setRelative {
+    position: relative;
+}
+
+
+.otherMessageFileRelative {
+    position: relative;
 }

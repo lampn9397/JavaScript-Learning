@@ -185,13 +185,11 @@ export default function chatReducer(state = defaultState, action) {
                 ...state,
                 sendMessagesLoading: false,
             };
-        case ActionTypes.SHOW_REACTION_POPUP: {
-            // const reactionPopUpMessageId = state.reactionPopUpMessageId ? null : action.payload
+        case ActionTypes.SHOW_REACTION_POPUP:
             return {
                 ...state,
                 reactionPopUpMessageId: action.payload,
             };
-        }
         case ActionTypes.LOGOUT_DONE:
             return defaultState
         default:

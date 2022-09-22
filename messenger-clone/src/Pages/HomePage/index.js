@@ -81,6 +81,8 @@ function HomePage() {
 
     const callChatMessageAPI = React.useRef(false)
 
+    const isClickOnReaction = React.useRef(false)
+
     const otherUsers = selectedConversation?.users.filter((userItem) => userItem._id !== user._id)
 
     const { id } = useParams();
@@ -125,11 +127,22 @@ function HomePage() {
     }, [dispatch])
 
     const onClickShowPopUp = React.useCallback((item) => () => {
+        isClickOnReaction.current = true
+
+        const reactionPopUpVisible = reactionPopUpMessageId === item._id
+
+        let payload = item._id
+
+        if (reactionPopUpVisible) {
+            payload = null
+        }
+
         dispatch({
             type: ActionTypes.SHOW_REACTION_POPUP,
-            payload: item._id
+            payload
         })
-    }, [dispatch])
+
+    }, [dispatch, reactionPopUpMessageId])
 
     const onClickSearchUser = React.useCallback((item) => {
         history.push(routes.HOME(newChat).path)
@@ -267,6 +280,7 @@ function HomePage() {
                 onReaction={onReaction(item)}
                 onClickShowPopUp={onClickShowPopUp(item)}
                 reactionPopUpVisible={reactionPopUpVisible}
+                reactions={item.reactions}
             />
         )
     }
@@ -317,10 +331,15 @@ function HomePage() {
     React.useEffect(() => {
 
         const onClickBody = () => {
-            // dispatch({
-            //     type: ActionTypes.SHOW_REACTION_POPUP,
-            //     payload: null,
-            // })
+            if (isClickOnReaction.current) {
+                isClickOnReaction.current = false
+                return
+            }
+
+            dispatch({
+                type: ActionTypes.SHOW_REACTION_POPUP,
+                payload: null,
+            })
         }
 
         document.body.addEventListener("click", onClickBody)
@@ -340,7 +359,7 @@ function HomePage() {
     }, [dispatch, id]);
 
     React.useEffect(() => {
-        if (selectedConversation && selectedConversation.lastMessage.user._id !== user._id) {
+        if (selectedConversation && selectedConversation.lastMessage && selectedConversation.lastMessage?.user._id !== user._id) {
             dispatch({ type: ActionTypes.READ_MESSAGE, payload: selectedConversation.lastMessage._id })
         }
     }, [dispatch, selectedConversation, user._id])
