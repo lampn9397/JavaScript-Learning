@@ -42,6 +42,10 @@ export default function MessageItem({
         return reactionListValue
     }, [reactions])
 
+    const myReaction = React.useMemo(() => (
+        reactions.find((reactionItem) => reactionItem.user === user._id)
+    ), [reactions, user._id])
+
     const onClickImage = React.useCallback((item) => () => {
         fullScreenImageRef.current.show(item, message.files)
 
@@ -63,19 +67,24 @@ export default function MessageItem({
     }, [reactionList.length, readUsers])
 
     const listMessageReactions = React.useCallback(() => {
+
         if (reactionList.length === 0) return null;
+
         return (
-            <div className={
-                styles.messageReactions}>
+            <div className={styles.messageReactions}>
                 {reactionList.map((item, index) => (
                     <img src={images[item.type.toLowerCase()]} alt='' className={`${styles.reactions}`} key={index} />
                 ))}
+
+                {reactions.length > 1 && reactions.length}
             </div>
         )
-    }, [reactionList])
+    }, [reactionList, reactions.length])
 
     const renderItemFile = React.useCallback(() => {
+
         if (!message.files.length) return null;
+
         return (
             <div className={classNames({
                 [styles.fileContainer]: true,
@@ -138,6 +147,7 @@ export default function MessageItem({
                             onReaction={onReaction}
                             onClickShowPopUp={onClickShowPopUp}
                             reactionPopUpVisible={reactionPopUpVisible}
+                            myReaction={myReaction}
                         />
                         {message.type === messageTypes.LIKE ? (
                             <div className={styles.iconContainer}>
@@ -172,6 +182,7 @@ export default function MessageItem({
                             onReaction={onReaction}
                             onClickShowPopUp={onClickShowPopUp}
                             reactionPopUpVisible={reactionPopUpVisible}
+                            myReaction={myReaction}
                         />
                     </div>
                 ) : (
@@ -193,6 +204,7 @@ export default function MessageItem({
                                 onReaction={onReaction}
                                 onClickShowPopUp={onClickShowPopUp}
                                 reactionPopUpVisible={reactionPopUpVisible}
+                                myReaction={myReaction}
                             />
                         </div>
                     </>

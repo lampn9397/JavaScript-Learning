@@ -6,8 +6,16 @@ import classNames from 'classnames';
 
 import styles from './style.module.css'
 import { REACTION_TYPES } from '../../constants';
+import { t } from 'i18next';
 
-export default function MessageItemReaction({ className, popUpClassName, onReaction, onClickShowPopUp, reactionPopUpVisible }) {
+export default function MessageItemReaction({
+    className,
+    popUpClassName,
+    onReaction,
+    onClickShowPopUp,
+    reactionPopUpVisible,
+    myReaction,
+}) {
 
     const onClickReaction = React.useCallback((emojiType) => () => {
         onReaction(emojiType)
@@ -23,10 +31,14 @@ export default function MessageItemReaction({ className, popUpClassName, onReact
         >
             {reactionPopUpVisible && (
                 <div className={`${styles.popUpEmoji} ${popUpClassName}`}>
-                    <img src={images.like} alt='' className={`${styles.emojis}`} onClick={onClickReaction(REACTION_TYPES.LIKE)} />
-                    <img src={images.love} alt='' className={`${styles.emojis}`} onClick={onClickReaction(REACTION_TYPES.LOVE)} />
-                    <img src={images.angry} alt='' className={`${styles.emojis}`} onClick={onClickReaction(REACTION_TYPES.ANGRY)} />
-                    <img src={images.sad} alt='' className={`${styles.emojis}`} onClick={onClickReaction(REACTION_TYPES.SAD)} />
+                    {[REACTION_TYPES.LIKE, REACTION_TYPES.LOVE, REACTION_TYPES.ANGRY, REACTION_TYPES.SAD].map((item) => (
+                        <div className={classNames({
+                            [styles.reactionContainer]: true,
+                            [styles.isMyReaction]: myReaction?.type === item,
+                        })}>
+                            <img src={images[item.toLowerCase()]} alt='' className={styles.emojis} onClick={onClickReaction(item)} />
+                        </div>
+                    ))}
                     <div className={`${styles.moreEmojis}`}>
                         <AddIcon />
                     </div>
@@ -43,6 +55,7 @@ MessageItemReaction.propTypes = {
     onReaction: PropTypes.func,
     onClickShowPopUp: PropTypes.func,
     reactionPopUpVisible: PropTypes.bool,
+    myReaction: PropTypes.instanceOf(Object),
 }
 
 MessageItemReaction.defaultProps = {
@@ -51,4 +64,5 @@ MessageItemReaction.defaultProps = {
     onReaction: () => undefined,
     onClickShowPopUp: () => undefined,
     reactionPopUpVisible: false,
+    myReaction: null,
 }

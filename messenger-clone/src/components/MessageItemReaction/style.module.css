@@ -31,7 +31,6 @@
 .emojis {
     height: 24px;
     width: 24px;
-    margin-right: 8px;
 }
 
 .graySmile {
@@ -55,4 +54,17 @@
 
 .popUpEmojClass {
     opacity: 1;
+}
+
+.isMyReaction {
+    background-color: rgb(218, 219, 220);
+}
+
+.reactionContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    border-radius: 8px;
+    padding: 3px;
 }
