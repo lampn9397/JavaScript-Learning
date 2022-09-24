@@ -168,6 +168,9 @@
 }
 
 .messageReactions {
+    position: absolute;
+    bottom: -12px;
+    right: 0px;
     height: 16px;
     background-color: white;
     border-radius: 18px;
@@ -176,9 +179,12 @@
     justify-content: center;
     padding: 3px 6px 3px 6px;
     box-shadow: -2px 4px 5px 4px rgb(0 0 0 / 20%);
-    position: absolute;
-    bottom: -12px;
-    right: 0px;
+    cursor: pointer;
+
+}
+
+.messageReactions:hover~.userReactMessageContainer {
+    display: block;
 }
 
 .otherMessageWrapper {
@@ -211,4 +217,25 @@
 
 .otherMessageFileRelative {
     position: relative;
+}
+
+.userReactMessage {
+
+    background-color: rgba(42, 41, 41, 0.8);
+    color: white;
+    border-radius: 18px;
+    width: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+
+}
+
+.userReactMessageContainer {
+    display: none;
+    position: absolute;
+    z-index: 99;
+    right: 0px;
+    bottom: 12px;
 }

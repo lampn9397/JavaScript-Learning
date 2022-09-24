@@ -20,7 +20,8 @@ export default function MessageItem({
     onReaction,
     onClickShowPopUp,
     reactionPopUpVisible,
-    reactions
+    reactions,
+    users,
 }) {
 
     const isMyMessage = message.user === user._id || message.user._id === user._id
@@ -70,16 +71,24 @@ export default function MessageItem({
 
         if (reactionList.length === 0) return null;
 
-        return (
+        return (<React.Fragment>
+
             <div className={styles.messageReactions}>
                 {reactionList.map((item, index) => (
                     <img src={images[item.type.toLowerCase()]} alt='' className={`${styles.reactions}`} key={index} />
                 ))}
-
                 {reactions.length > 1 && reactions.length}
             </div>
+            <div className={styles.userReactMessageContainer}>
+                <div className={styles.userReactMessage}>{reactions.map((reactionItem) => {
+                    const userReact = users.find((userItem) => userItem._id === reactionItem.user)
+                    return <div>{`${userReact.firstName} ${userReact.lastName}`} </div>
+                })}
+                </div>
+            </div>
+        </React.Fragment>
         )
-    }, [reactionList, reactions.length])
+    }, [reactionList, reactions, users])
 
     const renderItemFile = React.useCallback(() => {
 

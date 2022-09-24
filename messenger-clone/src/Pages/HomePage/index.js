@@ -281,6 +281,7 @@ function HomePage() {
                 onClickShowPopUp={onClickShowPopUp(item)}
                 reactionPopUpVisible={reactionPopUpVisible}
                 reactions={item.reactions}
+                users={selectedConversation.users}
             />
         )
     }
