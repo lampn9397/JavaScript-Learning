@@ -73,13 +73,20 @@ export default function MessageItem({
 
         return (<React.Fragment>
 
-            <div className={styles.messageReactions}>
+            <div className={classNames({
+                [styles.messageReactions]: true,
+                [styles.otherMessageReactions]: !isMyMessage,
+
+            })}>
                 {reactionList.map((item, index) => (
                     <img src={images[item.type.toLowerCase()]} alt='' className={`${styles.reactions}`} key={index} />
                 ))}
                 {reactions.length > 1 && reactions.length}
             </div>
-            <div className={styles.userReactMessageContainer}>
+            <div className={classNames({
+                [styles.userReactMessageContainer]: true,
+                [styles.otherUserReactMessageContainer]: !isMyMessage
+            })}>
                 <div className={styles.userReactMessage}>{reactions.map((reactionItem) => {
                     const userReact = users.find((userItem) => userItem._id === reactionItem.user)
                     return <div>{`${userReact.firstName} ${userReact.lastName}`} </div>
@@ -100,7 +107,7 @@ export default function MessageItem({
                 [styles.myMessageFileContainer]: isMyMessage,
                 [styles.otherMessageFileRelative]: !isMyMessage,
             })}>
-                {!isMyMessage && listMessageReactions()}
+                {/* {!isMyMessage && listMessageReactions()} */}
                 {message.files.map((item, index) => {
                     if (item.type === FileTypes.CHAT_IMAGE) {
                         return (
@@ -177,9 +184,9 @@ export default function MessageItem({
     }
 
     return (
-        <div className={styles.otherMessageContainer} >
+        <div className={styles.otherMessageWrapper} >
             <div className={classNames({
-                [styles.otherMessageWrapper]: true,
+                [styles.otherMessageContainer]: true,
                 [styles.reactionMargin]: reactionList.length,
             })}>
                 {message.type === messageTypes.LIKE ? (
@@ -202,10 +209,10 @@ export default function MessageItem({
                             </div>
                             {message.text && (
                                 <div className={`${styles.message} ${styles.otherMessagesColor}`}>
-                                    {listMessageReactions()}
                                     {message.text}
                                 </div>
                             )}
+                            {listMessageReactions()}
                             {renderItemFile()}
                             <MessageItemReaction
                                 className={styles.messageItemReaction}
@@ -218,10 +225,10 @@ export default function MessageItem({
                         </div>
                     </>
                 )}
-                <div className={`${styles.otherReadUsersContainer}`}>
-                    {renderReadUsers()}
-                </div>
+                {/* <div className={`${styles.otherReadUsersContainer}`}>
+                </div> */}
             </div>
+            {renderReadUsers()}
         </div>
     )
 

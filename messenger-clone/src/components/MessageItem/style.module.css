@@ -3,6 +3,8 @@
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 5px;
+    width: 70%;
+    max-width: 70%;
 }
 
 .otherMessagesColor {
@@ -16,6 +18,7 @@
     display: flex;
     align-items: center;
     position: relative;
+    justify-content: flex-end;
 }
 
 .message {
@@ -76,6 +79,7 @@
 .messageWithAvatar {
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .avatar {
@@ -111,6 +115,9 @@
     flex-direction: column;
     align-items: flex-end;
     margin-top: 2px;
+    max-width: 70%;
+    width: 70%;
+    align-self: flex-end;
 }
 
 .myMessageWrapper:hover .messageItemReaction {
@@ -154,7 +161,7 @@
 .myMessageItemFileContainer {
     display: flex;
     justify-content: flex-end;
-    max-width: 70%;
+    width: 100%;
 }
 
 .fileContainer {
@@ -183,14 +190,21 @@
 
 }
 
+.otherMessageReactions {
+    right: 36px;
+    z-index: 98;
+}
+
+
 .messageReactions:hover~.userReactMessageContainer {
     display: block;
 }
 
 .otherMessageWrapper {
     display: flex;
-    flex-direction: column;
     width: 100%;
+    justify-content: space-between;
+    align-items: flex-end;
 }
 
 .reactions {
@@ -238,4 +252,12 @@
     z-index: 99;
     right: 0px;
     bottom: 12px;
+}
+
+.otherUserReactMessageContainer {
+    right: -10px;
+    max-width: 120px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
