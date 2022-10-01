@@ -24,7 +24,21 @@ export default function MessageItem({
     users,
 }) {
 
+    const [state, setState] = React.useState({
+        messageTextWidth: null,
+    })
+
     const isMyMessage = message.user === user._id || message.user._id === user._id
+
+    const messageTextWidthRef = React.useRef()
+
+    const onMouseOverMessageReaction = React.useCallback(() => {
+        if (!messageTextWidthRef.current) return
+        setState((prevState) => ({
+            ...prevState,
+            messageTextWidth: messageTextWidthRef.current.offsetWidth,
+        }))
+    }, [])
 
     const reactionList = React.useMemo(() => {
         const reactionListValue = [];
@@ -77,7 +91,9 @@ export default function MessageItem({
                 [styles.messageReactions]: true,
                 [styles.otherMessageReactions]: !isMyMessage,
 
-            })}>
+            })}
+                onMouseOver={onMouseOverMessageReaction}
+            >
                 {reactionList.map((item, index) => (
                     <img src={images[item.type.toLowerCase()]} alt='' className={`${styles.reactions}`} key={index} />
                 ))}
@@ -86,7 +102,9 @@ export default function MessageItem({
             <div className={classNames({
                 [styles.userReactMessageContainer]: true,
                 [styles.otherUserReactMessageContainer]: !isMyMessage
-            })}>
+            })}
+                style={{ left: isMyMessage ? undefined : state.messageTextWidth, right: !isMyMessage && 'unset' }}
+            >
                 <div className={styles.userReactMessage}>{reactions.map((reactionItem) => {
                     const userReact = users.find((userItem) => userItem._id === reactionItem.user)
                     return <div>{`${userReact.firstName} ${userReact.lastName}`} </div>
@@ -95,7 +113,7 @@ export default function MessageItem({
             </div>
         </React.Fragment>
         )
-    }, [reactionList, reactions, users])
+    }, [isMyMessage, onMouseOverMessageReaction, reactionList, reactions, state.messageTextWidth, users])
 
     const renderItemFile = React.useCallback(() => {
 
@@ -141,7 +159,7 @@ export default function MessageItem({
                 })}
             </div>
         )
-    }, [isMyMessage, listMessageReactions, message.files, onClickImage])
+    }, [isMyMessage, message.files, onClickImage])
 
     if (isMyMessage) {
         return (
@@ -208,7 +226,7 @@ export default function MessageItem({
                                 <BadgeAvatars badgeVisible={true} avatarClassName={`${styles.avatar}`} avatar={avatar} online={online} />
                             </div>
                             {message.text && (
-                                <div className={`${styles.message} ${styles.otherMessagesColor}`}>
+                                <div className={`${styles.message} ${styles.otherMessagesColor}`} ref={messageTextWidthRef}>
                                     {message.text}
                                 </div>
                             )}

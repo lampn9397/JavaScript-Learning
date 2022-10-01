@@ -255,9 +255,5 @@
 }
 
 .otherUserReactMessageContainer {
-    right: -10px;
-    max-width: 120px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+    /* right: -10px; */
 }
