@@ -7,6 +7,8 @@ import TextField from '@mui/material/TextField';
 import PreviewFile from '../PreviewFile';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import EmojiPicker from 'emoji-picker-react';
 
 import { readFile } from '../../utils';
 import styles from './style.module.css'
@@ -14,7 +16,6 @@ import { messageTypes } from '../../constants';
 
 export default function ChatInput({
     onSubmit: onSubmitProps,
-    inputMessage,
     attachFilesEnable,
     likeEnable,
     disableChatInput,
@@ -23,6 +24,7 @@ export default function ChatInput({
     const [state, setState] = React.useState({
         inputMessage: "",
         attachFiles: { filePreview: [], fileSend: [] },
+        emojiOpen: false,
     })
 
     const inputRef = React.useRef()
@@ -93,6 +95,20 @@ export default function ChatInput({
         inputRef.current.value = ''
     }, [])
 
+    const onClickOpenEmoji = React.useCallback(() => {
+        setState((prevState) => ({
+            ...prevState,
+            emojiOpen: !prevState.emojiOpen,
+        }))
+    }, [])
+
+    const onEmojiClick = React.useCallback((event, data) => {
+        setState((prevState) => ({
+            ...prevState,
+            inputMessage: `${prevState.inputMessage}${data.emoji}`,
+        }))
+    }, [])
+
     return (
         <div className={styles.chatUltils}>
             {attachFilesEnable && (
@@ -129,6 +145,14 @@ export default function ChatInput({
                     onKeyDown={onKeyDownInputMessage}
                     className={styles.inputMessageContainer}
                 />
+                <div className={styles.emojiContainer}>
+                    <SentimentSatisfiedAltIcon color='primary' onClick={onClickOpenEmoji} />
+                    {state.emojiOpen && (
+                        <div className={styles.emojiPicker}>
+                            <EmojiPicker onEmojiClick={onEmojiClick} emojiStyle='twitter' />
+                        </div>
+                    )}
+                </div>
             </div>
             {(!likeEnable || state.inputMessage || state.attachFiles.filePreview.length) ? (
                 <div className={styles.iconContainer}>

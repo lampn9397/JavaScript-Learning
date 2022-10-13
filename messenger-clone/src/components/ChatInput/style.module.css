@@ -19,6 +19,9 @@
     margin-right: 10px;
     margin-left: 5px;
     flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 5px;
 
 }
 
@@ -205,4 +208,17 @@
     padding: 2px 2px 2px 2px;
     margin-right: 5px;
     margin-left: 5px;
+}
+
+.emoji {}
+
+.emojiContainer {
+    cursor: pointer;
+    height: 24px;
+    position: relative;
+}
+
+.emojiPicker {
+    position: absolute;
+    bottom: 25px;
 }

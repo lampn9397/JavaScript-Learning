@@ -8,7 +8,7 @@ import styles from './style.module.css'
 import { FileTypes, fullScreenImageRef, messageTypes } from '../../constants';
 import BadgeAvatars from '../BadgeAvatars';
 import MessageItemReaction from '../MessageItemReaction';
-import { REACTION_TYPES } from '../../constants';
+import { onlyEmojiRegExp } from '../../constants';
 import images from '../../assets';
 
 export default function MessageItem({
@@ -27,6 +27,10 @@ export default function MessageItem({
     const [state, setState] = React.useState({
         messageTextWidth: null,
     })
+
+    const isOnlyEmoji = React.useMemo(() => {
+        return onlyEmojiRegExp.test(message.text)
+    }, [message.text])
 
     const isMyMessage = message.user === user._id || message.user._id === user._id
 
@@ -90,7 +94,6 @@ export default function MessageItem({
             <div className={classNames({
                 [styles.messageReactions]: true,
                 [styles.otherMessageReactions]: !isMyMessage,
-
             })}
                 onMouseOver={onMouseOverMessageReaction}
             >
@@ -189,7 +192,15 @@ export default function MessageItem({
                             </div>
                         ) : (
                             <>
-                                {message.text && <div className={`${styles.message} ${styles.myMessagesColor}`}>{message.text}</div>}
+                                {message.text && (
+                                    <div className={classNames({
+                                        [styles.message]: true,
+                                        [styles.myMessagesColor]: true,
+                                        [styles.emojiOnly]: isOnlyEmoji,
+                                    })}>
+                                        {message.text}
+                                    </div>
+                                )}
                                 {listMessageReactions()}
                             </>
                         )}
@@ -226,7 +237,11 @@ export default function MessageItem({
                                 <BadgeAvatars badgeVisible={true} avatarClassName={`${styles.avatar}`} avatar={avatar} online={online} />
                             </div>
                             {message.text && (
-                                <div className={`${styles.message} ${styles.otherMessagesColor}`} ref={messageTextWidthRef}>
+                                <div className={classNames({
+                                    [styles.message]: true,
+                                    [styles.otherMessagesColor]: true,
+                                    [styles.emojiOnly]: isOnlyEmoji,
+                                })} ref={messageTextWidthRef}>
                                     {message.text}
                                 </div>
                             )}
