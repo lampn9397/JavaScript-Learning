@@ -1,0 +1,27 @@
+{
+  "name": "story-server-api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "watch:dev": "DEBUG=story-server-api:* nodemon"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "crypto-js": "^4.1.1",
+    "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
+    "express": "~4.16.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.6.5",
+    "mongoose-lean-getters": "^0.3.5",
+    "mongoose-slug-generator": "^1.0.4",
+    "morgan": "~1.9.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.8.0",
+    "nodemon": "^2.0.20",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.0",
+    "yup": "^0.32.11"
+  }
+}
