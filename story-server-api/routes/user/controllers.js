@@ -4,7 +4,7 @@ const nodemailer = require("nodemailer");
 
 const User = require("../../models/User");
 const { jwtOptions } = require('../../utils/constants');
-const { createResponse } = require("../../utils/helpers");
+const { createResponse, getFilePath } = require("../../utils/helpers");
 
 module.exports.onRegister = async (req, res, next) => {
     try {
@@ -247,10 +247,7 @@ module.exports.updateProfile = async (req, res, next) => {
         }
 
         if (req.file) {
-            const fileDestination = req.file.destination.replace('public', '')
-
-            user.avatar = `${fileDestination}${req.file.filename}`
-
+            user.avatar = getFilePath(req.file)
         }
 
         await user.save()

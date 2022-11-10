@@ -1,6 +1,9 @@
 const { Schema, model } = require('mongoose');
-const yup = require('yup')
-
+const yup = require('yup');
+const StoryCategory = require('./StoryCategory');
+const StoryGenre = require('./StoryGenre');
+const StoryTag = require('./StoryTag');
+const mongooseLeanGetters = require('mongoose-lean-getters');
 
 const StoryStatus = {
     ON_GOING: 'ON_GOING',
@@ -31,22 +34,44 @@ const storySchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'story_genres',
         required: [true, 'Thể loại là bắt buộc'],
+        validate: {
+            message: "Id Genre Không Hợp Lệ",
+            validator: async (value) => {
+                const isStoryGenreExist = await StoryGenre.exists({ _id: value })
+                return isStoryGenreExist
+            },
+        }
     },
     category: {
         type: Schema.Types.ObjectId,
         ref: 'story_categories',
         required: [true, 'Danh mục là bắt buộc'],
+        validate: {
+            message: "Id Category Không Hợp Lệ",
+            validator: async (value) => {
+                const isStoryCategoryExist = await StoryCategory.exists({ _id: value })
+                return isStoryCategoryExist
+            },
+        }
     },
     tags: [{
         type: Schema.Types.ObjectId,
         ref: 'story_tags',
+        validate: {
+            message: "Id Tag Không Hợp Lệ",
+            validator: async (value) => {
+                const isStoryTagExist = await StoryTag.exists({ _id: value })
+                return isStoryTagExist
+            },
+        }
     }],
     status: {
         type: String,
         enum: {
             values: Object.keys(StoryStatus),
             message: 'Trạng thái không hợp lệ'
-        }
+        },
+        default: StoryStatus.ON_GOING
     },
     totalLikes: {
         type: Number,
@@ -88,12 +113,15 @@ const storySchema = new Schema({
         maxlength: [300, 'Mô tả dùng tối đa 300 kí tự'],
         required: [true, 'Mô tả là bắt buộc'],
     },
-
+    isPublish: {
+        type: Boolean,
+        default: false,
+    }
 }, {
     versionKey: false,
     timestamps: true,
 }) //khong hien thi version document
 
-userSchema.plugin(mongooseLeanGetters);
+storySchema.plugin(mongooseLeanGetters);
 
 module.exports = model('stories', storySchema);

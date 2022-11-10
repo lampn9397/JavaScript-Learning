@@ -1,17 +1,20 @@
 const multer = require('multer');
+var getSlug = require('speakingurl');
 
 const storage = multer.diskStorage({
-    destination: 'public/images/user_avatar/',
+    destination: 'public/images/story_poster/',
     filename: (req, file, cb) => {
         const fileExtensionArray = file.originalname.split('.');
 
+        const slug = getSlug(fileExtensionArray.slice(0, fileExtensionArray.length - 1).join('-'))
+
         const fileExtension = fileExtensionArray[fileExtensionArray.length - 1]; //lay duoi file
 
-        cb(null, `${req.user._id}.${fileExtension}`);
+        cb(null, `${req.user._id}-${slug}.${fileExtension}`);
     },
 });
 
-module.exports.userAvatarMulter = multer({
+module.exports.posterMulter = multer({
     storage,
     limits: {
         files: 1,
