@@ -7,7 +7,18 @@ const storyTagSchema = new Schema({
         minlength: [1, 'Tên danh mục con ít nhất 1 kí tự'],
         maxlength: [50, 'Tên danh mục con tối đa 50 kí tự'],
     },
-    slug: { type: String, slug: "name" }
+    slug: {
+        type: String,
+        validate: {
+            message: "Thẻ đã tồn tại",
+            validator: async (value) => {
+                const isStoryTagExist = await StoryTag.exists({ slug: value })
+                return !isStoryTagExist
+            },
+        }
+    }
 }, { versionKey: false })
 
-module.exports = model('story_tags', storyTagSchema);
+const StoryTag = model('story_tags', storyTagSchema)
+
+module.exports = StoryTag;

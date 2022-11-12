@@ -1,5 +1,7 @@
 const multer = require('multer');
-var getSlug = require('speakingurl');
+const getSlug = require('speakingurl');
+const Story = require('../../models/Story');
+const { createResponse } = require('../../utils/helpers');
 
 const storage = multer.diskStorage({
     destination: 'public/images/story_poster/',
@@ -24,9 +26,25 @@ module.exports.posterMulter = multer({
         const isImage = file.mimetype.startsWith('image/');
 
         if (!isImage) {
-            return cb(new Error('error.invalid_avatar_image'));
+            return cb(new Error('Tệp không hợp lệ'));
         }
 
         cb(null, true);
     },
 });
+
+module.exports.validateStoryUploader = async (req, res, next) => {
+    const isExist = await Story.exists({
+        _id: req.params.id,
+        uploader: req.user._id,
+    })
+
+    if (!isExist) {
+        res.status(400).json(createResponse({
+            message: "Truyện không tồn tại"
+        }))
+        return
+    }
+
+    next()
+}

@@ -4,6 +4,13 @@ const storyChapterSchema = new Schema({
     story: {
         type: Schema.Types.ObjectId,
         ref: 'stories',
+        validate: {
+            message: "Truyện không tồn tại",
+            validator: async (value) => {
+                const isStoryExist = await Story.exists({ _id: value })
+                return isStoryExist
+            },
+        }
     },
     numberOrder: {
         type: Number,

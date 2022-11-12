@@ -9,6 +9,8 @@ const StoryCategory = require('../../models/StoryCategory');
 const StoryGenre = require('../../models/StoryGenre');
 const StoryTag = require('../../models/StoryTag');
 const Story = require('../../models/Story');
+const getSlug = require('speakingurl');
+const StoryChapter = require('../../models/StoryChapter');
 
 module.exports.onGetCategory = async (req, res, next) => {
     try {
@@ -25,7 +27,10 @@ module.exports.onGetCategory = async (req, res, next) => {
 
 module.exports.onCreateCategory = async (req, res, next) => {
     try {
-        await StoryCategory.create(req.body)
+        await StoryCategory.create({
+            name: req.body.name,
+            slug: getSlug(req.body.name)
+        })
 
         res.json(createResponse())
 
@@ -48,7 +53,10 @@ module.exports.onGetGenre = async (req, res, next) => {
 
 module.exports.onCreateGenre = async (req, res, next) => {
     try {
-        await StoryGenre.create(req.body)
+        await StoryGenre.create({
+            name: req.body.name,
+            slug: getSlug(req.body.name),
+        })
 
         res.json(createResponse())
 
@@ -72,7 +80,10 @@ module.exports.onGetTag = async (req, res, next) => {
 
 module.exports.onCreateTag = async (req, res, next) => {
     try {
-        await StoryTag.create(req.body)
+        await StoryTag.create({
+            name: req.body.name,
+            slug: getSlug(req.body.name)
+        })
 
         res.json(createResponse())
 
@@ -127,6 +138,27 @@ module.exports.onCreateStory = async (req, res, next) => {
         }
 
         await Story.create(story)
+
+        res.json(createResponse())
+
+    } catch (error) {
+        next(error)
+    }
+};
+
+module.exports.onCreateChapter = async (req, res, next) => {
+    try {
+        const storyChapter = {
+            story: req.params.id,
+            numberOrder: req.body.numberOrder,
+            chapterNumber: req.body.chapterNumber,
+            name: req.body.name,
+            bookNumber: req.body.bookNumber,
+            bookName: req.body.bookName,
+            content: req.body.content,
+        }
+
+        await StoryChapter.create(storyChapter)
 
         res.json(createResponse())
 

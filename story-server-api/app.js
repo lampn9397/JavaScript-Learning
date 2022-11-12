@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const dotenv = require('dotenv')
 const slug = require('mongoose-slug-generator');
+const multer = require('multer');
 
 mongoose.plugin(slug, { lang: "vi", });
 
@@ -15,7 +16,7 @@ dotenv.config();
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 const storyRouter = require('./routes/story');
-const { jwtOptions } = require('./utils/constants');
+const { jwtOptions, multerErrorMessages } = require('./utils/constants');
 const User = require('./models/User');
 
 passport.use(new JwtStrategy(jwtOptions, async function (jwt_payload, done) {
@@ -66,9 +67,12 @@ app.use((error, req, res, next) => {
 
         message = error.errors[errorField].message;
 
+    } else if (error instanceof multer.MulterError) {
+        message = multerErrorMessages[error.code]
     } else {
         console.error(error);
     }
+
 
     res.status(400).json({
         ok: false,

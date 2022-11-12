@@ -10,8 +10,9 @@ const {
     onCreateTag,
     onGetStory,
     onCreateStory,
+    onCreateChapter,
 } = require('./controllers');
-const { posterMulter } = require('./middlewares');
+const { posterMulter, validateStoryUploader } = require('./middlewares');
 const router = express.Router();
 
 router.get('/category', onGetCategory)
@@ -25,6 +26,8 @@ router.post('/genre', onCreateGenre)
 router.get('/tag', onGetTag)
 
 router.post('/tag', onCreateTag)
+
+router.post('/:id/chapter', passport.authenticate('jwt', { session: false }), validateStoryUploader, onCreateChapter)
 
 router.get('/', onGetStory)
 

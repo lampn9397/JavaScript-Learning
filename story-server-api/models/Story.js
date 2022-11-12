@@ -35,7 +35,7 @@ const storySchema = new Schema({
         ref: 'story_genres',
         required: [true, 'Thể loại là bắt buộc'],
         validate: {
-            message: "Id Genre Không Hợp Lệ",
+            message: "Thể loại không hợp lệ",
             validator: async (value) => {
                 const isStoryGenreExist = await StoryGenre.exists({ _id: value })
                 return isStoryGenreExist
@@ -47,7 +47,7 @@ const storySchema = new Schema({
         ref: 'story_categories',
         required: [true, 'Danh mục là bắt buộc'],
         validate: {
-            message: "Id Category Không Hợp Lệ",
+            message: "Danh mục không hợp lệ",
             validator: async (value) => {
                 const isStoryCategoryExist = await StoryCategory.exists({ _id: value })
                 return isStoryCategoryExist
@@ -58,7 +58,7 @@ const storySchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'story_tags',
         validate: {
-            message: "Id Tag Không Hợp Lệ",
+            message: "Thẻ không hợp lệ",
             validator: async (value) => {
                 const isStoryTagExist = await StoryTag.exists({ _id: value })
                 return isStoryTagExist

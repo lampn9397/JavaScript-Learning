@@ -21,7 +21,7 @@ module.exports.userAvatarMulter = multer({
         const isImage = file.mimetype.startsWith('image/');
 
         if (!isImage) {
-            return cb(new Error('error.invalid_avatar_image'));
+            return cb(new Error('Tệp không hợp lệ'));
         }
 
         cb(null, true);
