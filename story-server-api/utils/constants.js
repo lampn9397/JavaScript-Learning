@@ -21,3 +21,7 @@ module.exports.multerErrorMessages = {
   LIMIT_UNEXPECTED_FILE: 'Unexpected field',
   MISSING_FIELD_NAME: 'Field name missing'
 }
+
+module.exports.mongooseCastErrorField = {
+  genre: 'Thể loại'
+}

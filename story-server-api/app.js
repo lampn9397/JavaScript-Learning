@@ -16,7 +16,7 @@ dotenv.config();
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 const storyRouter = require('./routes/story');
-const { jwtOptions, multerErrorMessages } = require('./utils/constants');
+const { jwtOptions, multerErrorMessages, mongooseCastErrorField } = require('./utils/constants');
 const User = require('./models/User');
 
 passport.use(new JwtStrategy(jwtOptions, async function (jwt_payload, done) {
@@ -47,7 +47,7 @@ mongoose.connection.on('error', (err) => {
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'))); //_dirname:thu muc hien tai
 
@@ -60,19 +60,29 @@ app.use('/story', storyRouter);
 app.use((error, req, res, next) => {
     let { message } = error;
 
-    const isMongooseError = !!error.errors;
+    // const isMongooseError = error.errors;
+
+    const isMongooseError = error instanceof mongoose.Error.ValidationError;
 
     if (isMongooseError) {
-        const [errorField] = Object.keys(error.errors);
+        // const [errorField] = Object.keys(error.errors);
 
-        message = error.errors[errorField].message;
+        // message = error.errors[errorField].message;
 
+        const [firstErrorKey] = Object.keys(error.errors);
+
+        const firstError = error.errors[firstErrorKey];
+
+        ({ message } = firstError);
+
+        if (firstError instanceof mongoose.Error.CastError) {
+            message = `${mongooseCastErrorField[firstErrorKey]} không hợp lệ`;
+        }
     } else if (error instanceof multer.MulterError) {
-        message = multerErrorMessages[error.code]
+        message = multerErrorMessages[error.code];
     } else {
         console.error(error);
     }
-
 
     res.status(400).json({
         ok: false,
