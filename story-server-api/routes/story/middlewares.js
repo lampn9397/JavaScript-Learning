@@ -34,17 +34,21 @@ module.exports.posterMulter = multer({
 });
 
 module.exports.validateStoryUploader = async (req, res, next) => {
-    const isExist = await Story.exists({
-        _id: req.params.id,
-        uploader: req.user._id,
-    })
+    try {
+        const isExist = await Story.exists({
+            _id: req.params.id,
+            uploader: req.user._id,
+        })
 
-    if (!isExist) {
-        res.status(400).json(createResponse({
-            message: "Truyện không tồn tại"
-        }))
-        return
+        if (!isExist) {
+            res.status(400).json(createResponse({
+                message: "Truyện không tồn tại"
+            }))
+            return
+        }
+
+        next()
+    } catch (error) {
+        next(error)
     }
-
-    next()
 }

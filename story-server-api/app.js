@@ -62,22 +62,23 @@ app.use((error, req, res, next) => {
 
     // const isMongooseError = error.errors;
 
-    const isMongooseError = error instanceof mongoose.Error.ValidationError;
+    const isMongooseError = error instanceof mongoose.Error.ValidationError || error instanceof mongoose.Error.CastError;
 
     if (isMongooseError) {
-        // const [errorField] = Object.keys(error.errors);
+        if (error.errors) {
+            const [firstErrorKey] = Object.keys(error.errors);
 
-        // message = error.errors[errorField].message;
+            const firstError = error.errors[firstErrorKey];
 
-        const [firstErrorKey] = Object.keys(error.errors);
+            ({ message } = firstError);
 
-        const firstError = error.errors[firstErrorKey];
-
-        ({ message } = firstError);
-
-        if (firstError instanceof mongoose.Error.CastError) {
-            message = `${mongooseCastErrorField[firstErrorKey]} không hợp lệ`;
+            if (firstError instanceof mongoose.Error.CastError) {
+                message = `${firstErrorKey} không hợp lệ`;
+            }
+        } else {
+            message = `${error.value} không hợp lệ`;
         }
+
     } else if (error instanceof multer.MulterError) {
         message = multerErrorMessages[error.code];
     } else {

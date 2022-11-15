@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const Story = require('./Story');
 
 const storyChapterSchema = new Schema({
     story: {
@@ -15,10 +16,44 @@ const storyChapterSchema = new Schema({
     numberOrder: {
         type: Number,
         required: [true, 'Số thứ tự chương là bắt buộc'],
+        min: [1, 'Số thứ tự thấp nhất là 1'],
+        validate: [
+            {
+                message: "Số thứ tự phải là số nguyên dương",
+                validator: Number.isInteger
+            },
+            {
+                message: "Số thứ tự đã tồn tại",
+                validator: async (value) => {
+                    const isStoryNumberOrderExist = await StoryChapter.exists({
+                        numberOrder: value,
+                        story: this.story
+                    })
+                    return !isStoryNumberOrderExist
+                },
+            }
+        ]
     },
     chapterNumber: {
         type: Number,
         required: [true, 'Số chương là bắt buộc'],
+        min: [1, 'Số chương thấp nhất là 1'],
+        validate: [
+            {
+                message: "Số chương phải là số nguyên dương",
+                validator: Number.isInteger
+            },
+            {
+                message: "Số chương đã tồn tại",
+                validator: async function (value) {
+                    const isStoryChapterExist = await StoryChapter.exists({
+                        chapterNumber: value,
+                        story: this.story
+                    })
+                    return !isStoryChapterExist
+                },
+            }
+        ]
     },
     name: {
         trim: true,
@@ -30,6 +65,23 @@ const storyChapterSchema = new Schema({
     bookNumber: {
         type: Number,
         required: [true, 'Số quyển là bắt buộc'],
+        min: [1, 'Số quyển thấp nhất là 1'],
+        validate: [
+            {
+                message: "Số quyển phải là số nguyên dương",
+                validator: Number.isInteger
+            },
+            {
+                message: "Số quyển đã tồn tại",
+                validator: async function (value) {
+                    const isBookNumberExist = await StoryChapter.exists({
+                        bookNumber: value,
+                        story: this.story
+                    })
+                    return !isBookNumberExist
+                },
+            }
+        ]
     },
     bookName: {
         trim: true,
@@ -47,4 +99,6 @@ const storyChapterSchema = new Schema({
     }
 }, { timestamps: true, versionKey: false })
 
-module.exports = model('story_chapters', storyChapterSchema);
+const StoryChapter = model('story_chapters', storyChapterSchema)
+
+module.exports = StoryChapter;
