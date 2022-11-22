@@ -16,6 +16,7 @@ dotenv.config();
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 const storyRouter = require('./routes/story');
+const authorRouter = require('./routes/author');
 const { jwtOptions, multerErrorMessages, mongooseCastErrorField } = require('./utils/constants');
 const User = require('./models/User');
 
@@ -56,6 +57,7 @@ app.use(passport.initialize());
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/story', storyRouter);
+app.use('/author', authorRouter);
 
 app.use((error, req, res, next) => {
     let { message } = error;

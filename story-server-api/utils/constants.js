@@ -25,3 +25,5 @@ module.exports.multerErrorMessages = {
 module.exports.mongooseCastErrorField = {
   genre: 'Thể loại'
 }
+
+module.exports.DefaultPageLimit = 10

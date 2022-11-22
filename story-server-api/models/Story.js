@@ -24,10 +24,8 @@ const storySchema = new Schema({
         required: [true, 'Tên truyện là bắt buộc'],
     },
     author: {
-        trim: true,
-        type: String,
-        minlength: [1, 'Tên tác giả dùng ít nhất 1 kí tự'],
-        maxlength: [50, 'Tên tác giả dùng tối đa 50 kí tự'],
+        type: Schema.Types.ObjectId,
+        ref: "authors",
         default: null,
     },
     genre: {

@@ -93,6 +93,11 @@ const storyChapterSchema = new Schema({
         type: String,
         required: [true, 'Nội dung chương là bắt buộc'],
     },
+    uploader: {
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+        required: [true, 'Người đăng là bắt buộc'],
+    },
     totalLikes: {
         type: Number,
         default: 0,
