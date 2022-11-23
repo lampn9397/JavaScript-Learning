@@ -105,7 +105,10 @@ module.exports.onGetStory = async (req, res, next) => {
             limit = (isNaN(+limit) || !limit) ? 10 : Math.ceil(+limit)
         }
 
-        const story = await Story.find({}).populate('uploader', 'name').skip((page - 1) * limit).limit(limit)
+        const story = await Story.find({})
+            .populate('uploader', 'name')
+            .skip((page - 1) * limit)
+            .limit(limit)
 
         res.json(createResponse({
             results: story
@@ -182,7 +185,9 @@ module.exports.onGetChapterList = async (req, res, next) => {
             limit = (isNaN(+limit) || !limit) ? 10 : Math.ceil(+limit)
         }
 
-        const chapterList = await StoryChapter.find({ story: req.params.id }, '-content').skip((page - 1) * limit).limit(limit)
+        const chapterList = await StoryChapter.find({ story: req.params.id }, '-content')
+            .skip((page - 1) * limit)
+            .limit(limit);
 
         res.json(createResponse({
             results: chapterList,
