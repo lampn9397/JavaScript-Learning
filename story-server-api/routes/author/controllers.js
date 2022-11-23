@@ -24,9 +24,34 @@ module.exports.onCreateAuthor = async (req, res, next) => {
 };
 module.exports.onGetAuthorList = async (req, res, next) => {
     try {
-        const authorList = await Author.find({
-            $text: { $search: req.query.name }
-        })
+        const filter = {};
+
+        const { name } = req.query;
+
+        let { page = 1, limit = 10 } = req.query
+
+        if (name) {
+            const serarator = ' ';
+
+            filter.$text = {
+                $search: name
+                    .split(serarator)
+                    .map((x) => `"${x}"`)
+                    .join(serarator),
+            };
+        }
+
+        if (typeof page === "string") {
+            page = (isNaN(+page) || !page) ? 1 : Math.ceil(+page)
+        }
+
+        if (typeof limit === "string") {
+            limit = (isNaN(+limit) || !limit) ? 10 : Math.ceil(+limit)
+        }
+
+        const authorList = await Author.find(filter)
+            .skip((page - 1) * limit)
+            .limit(limit);
 
         res.json(createResponse({
             results: authorList
