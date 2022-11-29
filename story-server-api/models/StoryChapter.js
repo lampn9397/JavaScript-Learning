@@ -24,11 +24,13 @@ const storyChapterSchema = new Schema({
             },
             {
                 message: "Số thứ tự đã tồn tại",
-                validator: async (value) => {
+                validator: async function (value) {
+
                     const isStoryNumberOrderExist = await StoryChapter.exists({
                         numberOrder: value,
                         story: this.story
                     })
+
                     return !isStoryNumberOrderExist
                 },
             }
@@ -48,7 +50,8 @@ const storyChapterSchema = new Schema({
                 validator: async function (value) {
                     const isStoryChapterExist = await StoryChapter.exists({
                         chapterNumber: value,
-                        story: this.story
+                        story: this.story,
+                        bookNumber: this.bookNumber,
                     })
                     return !isStoryChapterExist
                 },
@@ -71,16 +74,16 @@ const storyChapterSchema = new Schema({
                 message: "Số quyển phải là số nguyên dương",
                 validator: Number.isInteger
             },
-            {
-                message: "Số quyển đã tồn tại",
-                validator: async function (value) {
-                    const isBookNumberExist = await StoryChapter.exists({
-                        bookNumber: value,
-                        story: this.story
-                    })
-                    return !isBookNumberExist
-                },
-            }
+            // {
+            //     message: "Số quyển đã tồn tại",
+            //     validator: async function (value) {
+            //         const isBookNumberExist = await StoryChapter.exists({
+            //             bookNumber: value,
+            //             story: this.story
+            //         })
+            //         return !isBookNumberExist
+            //     },
+            // }
         ]
     },
     bookName: {

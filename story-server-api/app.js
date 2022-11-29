@@ -78,7 +78,7 @@ app.use((error, req, res, next) => {
                 message = `${firstErrorKey} không hợp lệ`;
             }
         } else {
-            message = `${error.value} không hợp lệ`;
+            message = `${error.path} không hợp lệ`;
         }
 
     } else if (error instanceof multer.MulterError) {

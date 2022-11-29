@@ -12,6 +12,13 @@ const authorSchema = new Schema({
         minlength: [1, 'Tên tác giả dùng ít nhất 1 kí tự'],
         maxlength: [50, 'Tên tác giả dùng tối đa 50 kí tự'],
         required: [true, 'Tên tác giả là bắt buộc'],
+        validate: {
+            message: "Tác giả đã tồn tại",
+            validator: async (value) => {
+                const isAuthorExist = await Author.exists({ name: value })
+                return !isAuthorExist
+            },
+        }
     },
     avatar: {
         type: String,
@@ -20,7 +27,7 @@ const authorSchema = new Schema({
     },
     description: {
         type: String,
-        minlength: [1, 'Mô tả dùng ít nhất 1 kí tự'],
+        default: '',
         maxlength: [300, 'Mô tả dùng tối đa 300 kí tự'],
     },
     birthday: {
@@ -33,4 +40,6 @@ authorSchema.plugin(mongooseLeanGetters);
 
 authorSchema.index({ name: "text" })
 
-module.exports = model('authors', authorSchema);
+const Author = model('authors', authorSchema);
+
+module.exports = Author;

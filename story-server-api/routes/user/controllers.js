@@ -5,6 +5,8 @@ const nodemailer = require("nodemailer");
 const User = require("../../models/User");
 const { jwtOptions } = require('../../utils/constants');
 const { createResponse, getFilePath } = require("../../utils/helpers");
+const Story = require('../../models/Story');
+const StoryFollow = require('../../models/StoryFollow');
 
 module.exports.onRegister = async (req, res, next) => {
     try {
@@ -254,6 +256,36 @@ module.exports.updateProfile = async (req, res, next) => {
 
         res.json(createResponse({
             message: "Tài khoản thay đổi thành công",
+        }))
+        return
+
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports.getUserStoryList = async (req, res, next) => {
+    try {
+        const myStoryList = await Story.find({
+            uploader: req.params.id
+        }).populate("uploader", "name")
+
+        res.json(createResponse({
+            results: myStoryList,
+        }))
+        return
+
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports.getMyFollowStory = async (req, res, next) => {
+    try {
+        const myFollowStory = await StoryFollow.find({
+            user: req.user._id,
+        }).populate("story")
+
+        res.json(createResponse({
+            results: myFollowStory,
         }))
         return
 

@@ -13,3 +13,19 @@ module.exports.createResponse = (response = defaultResponse) => {
 
   return responseModel;
 };
+
+module.exports.getPaginationConfig = (req, defaultPage, defaultLimit) => {
+  let { page = defaultPage, limit = defaultLimit } = req.query
+
+  if (typeof page === "string") {
+    page = (isNaN(+page) || !page) ? defaultPage : Math.ceil(+page)
+  }
+
+  if (typeof limit === "string") {
+    limit = (isNaN(+limit) || !limit) ? defaultLimit : Math.ceil(+limit)
+  }
+
+  return { page, limit }
+}
+
+

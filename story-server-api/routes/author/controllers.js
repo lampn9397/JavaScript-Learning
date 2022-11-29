@@ -4,7 +4,8 @@ const sha256 = require('crypto-js/sha256');
 const Fuse = require('fuse.js')
 
 const Author = require('../../models/Author');
-const { createResponse } = require('../../utils/helpers');
+const { createResponse, getPaginationConfig } = require('../../utils/helpers');
+const Story = require('../../models/Story');
 
 
 module.exports.onCreateAuthor = async (req, res, next) => {
@@ -28,8 +29,6 @@ module.exports.onGetAuthorList = async (req, res, next) => {
 
         const { name } = req.query;
 
-        let { page = 1, limit = 10 } = req.query
-
         if (name) {
             const serarator = ' ';
 
@@ -41,17 +40,17 @@ module.exports.onGetAuthorList = async (req, res, next) => {
             };
         }
 
-        if (typeof page === "string") {
-            page = (isNaN(+page) || !page) ? 1 : Math.ceil(+page)
-        }
+        let authorList = []
 
-        if (typeof limit === "string") {
-            limit = (isNaN(+limit) || !limit) ? 10 : Math.ceil(+limit)
-        }
+        if (name) {
+            authorList = await Author.find(filter)
+        } else {
+            const { page, limit } = getPaginationConfig(req, 1, 10)
 
-        const authorList = await Author.find(filter)
-            .skip((page - 1) * limit)
-            .limit(limit);
+            authorList = await Author.find(filter)
+                .skip((page - 1) * limit)
+                .limit(limit);
+        }
 
         res.json(createResponse({
             results: authorList
@@ -62,4 +61,35 @@ module.exports.onGetAuthorList = async (req, res, next) => {
     }
 };
 
+module.exports.onGetAuthorDetail = async (req, res, next) => {
+    try {
+        const authorDetail = await Author.findById(req.params.id)
+
+        res.json(createResponse({
+            results: authorDetail
+        }))
+
+    } catch (error) {
+        next(error)
+    }
+};
+
+module.exports.onGetStoryByAuthor = async (req, res, next) => {
+    try {
+        const { page, limit } = getPaginationConfig(req, 1, 10)
+
+        const stories = await Story.find({ author: req.params.id })
+            .populate('uploader', 'name')
+            .populate("author")
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        res.json(createResponse({
+            results: stories
+        }))
+
+    } catch (error) {
+        next(error)
+    }
+};
 

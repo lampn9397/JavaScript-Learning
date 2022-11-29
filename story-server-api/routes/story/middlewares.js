@@ -1,6 +1,7 @@
 const multer = require('multer');
 const getSlug = require('speakingurl');
 const Story = require('../../models/Story');
+const StoryChapter = require('../../models/StoryChapter');
 const { createResponse } = require('../../utils/helpers');
 
 const storage = multer.diskStorage({
@@ -43,6 +44,25 @@ module.exports.validateStoryUploader = async (req, res, next) => {
         if (!isExist) {
             res.status(400).json(createResponse({
                 message: "Truyện không tồn tại"
+            }))
+            return
+        }
+
+        next()
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports.validateStoryChapter = async (req, res, next) => {
+    try {
+        const isExist = await StoryChapter.exists({
+            story: req.params.id,
+            _id: req.params.chapterId,
+        })
+
+        if (!isExist) {
+            res.status(400).json(createResponse({
+                message: "Chương không tồn tại"
             }))
             return
         }

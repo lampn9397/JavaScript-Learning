@@ -8,7 +8,9 @@ const {
     onRecoveryPassword,
     onVerifyRecoveryPasswordCode,
     resetPassword,
-    updateProfile
+    updateProfile,
+    getUserStoryList,
+    getMyFollowStory,
 } = require('./controllers');
 const { userAvatarMulter } = require('./middlewares');
 const router = express.Router();
@@ -24,6 +26,10 @@ router.post('/recovery-password', onRecoveryPassword);
 router.post('/verify-recovery-password-code', onVerifyRecoveryPasswordCode);
 
 router.post('/reset-password', resetPassword);
+
+router.get('/story/follow', passport.authenticate('jwt', { session: false }), getMyFollowStory);
+
+router.get('/:id/story', getUserStoryList);
 
 router.put('/', passport.authenticate('jwt', { session: false }), userAvatarMulter.single("avatar"), updateProfile);
 

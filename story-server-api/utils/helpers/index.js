@@ -9,3 +9,4 @@ module.exports.getFilePath = (file) => {
 
     return `${fileDestination}${file.filename}`
 }
+
