@@ -64,6 +64,8 @@ app.use((error, req, res, next) => {
 
     // const isMongooseError = error.errors;
 
+    let errors = undefined
+
     const isMongooseError = error instanceof mongoose.Error.ValidationError || error instanceof mongoose.Error.CastError;
 
     if (isMongooseError) {
@@ -71,6 +73,8 @@ app.use((error, req, res, next) => {
             const [firstErrorKey] = Object.keys(error.errors);
 
             const firstError = error.errors[firstErrorKey];
+
+            errors = error.errors;
 
             ({ message } = firstError);
 
@@ -90,6 +94,7 @@ app.use((error, req, res, next) => {
     res.status(400).json({
         ok: false,
         message,
+        errors,
     })
 })
 

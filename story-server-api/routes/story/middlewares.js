@@ -53,6 +53,7 @@ module.exports.validateStoryUploader = async (req, res, next) => {
         next(error)
     }
 }
+
 module.exports.validateStoryChapter = async (req, res, next) => {
     try {
         const isExist = await StoryChapter.exists({
@@ -63,6 +64,25 @@ module.exports.validateStoryChapter = async (req, res, next) => {
         if (!isExist) {
             res.status(400).json(createResponse({
                 message: "Chương không tồn tại"
+            }))
+            return
+        }
+
+        next()
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports.validateStoryExist = async (req, res, next) => {
+    try {
+        const isExist = await Story.exists({
+            _id: req.params.id,
+        })
+
+        if (!isExist) {
+            res.status(400).json(createResponse({
+                message: "Truyện không tồn tại"
             }))
             return
         }

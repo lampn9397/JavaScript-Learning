@@ -15,7 +15,11 @@ const StoryChapter = require('../../models/StoryChapter');
 const { json } = require('express');
 const Author = require('../../models/Author');
 const StoryFollow = require('../../models/StoryFollow');
+const StoryLike = require('../../models/StoryLike');
+const StoryRating = require('../../models/StoryRating');
+const StoryComment = require('../../models/StoryComment');
 
+const requestedIPs = {}
 
 module.exports.onGetCategory = async (req, res, next) => {
     try {
@@ -264,6 +268,21 @@ module.exports.onUpdateChapter = async (req, res, next) => {
         next(error)
     }
 };
+module.exports.onDeleteChapter = async (req, res, next) => {
+    try {
+        await StoryChapter.deleteOne({
+            story: req.params.id,
+            _id: req.params.chapterId
+        })
+
+        res.json(createResponse({
+            message: "Chương truyện đã xóa thành công"
+        }))
+
+    } catch (error) {
+        next(error)
+    }
+};
 
 module.exports.onGetChapterList = async (req, res, next) => {
     try {
@@ -288,6 +307,18 @@ module.exports.onGetChapterDetail = async (req, res, next) => {
             story: req.params.id,
             _id: req.params.chapterId,
         }).populate("uploader", "name")
+
+        const isTimeValid = (Date.now() - requestedIPs[req.ip]) >= 180000 //thoi gian giua cac lan request  lon hon hoac = 3 phut
+
+        if (!requestedIPs[req.ip] || isTimeValid) {
+            requestedIPs[req.ip] = Date.now()
+
+            await Story.updateOne({
+                _id: req.params.id
+            }, {
+                $inc: { totalViews: 1 }
+            })
+        }
 
         if (!chapterDetail) {
             res.status(404).json(createResponse({
@@ -368,16 +399,21 @@ module.exports.onGetStoryDetail = async (req, res, next) => {
 
 module.exports.onFollowStory = async (req, res, next) => {
     try {
-        const isStoryFollowed = await StoryFollow.exists({
+        const storyFollowModel = {
             user: req.user._id,
             story: req.params.id,
-        })
+        }
+
+        const isStoryFollowed = await StoryFollow.exists(storyFollowModel)
 
         if (!isStoryFollowed) {
-            await StoryFollow.create({
-                user: req.user._id,
-                story: req.params.id,
-            })
+            const followPromise = StoryFollow.create(storyFollowModel)
+
+            const updatePromise = Story.updateOne({
+                _id: req.params.id
+            }, { $inc: { totalFollows: 1 } })
+
+            await Promise.all([followPromise, updatePromise])
         }
 
         res.json(createResponse({
@@ -388,12 +424,15 @@ module.exports.onFollowStory = async (req, res, next) => {
         next(error)
     }
 }
+
 module.exports.onUnfollowStory = async (req, res, next) => {
     try {
-        const isStoryFollowed = await StoryFollow.exists({
+        const storyFollowModel = {
             user: req.user._id,
             story: req.params.id,
-        })
+        }
+
+        const isStoryFollowed = await StoryFollow.exists(storyFollowModel)
 
         if (!isStoryFollowed) {
             res.status(400).json(createResponse({
@@ -402,14 +441,123 @@ module.exports.onUnfollowStory = async (req, res, next) => {
             return
         }
 
-        await StoryFollow.deleteOne({
-            user: req.user._id,
-            story: req.params.id,
-        })
+        const unfollowPromise = StoryFollow.deleteOne(storyFollowModel)
+
+        const updatePromise = Story.updateOne({
+            _id: req.params.id
+        }, { $inc: { totalFollows: -1 } })
+
+        await Promise.all([unfollowPromise, updatePromise])
 
         res.json(createResponse({
-            message: "Truyện Đã hủy theo dõi",
+            message: "Truyện đã hủy theo dõi",
         }));
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports.onLikeStory = async (req, res, next) => {
+    try {
+        const storyLikeModel = {
+            user: req.user._id,
+            story: req.params.id,
+        }
+
+        const isStoryLike = await StoryLike.exists(storyLikeModel)
+
+        if (!isStoryLike) {
+            const createPromise = StoryLike.create(storyLikeModel)
+
+            const updatePromise = Story.updateOne({
+                _id: req.params.id
+            }, { $inc: { totalLikes: 1 } }) //$inc: tang gia tri totallike
+
+            await Promise.all([createPromise, updatePromise])
+        } else {
+            const deletePromise = StoryLike.deleteOne(storyLikeModel)
+
+            const updatePromise = Story.updateOne({
+                _id: req.params.id
+            }, { $inc: { totalLikes: -1 } })
+
+            await Promise.all([deletePromise, updatePromise])
+        }
+
+        res.json(createResponse())
+
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports.onRatingStory = async (req, res, next) => {
+    try {
+        const storyRatingFilter = {
+            user: req.user._id,
+            story: req.params.id,
+        }
+
+        const storyRatingModel = {
+            user: req.user._id,
+            story: req.params.id,
+            feedback: req.body.feedback,
+            rating: req.body.rating,
+        }
+
+        const updateRatingModel = {
+            feedback: req.body.feedback,
+            rating: req.body.rating,
+        }
+
+        const isStoryRatingExist = await StoryRating.exists(storyRatingFilter)
+
+        if (!isStoryRatingExist) {
+            await StoryRating.create(storyRatingModel)
+
+            await Story.updateOne({
+                _id: req.params.id
+            }, { $inc: { totalRatings: 1 } }) //$inc: tang gia tri totallike
+        } else {
+            await StoryRating.updateOne(storyRatingFilter, updateRatingModel, { runValidators: true })
+        }
+
+        res.json(createResponse())
+
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports.onCommentStory = async (req, res, next) => {
+    try {
+        const storyCommentFilter = {
+            user: req.user._id,
+            story: req.params.id,
+        }
+
+        const storyCommentModel = {
+            user: req.user._id,
+            story: req.params.id,
+            content: req.body.content,
+        }
+
+        const updateCommentModel = {
+            content: req.body.content,
+        }
+
+        const isStoryContentExist = await StoryComment.exists(storyCommentFilter)
+
+        let storyComment = null;
+
+        if (!isStoryContentExist) {
+            storyComment = await StoryComment.create(storyCommentModel)
+        } else {
+            storyComment = await StoryComment.updateOne(storyCommentFilter, updateCommentModel, { runValidators: true, new: true })
+        }
+
+        res.json(createResponse({
+            results: storyComment
+        }))
 
     } catch (error) {
         next(error)

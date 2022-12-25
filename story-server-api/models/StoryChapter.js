@@ -28,9 +28,8 @@ const storyChapterSchema = new Schema({
 
                     const isStoryNumberOrderExist = await StoryChapter.exists({
                         numberOrder: value,
-                        story: this.story
+                        story: this._conditions?.story ?? this.story
                     })
-
                     return !isStoryNumberOrderExist
                 },
             }
@@ -50,8 +49,8 @@ const storyChapterSchema = new Schema({
                 validator: async function (value) {
                     const isStoryChapterExist = await StoryChapter.exists({
                         chapterNumber: value,
-                        story: this.story,
-                        bookNumber: this.bookNumber,
+                        story: this._conditions?.story ?? this.story,
+                        bookNumber: this._update?.$set.bookNumber ?? this.bookNumber,
                     })
                     return !isStoryChapterExist
                 },

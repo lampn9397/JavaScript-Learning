@@ -19,8 +19,13 @@ const {
     onUnfollowStory,
     onUpdateStory,
     onUpdateChapter,
+    onDeleteChapter,
+    onLikeStory,
+    onRatingStory,
+    onCommentStory,
+    onGetFollowStory
 } = require('./controllers');
-const { posterMulter, validateStoryUploader, validateStoryChapter } = require('./middlewares');
+const { posterMulter, validateStoryUploader, validateStoryChapter, validateStoryExist } = require('./middlewares');
 const router = express.Router();
 
 router.get('/category', onGetCategory)
@@ -39,6 +44,8 @@ router.post('/:id/chapter', passport.authenticate('jwt', { session: false }), va
 
 router.put('/:id/chapter/:chapterId', passport.authenticate('jwt', { session: false }), validateStoryUploader, validateStoryChapter, onUpdateChapter)
 
+router.delete('/:id/chapter/:chapterId', passport.authenticate('jwt', { session: false }), validateStoryUploader, validateStoryChapter, onDeleteChapter)
+
 router.get('/:id/chapter', onGetChapterList)
 
 router.get('/:id/chapter/total', onGetTotalChapterPages)
@@ -47,9 +54,15 @@ router.get('/:id/chapter/:chapterId', onGetChapterDetail)
 
 router.get('/:id', onGetStoryDetail)
 
-router.delete('/:id/follow', passport.authenticate('jwt', { session: false }), onUnfollowStory);
+router.delete('/:id/follow', passport.authenticate('jwt', { session: false }), validateStoryExist, onUnfollowStory);
 
-router.post('/:id/follow', passport.authenticate('jwt', { session: false }), onFollowStory);
+router.post('/:id/follow', passport.authenticate('jwt', { session: false }), validateStoryExist, onFollowStory);
+
+router.post('/:id/like', passport.authenticate('jwt', { session: false }), validateStoryExist, onLikeStory);
+
+router.post('/:id/rating', passport.authenticate('jwt', { session: false }), validateStoryExist, onRatingStory);
+
+router.post('/:id/comment', passport.authenticate('jwt', { session: false }), validateStoryExist, onCommentStory);
 
 router.get('/', onGetStory)
 
