@@ -1,0 +1,35 @@
+.navBarContainer {
+    display: flex;
+}
+
+.menuContainer {
+    background-color: var(--mainColor);
+}
+
+.menu {
+    background-color: var(--mainColor);
+    color: white;
+}
+
+.itemContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.itemCategoryContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #077c86 !important;
+    color: white !important;
+    width: 300px;
+    border-radius: 0px !important;
+    margin-right: 200px !important;
+}
+
+.itemContainer:hover {
+    background-color: #077c86 !important;
+    color: white !important;
+    border-radius: 0px !important;
+}

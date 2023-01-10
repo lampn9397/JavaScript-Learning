@@ -8,6 +8,7 @@ const passport = require('passport');
 const dotenv = require('dotenv')
 const slug = require('mongoose-slug-generator');
 const multer = require('multer');
+const cors = require('cors');
 
 mongoose.plugin(slug, { lang: "vi", });
 
@@ -46,6 +47,7 @@ mongoose.connection.on('error', (err) => {
     }
 });
 
+app.use(cors({ origin: '*' }));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

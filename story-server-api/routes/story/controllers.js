@@ -152,6 +152,10 @@ module.exports.onCreateStory = async (req, res, next) => {
 
         await Story.create(story)
 
+        await StoryCategory.updateOne({
+            _id: story.category
+        }, { $inc: { storyCount: 1 } })
+
         res.json(createResponse())
 
     } catch (error) {
@@ -190,9 +194,19 @@ module.exports.onUpdateStory = async (req, res, next) => {
             story.poster = getFilePath(req.file)
         }
 
-        await Story.updateOne({
-            _id: req.params.id,
-        }, story)
+        const oldStory = await Story.findByIdAndUpdate(req.params.id, story)
+
+        if (story.category && story.category !== oldStory.category) {
+            const incStoryCategory = StoryCategory.updateOne({
+                _id: story.category
+            }, { $inc: { storyCount: 1 } })
+
+            const decStoryCategory = StoryCategory.updateOne({
+                _id: oldStory.category
+            }, { $inc: { storyCount: -1 } })
+
+            await Promise.all([incStoryCategory, decStoryCategory])
+        }
 
         res.json(createResponse({
             message: "Truyện đã cập nhật thành công"

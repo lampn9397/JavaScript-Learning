@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const { number } = require('yup');
 
 const storyCategorySchema = new Schema({
     name: {
@@ -16,6 +17,10 @@ const storyCategorySchema = new Schema({
                 return !isStoryCategoryExist
             },
         }
+    },
+    storyCount: {
+        type: Number,
+        default: 0
     }
 }, { versionKey: false })
 

@@ -1,0 +1,27 @@
+.newsBarContainer {
+    display: flex;
+}
+
+.newsBarRow {
+    max-width: 300px;
+    background-color: #f7f6f2;
+    flex-wrap: wrap;
+}
+
+.newsBarItem {
+    max-width: 150px;
+    min-width: 150px;
+}
+
+.newsBarItemInfo {
+    margin-left: 5px;
+}
+
+.newsBarItemIcon {
+    height: 24px;
+    width: 24px;
+}
+
+.newsBarItemCount {
+    color: #999;
+}
