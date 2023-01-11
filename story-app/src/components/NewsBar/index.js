@@ -1,9 +1,7 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
-import styles from './style.module.css'
 import images from '../../assets';
-import * as ActionTypes from '../../redux/actionTypes'
+import styles from './style.module.css'
 
 function NewsBar({ categories }) {
 

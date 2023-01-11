@@ -1,6 +1,5 @@
 import React from 'react';
 import { MenuOutlined } from '@ant-design/icons';
-import Item from './Item';
 
 import styles from './style.module.css'
 

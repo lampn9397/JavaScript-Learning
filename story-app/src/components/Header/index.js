@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './style.module.css'
 import { AutoComplete, Input, Dropdown, theme } from 'antd';
 import { Avatar } from 'antd';
-import { UserOutlined, BookOutlined } from '@ant-design/icons';
+import { UserOutlined } from '@ant-design/icons';
 
 import images from '../../assets';
 import { items } from './constantHeader';

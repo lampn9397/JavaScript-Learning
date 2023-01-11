@@ -1,18 +1,19 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
+
 import Header from '../../components/Header';
 import NavBar from '../../components/NavBar';
 import NewsBar from '../../components/NewsBar';
-import { publicRoutes } from '../../constants';
+
 import styles from './style.module.css'
+import { publicRoutes } from '../../constants';
 
 function HomePage({
     categories,
     getCategories,
 }) {
-    let history = useHistory();
-    console.log('homepage', categories)
+    const history = useHistory();
+
     React.useEffect(() => {
         getCategories()
     }, [getCategories]);

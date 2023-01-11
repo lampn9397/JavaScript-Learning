@@ -12,14 +12,12 @@ export default function categoryReducer(state = defaultState, action) {
                 ...state,
                 getCategoryLoading: true,
             };
-        case ActionTypes.GET_CATEGORIES_SUCCESS: {
-            console.log('reducer', action.payload)
+        case ActionTypes.GET_CATEGORIES_SUCCESS:
             return {
                 ...state,
                 getCategoryLoading: false,
                 categories: action.payload,
             };
-        }
         case ActionTypes.GET_CATEGORIES_FAILED:
             return {
                 ...state,
