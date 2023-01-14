@@ -23,7 +23,7 @@ const {
     onLikeStory,
     onRatingStory,
     onCommentStory,
-    onGetFollowStory
+    onGetFollowStory,
 } = require('./controllers');
 const { posterMulter, validateStoryUploader, validateStoryChapter, validateStoryExist } = require('./middlewares');
 const router = express.Router();

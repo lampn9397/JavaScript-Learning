@@ -105,7 +105,14 @@ module.exports.onGetStory = async (req, res, next) => {
     try {
         const { page, limit } = getPaginationConfig(req, 1, 10)
 
+        const sort = {}
+
+        if (req.query.sort && req.query.sort === 'totalViews') {
+            sort.totalViews = -1 //1:ascending -1:descending
+        }
+
         const story = await Story.find({})
+            .sort(sort)
             .populate('uploader', 'name')
             .populate("author")
             .skip((page - 1) * limit)
