@@ -1,0 +1,47 @@
+.categoryBarContainer {
+    display: flex;
+}
+
+.categoryBarRow {
+    max-width: 286px;
+    background-color: #f7f6f2;
+    flex-wrap: wrap;
+    padding-left: 14px;
+    padding-top: 10px;
+}
+
+.categoryBarItem {
+    max-width: 142px;
+    min-width: 142px;
+    margin-bottom: 10px;
+    transition: 0.1s;
+    text-decoration: none;
+    color: black;
+}
+
+.categoryBarItem:hover {
+    color: #FF2E2E;
+}
+
+.categoryBarItem:hover .categoryBarItemIcon {
+    filter: invert(38%) sepia(81%) saturate(3391%) hue-rotate(341deg) brightness(100%) contrast(110%);
+}
+
+.categoryBarItem:hover .categoryBarItemCount {
+    color: #FF2E2E;
+}
+
+.categoryBarItemInfo {
+    margin-left: 5px;
+}
+
+.categoryBarItemIcon {
+    height: 24px;
+    width: 24px;
+    transition: 0.1s;
+}
+
+.categoryBarItemCount {
+    color: #999;
+    transition: 0.1s;
+}

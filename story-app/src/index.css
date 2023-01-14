@@ -42,7 +42,7 @@ body {
   justify-content: center;
 }
 
-alignCenter {
+.alignCenter {
   display: flex;
   align-items: center;
 }
