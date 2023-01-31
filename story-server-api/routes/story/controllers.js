@@ -117,12 +117,14 @@ module.exports.onGetStory = async (req, res, next) => {
             .populate("author")
             .skip((page - 1) * limit)
             .limit(limit)
+            .lean({ getters: true })
 
         res.json(createResponse({
             results: story
         }))
 
     } catch (error) {
+        console.log(error)
         next(error)
     }
 };
@@ -137,6 +139,7 @@ module.exports.onCreateStory = async (req, res, next) => {
             uploader: req.user._id,
             description: req.body.description,
             isPublish: true,
+            slug: getSlug(`${req.body.name}-${Date.now()}`)
         }
         if (req.body.tags instanceof Array) {
             story.tags = [...new Set(req.body.tags)]
@@ -194,7 +197,6 @@ module.exports.onUpdateStory = async (req, res, next) => {
 
                 story.author = author._id
             }
-
         }
 
         if (req.file) {

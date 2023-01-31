@@ -1,0 +1,42 @@
+.AppCarousel {
+    width: 550px;
+    margin-left: 18px;
+    margin-top: 18px;
+}
+
+.poster {
+    max-height: 300px;
+    min-height: 300px;
+    max-width: 550px;
+    min-width: 550px;
+}
+
+.dotCarosel {
+    background-color: #364d79;
+}
+
+.carouselItemNameContainer {
+    margin-left: 18px;
+}
+
+.carouselItemName {
+    height: 36px;
+    max-width: 90px;
+    width: 90px;
+    background-color: var(--mainColor);
+    color: white;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0px 10px 0px 10px;
+}
+
+.carouselItemName:hover {
+    background-color: #077c86;
+    cursor: pointer;
+}
+
+.carouselItemNameActive {
+    background-color: #077c86;
+}

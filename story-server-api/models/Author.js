@@ -3,6 +3,8 @@ const { Schema, model } = require('mongoose');
 const { mongooseLeanGetters } = require('mongoose-lean-getters');
 
 const avatarGetter = (value) => {
+    if (value.startsWith('http')) return value
+
     return `${process.env.HOST}${value}`
 }
 

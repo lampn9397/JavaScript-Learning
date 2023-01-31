@@ -1,3 +1,12 @@
+@font-face {
+  font-family: yyicon;
+  src: url(https://truyenyy-cdnx.yeuthanky.com/truyenyy/yyicon/fonts/yyicon.eot?ist0vx);
+  src: url(https://truyenyy-cdnx.yeuthanky.com/truyenyy/yyicon/fonts/yyicon.eot?ist0vx#iefix) format("embedded-opentype"), url(https://truyenyy-cdnx.yeuthanky.com/truyenyy/yyicon/fonts/yyicon.ttf?ist0vx) format("truetype"), url(https://truyenyy-cdnx.yeuthanky.com/truyenyy/yyicon/fonts/yyicon.woff?ist0vx) format("woff"), url(https://truyenyy-cdnx.yeuthanky.com/truyenyy/yyicon/fonts/yyicon.svg?ist0vx#yyicon) format("svg");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap
+}
+
 :root {
   --mainColor: #2798A1;
 }

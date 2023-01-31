@@ -11,9 +11,13 @@ const StoryStatus = {
     DROP: 'DROP',
 }
 
-const posterGetter = (value) => {
+function posterGetter(value) {
     return `${process.env.HOST}${value}`
 }
+
+// const posterGetter = (value) => {
+//     return `${process.env.HOST}${value}`
+// }
 
 const storySchema = new Schema({
     name: {
@@ -108,13 +112,17 @@ const storySchema = new Schema({
     description: {
         type: String,
         minlength: [1, 'Mô tả dùng ít nhất 1 kí tự'],
-        maxlength: [300, 'Mô tả dùng tối đa 300 kí tự'],
+        maxlength: [2000, 'Mô tả dùng tối đa 2000 kí tự'],
         required: [true, 'Mô tả là bắt buộc'],
     },
     isPublish: {
         type: Boolean,
         default: false,
-    }
+    },
+    slug: {
+        type: String,
+        required: [true, 'slug là bắt buộc'],
+    },
 }, {
     versionKey: false,
     timestamps: true,
@@ -122,4 +130,6 @@ const storySchema = new Schema({
 
 storySchema.plugin(mongooseLeanGetters);
 
-module.exports = model('stories', storySchema);
+const Story = model('stories', storySchema)
+
+module.exports = Story;

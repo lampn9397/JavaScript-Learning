@@ -16,6 +16,7 @@ export const ValidateEmail = (mail) => {
     }
     return (false)
 }
+
 export const apiErrorHandle = (error) => {
     const errorMessage = error.response?.data?.message ?? error.message;
 

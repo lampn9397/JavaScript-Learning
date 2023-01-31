@@ -17,6 +17,7 @@
     transition: 0.1s;
     text-decoration: none;
     color: black;
+    cursor: pointer;
 }
 
 .categoryBarItem:hover {
@@ -44,4 +45,13 @@
 .categoryBarItemCount {
     color: #999;
     transition: 0.1s;
+}
+
+.allCategoryBarRow {
+    background-color: #f7f6f2;
+    flex-wrap: wrap;
+    padding-left: 14px;
+    padding-top: 10px;
+    max-height: 500px;
+    overflow-y: scroll;
 }

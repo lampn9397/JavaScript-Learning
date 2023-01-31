@@ -7,16 +7,20 @@ import NavBar from '../../components/NavBar';
 import styles from './style.module.css'
 import { publicRoutes } from '../../constants';
 import CategoryBar from '../../components/CategoryBar';
+import AppCarousel from '../../components/AppCarousel';
 
 function HomePage({
     categories,
     getCategories,
+    topFiveStories,
+    getTopFiveStories,
 }) {
     const history = useHistory();
 
     React.useEffect(() => {
         getCategories()
-    }, [getCategories]);
+        getTopFiveStories()
+    }, [getCategories, getTopFiveStories]);
 
     const onClickButton = () => {
         history.push(publicRoutes.DetailPage.path)
@@ -26,8 +30,9 @@ function HomePage({
         <div className={styles.homePageContainer}>
             <Header />
             <NavBar />
-            <div className='resolution column'>
+            <div className='resolution flex'>
                 <CategoryBar categories={categories} />
+                <AppCarousel stories={topFiveStories} />
             </div>
         </div>
     )
