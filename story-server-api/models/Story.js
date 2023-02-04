@@ -123,6 +123,10 @@ const storySchema = new Schema({
         type: String,
         required: [true, 'slug là bắt buộc'],
     },
+    storyUpdateAt: {
+        type: Date,
+        default: Date.now,
+    }
 }, {
     versionKey: false,
     timestamps: true,

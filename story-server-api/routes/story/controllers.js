@@ -111,6 +111,10 @@ module.exports.onGetStory = async (req, res, next) => {
             sort.totalViews = -1 //1:ascending -1:descending
         }
 
+        if (req.query.sort && req.query.sort === 'storyUpdateAt') {
+            sort.storyUpdateAt = -1 //1:ascending -1:descending
+        }
+
         const story = await Story.find({})
             .sort(sort)
             .populate('uploader', 'name')
@@ -124,7 +128,6 @@ module.exports.onGetStory = async (req, res, next) => {
         }))
 
     } catch (error) {
-        console.log(error)
         next(error)
     }
 };
@@ -240,6 +243,8 @@ module.exports.onCreateChapter = async (req, res, next) => {
         }
 
         await StoryChapter.create(storyChapter)
+
+        await Story.updateOne({ _id: req.params.id }, { storyUpdateAt: Date.now() })
 
         res.json(createResponse())
 
