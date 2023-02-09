@@ -7,6 +7,8 @@ const mapStateToProps = (state) => ({
     categories: state.category.categories,
     topFiveStories: state.story.topFiveStories,
     newStories: state.story.newStories,
+    newStoryList: state.story.newStoryList,
+    storyViewsRankingList: state.story.storyViewsRankingList,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -42,10 +42,13 @@
     -webkit-line-clamp: 1;
     overflow: hidden;
     white-space: nowrap;
-    font-size: 18px;
     margin-top: 4px;
     margin-bottom: 8px;
     text-decoration: none;
+}
+
+.NewUpdatedStoryItemAuthor:hover {
+    color: #FF2E2E;
 }
 
 .more {
@@ -55,4 +58,8 @@
 .righArrow {
     margin-left: 4px;
     color: #1677ff;
+}
+
+.NewUpdateStoryContainer {
+    margin-bottom: 16px;
 }

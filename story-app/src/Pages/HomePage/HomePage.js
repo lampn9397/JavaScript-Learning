@@ -11,6 +11,8 @@ import CategoryBar from '../../components/CategoryBar';
 import AppCarousel from '../../components/AppCarousel';
 import CreateStoryCard from '../../components/CreateStoryCard';
 import NewUpdatedStory from '../../components/NewUpdatedStory';
+import NewStoryDetailList from '../../components/NewStoryDetailList';
+import StoryRankingList from '../../components/StoryRankingList';
 
 function HomePage({
     categories,
@@ -18,6 +20,9 @@ function HomePage({
     topFiveStories,
     getStories,
     newStories,
+    newStoryList,
+    storyViewsRankingList,
+
 }) {
     const history = useHistory();
 
@@ -25,6 +30,8 @@ function HomePage({
         getCategories()
         getStories("topFiveStories", 1, 5, "totalViews")
         getStories("newStories", 1, 10, "storyUpdateAt")
+        getStories("newStoryList", 1, 6, "storyUpdateAt")
+        getStories("storyViewsRankingList", 1, 10, "totalViews")
     }, [getCategories, getStories]);
 
     const onClickButton = () => {
@@ -42,8 +49,11 @@ function HomePage({
             </div>
             <div className='resolution flex'>
                 <NewUpdatedStory stories={newStories} />
+                <NewStoryDetailList stories={newStoryList} />
             </div>
-
+            <div className={`${styles.storyRankingSectionContainer} resolution flex`}>
+                <StoryRankingList title='Xem Nhiều' moreLink='' stories={storyViewsRankingList} />
+            </div>
         </div>
     )
 }

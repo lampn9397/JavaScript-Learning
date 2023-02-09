@@ -1,0 +1,12 @@
+.storyTitleContainer {
+    justify-content: space-between;
+}
+
+.storyTitle {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.more {
+    font-size: 16px;
+}

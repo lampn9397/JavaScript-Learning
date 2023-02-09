@@ -5,6 +5,10 @@ const defaultState = {
     topFiveStoriesLoading: true,
     newStories: [],
     newStoriesLoading: true,
+    newStoryList: [],
+    newStoryListLoading: true,
+    storyViewsRankingList: [],
+    storyViewsRankingListLoading: true,
 }
 
 export default function storyReducer(state = defaultState, action) {
