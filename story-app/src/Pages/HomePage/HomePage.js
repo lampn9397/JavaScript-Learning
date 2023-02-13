@@ -42,17 +42,21 @@ function HomePage({
         <div className={styles.homePageContainer}>
             <Header />
             <NavBar />
-            <div className='resolution flex'>
-                <CategoryBar categories={categories} />
-                <AppCarousel stories={topFiveStories} />
-                <CreateStoryCard />
-            </div>
-            <div className='resolution flex'>
-                <NewUpdatedStory stories={newStories} />
-                <NewStoryDetailList stories={newStoryList} />
-            </div>
-            <div className={`${styles.storyRankingSectionContainer} resolution flex`}>
-                <StoryRankingList title='Xem Nhiều' moreLink='' stories={storyViewsRankingList} />
+            <div className='resolution'>
+                <div className='flex'>
+                    <CategoryBar categories={categories} />
+                    <AppCarousel stories={topFiveStories} />
+                    <CreateStoryCard />
+                </div>
+                <div className='flex'>
+                    <NewUpdatedStory stories={newStories} />
+                    <NewStoryDetailList stories={newStoryList} />
+                </div>
+                <div className={`${styles.storyRankingSectionContainer} flex`}>
+                    <StoryRankingList title='Xem Nhiều' moreLink='' stories={storyViewsRankingList} />
+                    <StoryRankingList title='Xem Nhiều' moreLink='' stories={storyViewsRankingList} />
+                    <StoryRankingList title='Xem Nhiều' moreLink='' stories={storyViewsRankingList} />
+                </div>
             </div>
         </div>
     )
