@@ -5,6 +5,7 @@ import { Modal } from 'antd';
 
 import images from '../../assets';
 import styles from './style.module.css'
+import { publicRoutes } from '../../constants';
 
 function CategoryBar({ categories }) {
     const [state, setState] = React.useState({
@@ -36,7 +37,7 @@ function CategoryBar({ categories }) {
                         )
 
                         return (
-                            <Link className={`${styles.categoryBarItem} alignCenter`} key={index} to={`/danh-muc/${item.slug}`}>
+                            <Link className={`${styles.categoryBarItem} alignCenter`} key={index} to={publicRoutes.CategoryPage(item.slug).path}>
                                 <img alt='' src={images[item.slug]} className={styles.categoryBarItemIcon} />
                                 <div className={`${styles.categoryBarItemInfo} column`}>
                                     <div className={`${styles.categoryBarItemName}`}>{item.name}</div>
@@ -51,7 +52,7 @@ function CategoryBar({ categories }) {
                 <div className={`${styles.allCategoryBarRow} flex`}>
                     {categories.map((item, index) => {
                         return (
-                            <Link className={`${styles.categoryBarItem} alignCenter`} key={index} to={`/danh-muc/${item.slug}`}>
+                            <Link className={`${styles.categoryBarItem} alignCenter`} key={index} to={publicRoutes.CategoryPage(item.slug).path}>
                                 <img alt='' src={images[item.slug]} className={styles.categoryBarItemIcon} />
                                 <div className={`${styles.categoryBarItemInfo} column`}>
                                     <div className={`${styles.categoryBarItemName}`}>{item.name}</div>

@@ -16,6 +16,7 @@
 .NewUpdatedStoryItemContainer {
     justify-content: space-between;
     text-decoration: none;
+    column-gap: 10px;
 }
 
 .NewUpdatedStoryItem {

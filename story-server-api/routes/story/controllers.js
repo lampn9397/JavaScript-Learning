@@ -107,6 +107,8 @@ module.exports.onGetStory = async (req, res, next) => {
 
         const sort = {}
 
+        const filter = {}
+
         if (req.query.sort && req.query.sort === 'totalViews') {
             sort.totalViews = -1 //1:ascending -1:descending
         }
@@ -115,10 +117,16 @@ module.exports.onGetStory = async (req, res, next) => {
             sort.storyUpdateAt = -1 //1:ascending -1:descending
         }
 
-        const story = await Story.find({})
+        if (req.query.status === 'COMPLETED') {
+            filter.status = 'COMPLETED'
+            sort.storyUpdateAt = -1 //1:ascending -1:descending
+        }
+
+        const story = await Story.find(filter)
             .sort(sort)
             .populate('uploader', 'name')
             .populate("author")
+            .populate("category")
             .skip((page - 1) * limit)
             .limit(limit)
             .lean({ getters: true })
@@ -186,6 +194,14 @@ module.exports.onUpdateStory = async (req, res, next) => {
 
         if (req.body.category) {
             story.category = req.body.category
+        }
+
+        if (req.body.status) {
+            story.status = req.body.status
+
+            if (req.body.status === "COMPLETED") {
+                story.storyUpdateAt = Date.now()
+            }
         }
 
         if (req.body.description) {

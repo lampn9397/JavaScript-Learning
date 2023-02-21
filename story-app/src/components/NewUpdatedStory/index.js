@@ -8,6 +8,7 @@ import {
 
 import styles from './style.module.css'
 import { Link } from 'react-router-dom';
+import { publicRoutes } from '../../constants';
 
 
 function NewUpdatedStory({ stories }) {
@@ -17,11 +18,11 @@ function NewUpdatedStory({ stories }) {
             <div className={styles.title}>Truyện Mới Cập Nhật</div>
             {stories.map((item) => (
                 <div key={item._id} className={styles.NewUpdateStoryContainer}>
-                    <Link className={`${styles.NewUpdatedStoryItemContainer} flex`} to={`/truyen/${item.slug}`}>
+                    <Link className={`${styles.NewUpdatedStoryItemContainer} flex`} to={publicRoutes.DetailPage(item.slug).path}>
                         <div className={styles.NewUpdatedStoryItem}>{item.name}</div>
                         <div className={styles.NewUpdatedStoryAt}>{moment(item.storyUpdateAt).format("HH:mm DD/MM")}</div>
                     </Link>
-                    <Link to={`/tac-gia/${item.author?._id}`}>
+                    <Link to={publicRoutes.AuthorPage(item?.author?._id).path}>
                         <div className={styles.NewUpdatedStoryItemAuthor}>{item.author?.name}</div>
                     </Link>
                 </div>

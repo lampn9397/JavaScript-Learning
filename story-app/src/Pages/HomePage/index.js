@@ -9,17 +9,21 @@ const mapStateToProps = (state) => ({
     newStories: state.story.newStories,
     newStoryList: state.story.newStoryList,
     storyViewsRankingList: state.story.storyViewsRankingList,
+    storyLikesRankingList: state.story.storyLikesRankingList,
+    storyFollowsRankingList: state.story.storyFollowsRankingList,
+    newCompleteStory: state.story.newCompleteStory,
 });
 
 const mapDispatchToProps = (dispatch) => ({
     getCategories: () => dispatch({ type: ActionTypes.GET_CATEGORIES }),
-    getStories: (stateName, page = 1, limit = 5, sort = "") => dispatch({
+    getStories: (stateName, page = 1, limit = 5, sort = "", status = "") => dispatch({
         type: ActionTypes.GET_STORIES,
         payload: {
             page,
             limit,
             sort,
             stateName,
+            status,
         }
     }),
 });

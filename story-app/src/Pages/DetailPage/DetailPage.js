@@ -1,8 +1,9 @@
 import React from 'react';
+import styles from './style.module.css'
 
 function DetailPage() {
     return (
-        <div>
+        <div className={styles.detailPageContainer}>
             abccccccccccccccccccccccccccccccccccccc
         </div>
     )

@@ -1,5 +1,4 @@
 .storyRankingListContainer {
-    border: 1px solid black;
     flex: 1;
 }
 
@@ -18,20 +17,31 @@
 }
 
 .dash {
-    border: 1px solid black;
+    border-bottom: 1px solid #666;
     margin-top: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
 }
 
 .storyRankingItemContainer {
-    margin-bottom: 8px;
+    align-items: center;
+}
+
+.storyRankOneItemContainer {
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.spaceBetween {
+    justify-content: space-between;
 }
 
 .no1 {
     background-color: #bf2c24;
     color: white;
-    font-size: 18px;
+    font-size: 16px;
     text-align: center;
+    width: 43px;
+    margin-bottom: 4px;
 }
 
 .no2 {
@@ -53,4 +63,93 @@
     background-color: #ededed;
     color: #666;
     margin-right: 8px;
+}
+
+.topOneRankingInfor {
+    flex-direction: column;
+
+}
+
+.rankOnePosterContainer {
+    position: relative;
+    height: 107px;
+    margin-right: 7px;
+}
+
+.rankOneItemName {
+    font-size: 20px;
+}
+
+.rankOnePoster {
+    /* transform: rotateY(-35deg); */
+    transform: perspective(60px) rotateY(-10deg);
+    height: 100px;
+    width: 80px;
+    z-index: 2;
+}
+
+.bookPage {
+    z-index: 99;
+    top: -2%;
+    left: 100%;
+    position: absolute;
+    width: 10%;
+    height: 100%;
+    background-color: #efefef;
+    box-shadow: inset 0 0 5px #333;
+    transform: perspective(60px) rotateY(30deg);
+}
+
+.shadow {
+    position: absolute;
+    z-index: 1;
+    top: 86.1%;
+    right: 21%;
+    width: 20px;
+    height: 10px;
+    transform: perspective(74px) rotateX(-70deg) rotateY(-5deg);
+    box-shadow: 25px 0 5px 5px #adadad;
+}
+
+.rankOneType {
+    margin-top: 8px;
+    margin-bottom: 4px;
+    color: #bf2c24;
+    align-items: flex-end;
+}
+
+.RankOneNumber {
+    margin-right: 6px;
+    font-size: 18px;
+    font-style: italic;
+}
+
+.topOneType {
+    font-size: 12px;
+    margin-bottom: 2px;
+}
+
+.authorColor {
+    color: #999 !important;
+}
+
+.topOneAuthorContainer {
+    font-size: 14px;
+}
+
+.topOneCategory {
+    margin-right: 10px;
+}
+
+.storyRankingItem {
+    justify-content: space-between;
+    flex: 1;
+    border-top: 1px solid #c3bbbb;
+    font-size: 16px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.storyRankingItemCount {
+    color: #999;
 }

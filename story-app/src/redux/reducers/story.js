@@ -9,6 +9,12 @@ const defaultState = {
     newStoryListLoading: true,
     storyViewsRankingList: [],
     storyViewsRankingListLoading: true,
+    storyLikesRankingList: [],
+    storyLikesRankingListLoading: true,
+    storyFollowsRankingList: [],
+    storyFollowsRankingListLoading: true,
+    newCompleteStory: [],
+    newCompleteStoryLoading: true,
 }
 
 export default function storyReducer(state = defaultState, action) {

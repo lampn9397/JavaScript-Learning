@@ -1,0 +1,130 @@
+.NewCompleteStoryContainer {
+    --story-item-gap-column: 35px
+}
+
+.newCompleteStoryTitleContainer {
+    justify-content: space-between;
+    border-bottom: 1px solid #666;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.newCompleteStoryTitle {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.more {
+    font-size: 16px;
+    color: #999;
+}
+
+.lastestCompleteStoryContainer {
+    max-width: 284px;
+    width: 276px;
+    background-color: #f7f6f2;
+    padding: 25px 10px 25px 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.lastestStoryPoster {
+    height: 265px;
+    width: 229px;
+}
+
+.latestCompleteStoryName {
+    padding-top: 6px;
+    padding-bottom: 8px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.latestCompleteStoryAuthor {
+    color: #999;
+}
+
+.otherStoryListContainer {
+    margin-left: 18px;
+    flex-wrap: wrap;
+    gap: 10px var(--story-item-gap-column);
+}
+
+.latestCompleteStoryTotalChapter {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    color: #dc3545;
+    font-size: 18px;
+}
+
+.smallerText {
+    font-size: 14px !important;
+    margin-left: 4px;
+}
+
+.latestCompleteStoryDescription {
+    -webkit-line-clamp: 4 !important;
+}
+
+.otherStoryItem {
+    width: calc(50% - var(--story-item-gap-column));
+    max-width: calc(50% - var(--story-item-gap-column));
+}
+
+.otherStoryPoster {
+    height: 148px;
+    width: 105px;
+}
+
+.otherStoryInfor {
+    margin-left: 24px;
+}
+
+.otherStoryName {
+    margin-bottom: 4px;
+    -webkit-line-clamp: 2 !important;
+    font-size: 18px;
+}
+
+.otherStoryAuthor {
+    margin-bottom: 4px;
+    -webkit-line-clamp: 2 !important;
+    font-size: 14px;
+}
+
+.completeDetailContainer {
+    margin-bottom: 8px;
+    align-items: flex-end;
+}
+
+.completeStoryTotalChapter {
+    font-size: 18px;
+    color: #dc3545;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.completeStoryItemTotalViews {
+    font-size: 18px;
+    color: #4497f8;
+    margin-left: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.smallerText {
+    padding-left: 4px;
+    font-size: 12px;
+}
+
+.completeStoryDescriptionContainer {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 8;
+    -webkit-box-orient: vertical;
+}
+
+.marginRight {
+    margin-right: 20px;
+}

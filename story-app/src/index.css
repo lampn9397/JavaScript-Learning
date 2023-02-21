@@ -27,6 +27,16 @@ body {
   display: flex;
 }
 
+.flexWrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flexOne {
+  display: flex;
+  flex: 1;
+}
+
 .row {
   display: flex;
   flex-direction: row;
@@ -60,4 +70,15 @@ a {
 
 a:hover {
   color: #FF2E2E;
+}
+
+a:hover * {
+  color: #FF2E2E !important;
+}
+
+.long-content {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }

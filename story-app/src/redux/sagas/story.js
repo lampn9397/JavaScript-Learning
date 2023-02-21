@@ -6,7 +6,17 @@ import { apiErrorHandle } from '../../utils';
 
 function* getStoriesAction({ payload }) {
     try {
-        const { data } = yield axiosClient.get(`/story?page=${payload.page}&limit=${payload.limit}&sort=${payload.sort}`);
+        const searchParams = new URLSearchParams()
+
+        searchParams.set("page", payload.page)
+
+        searchParams.set("limit", payload.limit)
+
+        searchParams.set("sort", payload.sort)
+
+        searchParams.set("status", payload.status)
+
+        const { data } = yield axiosClient.get(`/story?${searchParams.toString()}`);
 
         yield put({
             type: ActionTypes.GET_STORIES_SUCCESS,

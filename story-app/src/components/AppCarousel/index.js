@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
 import styles from './style.module.css'
+import { publicRoutes } from '../../constants';
 
 
 function AppCarousel({ stories }) {
@@ -26,7 +27,7 @@ function AppCarousel({ stories }) {
         <div className={styles.AppCarouselContainer}>
             <Carousel autoplay className={styles.AppCarousel} pauseOnHover={false} dots={false} afterChange={afterChange} ref={carouselRef}>
                 {stories.map((item) => (
-                    <Link className={`${styles.carouselItemContainer}`} to={`/truyen/${item.slug}`} key={item._id}>
+                    <Link className={`${styles.carouselItemContainer}`} to={publicRoutes.DetailPage(item.slug).path} key={item._id}>
                         <img src={item.poster} className={styles.poster} alt='' />
                     </Link>
                 ))}
