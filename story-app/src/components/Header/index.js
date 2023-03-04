@@ -6,6 +6,8 @@ import { UserOutlined } from '@ant-design/icons';
 
 import images from '../../assets';
 import { items } from './constantHeader';
+import { Link } from 'react-router-dom';
+import { publicRoutes } from '../../constants';
 
 const { useToken } = theme;
 
@@ -37,14 +39,14 @@ function Header() {
 
     return (
         <div className={`${styles.HeaderContainer} resolution`}>
-            <div className={styles.logoContainer}>
+            <Link className={styles.logoContainer} to={publicRoutes.HomePage.path}>
                 <div className={styles.bookOutLineContainer}>
                     <img src={images.fairytale} className={styles.bookOutLine} alt='' />
                 </div>
                 <div className={styles.slogan}>
                     WEB TRUYỆN CHỮ
                 </div>
-            </div>
+            </Link>
             <AutoComplete className={styles.authorStorySearch}>
                 <Input.Search size="large" placeholder="Nhập tên truyện hoặc tác giả" />
             </AutoComplete>

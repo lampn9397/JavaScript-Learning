@@ -6,6 +6,14 @@
 
 :root {
   --mainColor: #2798A1;
+  --chapter-color: #10d43a;
+  --views-color: #4497f8;
+  --likes-color: #FF2E2E;
+  --category-color: #c51d1d;
+  --author-color: #309d3b;
+  --status-color: #0daacc;
+  --follows-color: #4330d4;
+  --main-color-hover: #077c86;
 }
 
 body {
@@ -81,4 +89,55 @@ a:hover * {
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-fill {
+  display: flex;
+  flex: 1;
+}
+
+.author-color {
+  border-color: var(--author-color) !important;
+}
+
+.status-color {
+  border-color: var(--status-color) !important;
+}
+
+.category-color {
+  border-color: var(--category-color) !important;
+}
+
+.chapter-color {
+  color: var(--chapter-color) !important;
+}
+
+.views-color {
+  color: var(--views-color) !important;
+}
+
+.likes-color {
+  color: var(--likes-color) !important
+}
+
+.follows-color {
+  color: var(--follows-color) !important
+}
+
+button {
+  border: none;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.zoom {
+  transform: scale(1.1);
+  transition: 0.3s;
 }

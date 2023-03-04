@@ -99,6 +99,10 @@ const storySchema = new Schema({
         type: Number,
         default: 0,
     },
+    totalRatingPoints: {
+        type: Number,
+        default: 0,
+    },
     uploader: {
         type: Schema.Types.ObjectId,
         ref: 'users',

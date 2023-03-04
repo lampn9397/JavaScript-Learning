@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import DetailPage from '../Pages/DetailPage/DetailPage';
+import DetailPage from '../Pages/DetailPage';
 import HomePage from '../Pages/HomePage';
 
 
@@ -70,6 +70,19 @@ export const publicRoutes = {
             component: HomePage
         }
     },
+    ChapterPage: ({ storySlug, chapterSlug } = {}) => {
+        let path = '/truyen/:storySlug/:chapterSlug'
+
+        if (storySlug && chapterSlug) {
+            path = `/truyen/${storySlug}/${chapterSlug}`
+        }
+
+        return {
+            path,
+            exact: true,
+            component: DetailPage
+        }
+    }
 }
 
 export const privateRoutes = {}

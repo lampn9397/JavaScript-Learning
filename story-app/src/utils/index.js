@@ -5,3 +5,16 @@ export const apiErrorHandle = (error) => {
 
     return errorMessage
 }
+
+export const getChapterSlug = (chapterNumber) => {
+    return `chuong-${chapterNumber}`
+}
+
+export const getChapterStatus = (chapterStatus) => {
+    const chapterStatusLabel = {
+        ON_GOING: 'Đang ra',
+        COMPLETED: 'Đã hoàn thành',
+        DROP: 'Đã hủy',
+    }
+    return chapterStatusLabel[chapterStatus]
+}

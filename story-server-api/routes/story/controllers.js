@@ -347,6 +347,7 @@ module.exports.onGetChapterList = async (req, res, next) => {
 
 module.exports.onGetChapterDetail = async (req, res, next) => {
     try {
+
         const chapterDetail = await StoryChapter.findOne({
             story: req.params.id,
             _id: req.params.chapterId,
@@ -418,16 +419,28 @@ module.exports.onGetStoryDetail = async (req, res, next) => {
         // }])
 
         //cach 2
-        const storyDetail = await Story.findById(req.params.id)
+
+        let query
+
+        //id co the truyen la stor id hoac story slug
+
+        if (mongoose.isObjectIdOrHexString(req.params.id)) {
+            query = Story.findById(req.params.id);
+        } else {
+            query = Story.findOne({ slug: req.params.id })
+        }
+
+        const storyDetail = await query
             .populate("genre")
             .populate("category")
             .populate("tags")
             .populate("uploader", "name")
             .populate("author")
+            .lean({ getters: true })
 
         if (!storyDetail) {
             res.status(404).json(createResponse({
-                message: "Id không hợp lệ",
+                message: "Id hoặc slug không hợp lệ không hợp lệ",
             }));
             return
         }
@@ -554,16 +567,30 @@ module.exports.onRatingStory = async (req, res, next) => {
             rating: req.body.rating,
         }
 
-        const isStoryRatingExist = await StoryRating.exists(storyRatingFilter)
+        const userStoryRating = await StoryRating.findOne(storyRatingFilter)
 
-        if (!isStoryRatingExist) {
+        if (!userStoryRating) {
+
             await StoryRating.create(storyRatingModel)
 
             await Story.updateOne({
                 _id: req.params.id
-            }, { $inc: { totalRatings: 1 } }) //$inc: tang gia tri totallike
+            }, {
+                $inc: {
+                    totalRatings: 1,
+                    totalRatingPoints: req.body.rating,
+                }
+            }) //$inc: tang gia tri totallike
         } else {
             await StoryRating.updateOne(storyRatingFilter, updateRatingModel, { runValidators: true })
+
+            await Story.updateOne({
+                _id: req.params.id
+            }, {
+                $inc: {
+                    totalRatingPoints: req.body.rating - userStoryRating.rating, //rating moi tru rating cu
+                }
+            }) //$inc: tang gia tri totallike
         }
 
         res.json(createResponse())
