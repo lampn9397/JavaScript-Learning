@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 import Header from '../../components/Header';
@@ -27,8 +26,6 @@ function HomePage({
     newCompleteStory,
 
 }) {
-    const history = useHistory();
-
     React.useEffect(() => {
         getCategories()
         getStories("topFiveStories", 1, 5, "totalViews")
@@ -39,10 +36,6 @@ function HomePage({
         getStories("storyFollowsRankingList", 1, 10, "totalFollows")
         getStories("newCompleteStory", 1, 5, "", "COMPLETED")
     }, [getCategories, getStories]);
-
-    const onClickButton = () => {
-        history.push(publicRoutes.DetailPage.path)
-    }
 
     return (
         <div className={styles.homePageContainer}>

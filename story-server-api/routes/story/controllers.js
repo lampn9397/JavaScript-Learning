@@ -332,7 +332,26 @@ module.exports.onGetChapterList = async (req, res, next) => {
     try {
         const { page, limit } = getPaginationConfig(req, 1, 10)
 
-        const chapterList = await StoryChapter.find({ story: req.params.id }, '-content')
+        const sort = {}
+
+        let query
+
+        const { sortType = 1 } = req.query; //1:ascending -1:descending
+
+        if (req.query.sort && req.query.sort === 'createdAt') {
+            sort.createdAt = sortType
+        }
+
+        if (mongoose.isObjectIdOrHexString(req.params.id)) {
+            query = StoryChapter.find({ story: req.params.id }, '-content');
+        } else {
+            const story = await Story.findOne({ slug: req.params.id })
+
+            query = StoryChapter.find({ story: story._id }, '-content')
+        }
+
+        const chapterList = await query
+            .sort(sort)
             .skip((page - 1) * limit)
             .limit(limit);
 

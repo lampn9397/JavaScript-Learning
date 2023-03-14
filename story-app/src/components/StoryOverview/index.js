@@ -6,9 +6,25 @@ import styles from './style.module.scss'
 import { publicRoutes } from '../../constants';
 import { getChapterSlug, getChapterStatus } from '../../utils';
 import images from '../../assets'
-import { BookOutlined, StarOutlined, StarTwoTone } from '@ant-design/icons';
+import { BookOutlined, StarFilled, StarOutlined } from '@ant-design/icons';
 
 function StoryOverview({ story }) {
+    const starArray = React.useMemo(() => {
+        const ratingLabel = {
+            0: "Rất Tệ",
+            1: "Không Hay Lắm",
+            2: "Bình Thường",
+            3: "Hay",
+            4: "Rất Hay",
+        }
+        return Array.from({ length: 5 }, (item, index) => ratingLabel[index])
+    }, [])
+
+    const avgStoryPoint = React.useMemo(() => {
+        if (story.totalRatings === 0) return story.totalRatings
+        return story.totalRatingPoints / story.totalRatings
+    }, [story.totalRatingPoints, story.totalRatings])
+
     return (
         <div className={`${styles.container} flex`}>
             <Link
@@ -75,17 +91,25 @@ function StoryOverview({ story }) {
                         </div>
                     </div>
                 </div>
-                <div className='column'>
+                <div className='column alignCenter'>
                     <div className='rating-container column center'>
                         <div className='story-total-point center'>
-                            <div className='story-point'>97</div>
-                            <div className='total-point'>./100</div>
+                            <div className='story-point'>{avgStoryPoint}</div>
+                            <div className='total-point'>/5</div>
                         </div>
-                        <div className='story-number-rating center'>12 Đánh Giá</div>
+                        <div className='story-number-rating center'>{story.totalRatings} Đánh Giá</div>
                     </div>
                     <div className='star-rating-container flex'>
-                        <StarOutlined className='star-rating' />
-                        <StarTwoTone twoToneColor="#f9a825" />
+                        {starArray.map((item, index) => {
+                            if (avgStoryPoint >= index + 1)
+                                return (
+                                    <StarFilled className='star-rating' title={item} key={index} />
+                                )
+
+                            return (
+                                <StarOutlined className='star-rating' title={item} key={index} />
+                            )
+                        })}
                     </div>
                 </div>
             </div>

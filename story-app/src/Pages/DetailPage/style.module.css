@@ -6,3 +6,11 @@
 .detailPage {
     row-gap: 10px;
 }
+
+.customLabel {
+    font-size: 18px;
+}
+
+.firstLabel {
+    margin-left: 18px;
+}

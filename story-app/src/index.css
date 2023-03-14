@@ -14,6 +14,8 @@
   --status-color: #0daacc;
   --follows-color: #4330d4;
   --main-color-hover: #077c86;
+  --light-gray: #aaa;
+  --border-color: #d9d9d9;
 }
 
 body {

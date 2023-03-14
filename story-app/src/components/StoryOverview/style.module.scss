@@ -143,12 +143,13 @@
         }
 
         .star-rating-container {
-            gap: 10px;
+            gap: 4px;
             margin-top: 10px;
 
             .star-rating {
                 filter: invert(83%) sepia(23%) saturate(4912%) hue-rotate(340deg) brightness(100%) contrast(96%);
-                font-size: 24px;
+                font-size: 25px;
+                cursor: pointer;
             }
         }
     }

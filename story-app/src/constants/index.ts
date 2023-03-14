@@ -10,7 +10,7 @@ export const publicRoutes = {
         exact: true,
         component: HomePage
     },
-    DetailPage: (slug) => {
+    DetailPage: (slug: string) => {
         let path = '/truyen/:slug'
 
         if (slug) {
@@ -23,7 +23,7 @@ export const publicRoutes = {
             component: DetailPage
         }
     },
-    AuthorPage: (id) => {
+    AuthorPage: (id: string) => {
         let path = '/tac-gia/:id'
 
         if (id) {
@@ -36,7 +36,7 @@ export const publicRoutes = {
             component: DetailPage
         }
     },
-    CategoryPage: (slug) => {
+    CategoryPage: (slug: string) => {
         let path = '/the-loai/:slug'
 
         if (slug) {
@@ -49,7 +49,7 @@ export const publicRoutes = {
             component: DetailPage
         }
     },
-    FilterPage: ({ ranking, status } = {}) => {
+    FilterPage: ({ ranking, status, genre, tags } = { ranking: "", status: "", genre: "", tags: "" }) => {
         let path = '/truyen/bo-loc'
 
         const searchParams = new URLSearchParams()
@@ -62,6 +62,14 @@ export const publicRoutes = {
             searchParams.set('status', status)
         }
 
+        if (genre) {
+            searchParams.set('genre', genre)
+        }
+
+        if (tags) {
+            searchParams.set('tags', tags)
+        }
+
         path = `${path}?${searchParams.toString()}`
 
         return {
@@ -70,7 +78,7 @@ export const publicRoutes = {
             component: HomePage
         }
     },
-    ChapterPage: ({ storySlug, chapterSlug } = {}) => {
+    ChapterPage: ({ storySlug, chapterSlug } = { storySlug: "", chapterSlug: "" }) => {
         let path = '/truyen/:storySlug/:chapterSlug'
 
         if (storySlug && chapterSlug) {
