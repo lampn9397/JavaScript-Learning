@@ -3,6 +3,12 @@ import axios from 'axios';
 import DetailPage from '../Pages/DetailPage';
 import HomePage from '../Pages/HomePage';
 
+interface FilterPageParams {
+    ranking?: string, // ? = not required
+    status?: string,
+    genre?: string,
+    tags?: string
+}
 
 export const publicRoutes = {
     HomePage: {
@@ -49,7 +55,12 @@ export const publicRoutes = {
             component: DetailPage
         }
     },
-    FilterPage: ({ ranking, status, genre, tags } = { ranking: "", status: "", genre: "", tags: "" }) => {
+    FilterPage: ({
+        ranking,
+        status,
+        genre,
+        tags,
+    }: FilterPageParams = {}) => {
         let path = '/truyen/bo-loc'
 
         const searchParams = new URLSearchParams()

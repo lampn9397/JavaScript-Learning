@@ -3,6 +3,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import Header from '../../components/Header';
+import ChapterList from '../../components/ChapterList';
 import NavBar from '../../components/NavBar';
 import StoryIntroTab from '../../components/StoryIntroTab/index';
 import StoryOverview from '../../components/StoryOverview';
@@ -27,7 +28,7 @@ function DetailPage({
         {
             key: '2',
             label: <div className={styles.customLabel}>Danh Sách Chương</div>,
-            children: `Content of Tab Pane 2`,
+            children: <ChapterList />,
         },
         {
             key: '3',

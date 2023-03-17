@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import type { Story } from '@/constants/types/story';
 import type { Chapter } from '@/constants/types/chapter';
 import styles from './style.module.scss'
-import { publicRoutes } from '@/constants/index';
+import { publicRoutes } from '../../constants/index';
 
 interface Props {
     story: Story,
@@ -20,7 +20,9 @@ export default function StoryIntroTab({ story, chapters }: Props) {
                 </div>
                 <div className='other-infor flex'>
                     <div className='infor-type'>Người Đăng</div>
-                    <div className='infor-detail'>{story.uploader.name}</div>
+                    <div className='infor-detail flex'>
+                        <div className='infor-border'>{story.uploader.name}</div>
+                    </div>
                 </div>
                 <div className='other-infor flex'>
                     <div className='infor-type'>Chương Mới Cập Nhật</div>
@@ -32,9 +34,11 @@ export default function StoryIntroTab({ story, chapters }: Props) {
                 </div>
                 <div className='other-infor flex'>
                     <div className='infor-type'>Danh Mục Con</div>
-                    {story.tags.map((item) => (
-                        <Link className='tag' to={publicRoutes.FilterPage({ ranking: "", status: "", genre: "", tags: item.slug }).path}>{item.name}</Link>
-                    ))}
+                    <div className='infor-detail tag-container flex'>
+                        {story.tags.map((item) => (
+                            <Link className='infor-border' to={publicRoutes.FilterPage({ tags: item.slug }).path}>{item.name}</Link>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
