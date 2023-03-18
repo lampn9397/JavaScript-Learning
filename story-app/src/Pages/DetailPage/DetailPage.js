@@ -16,6 +16,8 @@ function DetailPage({
     getChapterList,
     newChapters,
     newChaptersLoading,
+    chapterList,
+    chapterListLoading,
 }) {
     const { slug } = useParams();
 
@@ -40,9 +42,10 @@ function DetailPage({
     React.useEffect(() => {
         getstoryDetail({ slug })
         getChapterList(slug, "newChapters", 1, 3, "createdAt", "-1")
+        getChapterList(slug, "chapterList", 1, 3, "createdAt", "-1")
     }, [getChapterList, getstoryDetail, slug]);
 
-    if (detailLoading) return null
+    if (detailLoading || newChaptersLoading) return null
     return (
         <div className={styles.detailPageContainer}>
             <Header />

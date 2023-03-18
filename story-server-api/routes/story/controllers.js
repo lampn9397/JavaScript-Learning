@@ -342,6 +342,11 @@ module.exports.onGetChapterList = async (req, res, next) => {
             sort.createdAt = sortType
         }
 
+        if (req.query.sort && req.query.sort === 'bookNumber') {
+            sort.bookNumber = sortType
+            sort.createdAt = 1
+        }
+
         if (mongoose.isObjectIdOrHexString(req.params.id)) {
             query = StoryChapter.find({ story: req.params.id }, '-content');
         } else {

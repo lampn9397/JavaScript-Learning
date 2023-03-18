@@ -1,101 +1,31 @@
 import React from 'react';
-import { Space, Table, Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Table } from 'antd';
 
-import type { Story } from '@/constants/types/story';
 import type { Chapter } from '@/constants/types/chapter';
 import styles from './style.module.scss'
-import { publicRoutes } from '../../constants/index';
+import { columns } from './tableConfig';
 
 interface Props {
-    story: Story,
     chapters: Chapter[],
+    page: number,
+    onChangePagination: () => void,
 }
 
-export default function ChapterList({ story, chapters }: Props) {
-    interface DataType {
-        key: string;
-        name: string;
-        age: number;
-        address: string;
-        tags: string[];
-    }
-
-    const columns: ColumnsType<DataType> = [
-        {
-            title: 'STT',
-            dataIndex: 'STT',
-            key: 'STT',
-        },
-        {
-            title: 'Age',
-            dataIndex: 'age',
-            key: 'age',
-        },
-        {
-            title: 'Address',
-            dataIndex: 'address',
-            key: 'address',
-        },
-        {
-            title: 'Tags',
-            key: 'tags',
-            dataIndex: 'tags',
-            render: (_, { tags }) => (
-                <>
-                    {tags.map((tag) => {
-                        let color = tag.length > 5 ? 'geekblue' : 'green';
-                        if (tag === 'loser') {
-                            color = 'volcano';
-                        }
-                        return (
-                            <Tag color={color} key={tag}>
-                                {tag.toUpperCase()}
-                            </Tag>
-                        );
-                    })}
-                </>
-            ),
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            render: (_, record) => (
-                <Space size="middle">
-                    <a>Invite {record.name}</a>
-                    <a>Delete</a>
-                </Space>
-            ),
-        },
-    ];
-
-    const data: DataType[] = [
-        {
-            key: '1',
-            name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park',
-            tags: ['nice', 'developer'],
-        },
-        {
-            key: '2',
-            name: 'Jim Green',
-            age: 42,
-            address: 'London No. 1 Lake Park',
-            tags: ['loser'],
-        },
-        {
-            key: '3',
-            name: 'Joe Black',
-            age: 32,
-            address: 'Sydney No. 1 Lake Park',
-            tags: ['cool', 'teacher'],
-        },
-    ];
-
+export default function ChapterList({ chapters, page, onChangePagination }: Props) {
     return (
         <div className={`${styles.chapterListContainer} flex`}>
-            <Table columns={columns} dataSource={data} />
+            <Table
+                columns={columns}
+                dataSource={chapters}
+                pagination={{
+                    position: ["topRight"],
+                    current: page,
+                    total: 100,
+                    pageSize: 50,
+                    pageSizeOptions: [50, 100],
+                    onChange: onChangePagination
+                }}
+            />
         </div>
     )
 }
