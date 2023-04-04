@@ -15,6 +15,8 @@ const defaultState = {
     storyFollowsRankingListLoading: true,
     newCompleteStory: [],
     newCompleteStoryLoading: true,
+    storyByAuthorList: [],
+    storyByAuthorListLoading: true,
 }
 
 export default function storyReducer(state = defaultState, action) {
@@ -34,6 +36,22 @@ export default function storyReducer(state = defaultState, action) {
             return {
                 ...state,
                 [`${action.payload.stateName}Loading`]: false,
+            };
+        case ActionTypes.GET_STORY_BY_AUTHOR:
+            return {
+                ...state,
+                storyByAuthorListLoading: true,
+            };
+        case ActionTypes.GET_STORY_BY_AUTHOR_SUCCESS:
+            return {
+                ...state,
+                storyByAuthorList: action.payload.results,
+                storyByAuthorListLoading: false,
+            };
+        case ActionTypes.GET_STORY_BY_AUTHOR_FAILED:
+            return {
+                ...state,
+                storyByAuthorListLoading: false,
             };
         default:
             return state;

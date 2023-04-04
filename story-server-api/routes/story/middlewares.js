@@ -81,7 +81,7 @@ module.exports.validateStoryExist = async (req, res, next) => {
         })
 
         if (!isExist) {
-            res.status(400).json(createResponse({
+            res.status(404).json(createResponse({
                 message: "Truyện không tồn tại"
             }))
             return

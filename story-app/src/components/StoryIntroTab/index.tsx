@@ -5,13 +5,14 @@ import type { Story } from '@/constants/types/story';
 import type { Chapter } from '@/constants/types/chapter';
 import styles from './style.module.scss'
 import { publicRoutes } from '../../constants/index';
-
+import AuthorCard from '../AuthorCard';
 interface Props {
     story: Story,
     chapters: Chapter[],
+    storyByAuthor: Story,
 }
 
-export default function StoryIntroTab({ story, chapters }: Props) {
+export default function StoryIntroTab({ story, chapters, storyByAuthor }: Props) {
     return (
         <div className={`${styles.container} flex`}>
             <div className='column-container column'>
@@ -36,11 +37,12 @@ export default function StoryIntroTab({ story, chapters }: Props) {
                     <div className='infor-type'>Danh Mục Con</div>
                     <div className='infor-detail tag-container flex'>
                         {story.tags.map((item) => (
-                            <Link className='infor-border' to={publicRoutes.FilterPage({ tags: item.slug }).path}>{item.name}</Link>
+                            <Link className='infor-border' key={item._id} to={publicRoutes.FilterPage({ tags: item.slug }).path}>{item.name}</Link>
                         ))}
                     </div>
                 </div>
             </div>
+            <AuthorCard author={story.author} storyByAuthor={storyByAuthor} />
         </div>
     )
 }

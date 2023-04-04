@@ -18,7 +18,7 @@ function NewUpdatedStory({ stories }) {
             <div className={styles.title}>Truyện Mới Cập Nhật</div>
             {stories.map((item) => (
                 <div key={item._id} className={styles.NewUpdateStoryContainer}>
-                    <Link className={`${styles.NewUpdatedStoryItemContainer} flex`} to={publicRoutes.DetailPage(item.slug).path}>
+                    <Link className={`${styles.NewUpdatedStoryItemContainer} flex`} to={publicRoutes.StoryDetail(item.slug).path}>
                         <div className={styles.NewUpdatedStoryItem}>{item.name}</div>
                         <div className={styles.NewUpdatedStoryAt}>{moment(item.storyUpdateAt).format("HH:mm DD/MM")}</div>
                     </Link>

@@ -3,6 +3,8 @@ import * as ActionTypes from "../actionTypes";
 const defaultState = {
     newChapters: [],
     newChaptersLoading: true,
+    chapterList: [],
+    chapterListLoading: true,
 }
 
 export default function chapterReducer(state = defaultState, action) {

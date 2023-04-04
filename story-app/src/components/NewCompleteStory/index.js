@@ -16,12 +16,12 @@ function NewCompleteStory({ stories }) {
             </div>
             <div className='flex'>
                 <div className={`${styles.lastestCompleteStoryContainer} column`}>
-                    <Link to={publicRoutes.DetailPage(stories[0]?.slug).path}>
+                    <Link to={publicRoutes.StoryDetail(stories[0]?.slug).path}>
                         <img src={stories[0]?.poster} alt="" className={styles.lastestStoryPoster} />
                     </Link>
                     <Link
                         className={`${styles.latestCompleteStoryName} long-content`}
-                        to={publicRoutes.DetailPage(stories[0]?.slug).path}
+                        to={publicRoutes.StoryDetail(stories[0]?.slug).path}
                     >
                         {stories[0]?.name}
                     </Link>
@@ -40,11 +40,11 @@ function NewCompleteStory({ stories }) {
                     {stories.slice(1).map((item) => {
                         return (
                             <div key={item._id} className={`${styles.otherStoryItem} flex`}>
-                                <Link to={publicRoutes.DetailPage(item.slug).path}>
+                                <Link to={publicRoutes.StoryDetail(item.slug).path}>
                                     <img src={item.poster} alt="" className={styles.otherStoryPoster} />
                                 </Link>
                                 <div className={`${styles.otherStoryInfor} column`}>
-                                    <Link className={`${styles.otherStoryName} long-content`} to={publicRoutes.DetailPage(item.slug).path}>
+                                    <Link className={`${styles.otherStoryName} long-content`} to={publicRoutes.StoryDetail(item.slug).path}>
                                         {item.name}
                                     </Link>
                                     <Link className={`${styles.otherStoryAuthor} long-content`} to={publicRoutes.AuthorPage(stories[0]?.author?._id).path}>

@@ -14,6 +14,34 @@ const storyCommentSchema = new Schema({
         required: [true, 'Nội dung bình luận là bắt buộc'],
         maxlength: [300, 'Tên tác giả dùng tối đa 300 kí tự'],
     },
+    parentComment: {
+        type: Schema.Types.ObjectId,
+        ref: 'story_comments',
+        validate: {
+            message: "Comment Id không tồn tại",
+            validator: async (value) => {
+                const isStoryCommentExist = await StoryComment.exists({ _id: value })
+                return isStoryCommentExist
+            },
+        }
+    },
+    childComments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'story_comments',
+        validate: {
+            message: "Comment Id không tồn tại",
+            validator: async (value) => {
+                const isStoryCommentExist = await StoryComment.exists({ _id: value })
+                return isStoryCommentExist
+            },
+        }
+    }],
+    likedUsers: [{
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+    }],
 }, { timestamps: true, versionKey: false })
 
-module.exports = model('story_comments', storyCommentSchema);
+const StoryComment = model('story_comments', storyCommentSchema)
+
+module.exports = StoryComment;

@@ -27,7 +27,7 @@ function StoryRankingList({ stories, title, moreLink, className, countField, top
                             <div className={`${styles.storyRankOneItemContainer} ${styles.spaceBetween} flex`} key={item._id}>
                                 <div className={`${styles.topOneRankingInfor} flex`}>
                                     <div className={styles.no1}>NO.1</div>
-                                    <Link className={`${styles.rankOneItemName} long-content`} to={publicRoutes.DetailPage(item.slug).path}>{item.name}</Link>
+                                    <Link className={`${styles.rankOneItemName} long-content`} to={publicRoutes.StoryDetail(item.slug).path}>{item.name}</Link>
                                     <div className={`${styles.rankOneType} flex`}>
                                         <div className={styles.RankOneNumber}>{item[countField]}</div>
                                         <div className={styles.topOneType}>{topOneType}</div>
@@ -41,7 +41,7 @@ function StoryRankingList({ stories, title, moreLink, className, countField, top
                                         </Link>
                                     </div>
                                 </div>
-                                <Link className={styles.rankOnePosterContainer} to={publicRoutes.DetailPage(item.slug).path}>
+                                <Link className={styles.rankOnePosterContainer} to={publicRoutes.StoryDetail(item.slug).path}>
                                     <img src={item.poster} alt="" className={styles.rankOnePoster} />
                                     <div className={styles.bookPage}> </div>
                                     <div className={styles.shadow}> </div>
@@ -59,7 +59,7 @@ function StoryRankingList({ stories, title, moreLink, className, countField, top
                                 {index + 1}
                             </div>
                             <div className={`${styles.storyRankingItem} flex`}>
-                                <Link className='long-content' to={publicRoutes.DetailPage(item.slug).path}>{item.name}</Link>
+                                <Link className='long-content' to={publicRoutes.StoryDetail(item.slug).path}>{item.name}</Link>
                                 <div className={styles.storyRankingItemCount}>{item[countField]}</div>
                             </div>
                         </div>

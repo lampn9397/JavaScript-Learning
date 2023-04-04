@@ -16,7 +16,7 @@ function NewStoryDetailList({ stories }) {
                 {stories.map((item, index) => (
                     <div className={`${styles.newStoryDetailListRow} flex`} key={item._id}>
                         <div className={`${styles.newStoryDetailListItem} flex`}>
-                            <Link className={styles.storyPosterContainer} to={publicRoutes.DetailPage(item.slug).path}>
+                            <Link className={styles.storyPosterContainer} to={publicRoutes.StoryDetail(item.slug).path}>
                                 <img src={item.poster} alt="" className={styles.StoryPoster} />
                             </Link>
                             <div className={classNames({
@@ -24,7 +24,7 @@ function NewStoryDetailList({ stories }) {
                                 column: true,
                                 [styles.evenNumberStory]: index % 2 === 0,
                             })}>
-                                <Link className={styles.storyItemName} to={publicRoutes.DetailPage(item.slug).path}>
+                                <Link className={styles.storyItemName} to={publicRoutes.StoryDetail(item.slug).path}>
                                     {item.name}
                                 </Link>
                                 <Link className={styles.StoryItemAuthor} to={publicRoutes.AuthorPage(item?.author?._id).path}>{item.author?.name} </Link>

@@ -16,7 +16,7 @@ export const publicRoutes = {
         exact: true,
         component: HomePage
     },
-    DetailPage: (slug: string) => {
+    StoryDetail: (slug: string) => {
         let path = '/truyen/:slug'
 
         if (slug) {
@@ -27,6 +27,19 @@ export const publicRoutes = {
             path,
             exact: true,
             component: DetailPage
+        }
+    },
+    ChapterDetail: (storySlug: string, chapterNumber: number) => {
+        let path = '/truyen/:storySlug/:chapterSlug'
+
+        if (storySlug && chapterNumber) {
+            path = `/truyen/${storySlug}/chuong-${chapterNumber}`
+        }
+
+        return {
+            path,
+            exact: true,
+            component: null
         }
     },
     AuthorPage: (id: string) => {

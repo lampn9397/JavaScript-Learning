@@ -23,6 +23,8 @@ const {
     onLikeStory,
     onRatingStory,
     onCommentStory,
+    onGetStoryComment,
+    onLikeComment,
     onGetFollowStory,
 } = require('./controllers');
 const { posterMulter, validateStoryUploader, validateStoryChapter, validateStoryExist } = require('./middlewares');
@@ -40,6 +42,8 @@ router.get('/tag', onGetTag)
 
 router.post('/tag', onCreateTag)
 
+router.post('/comment/:commentId/like', passport.authenticate('jwt', { session: false }), onLikeComment);
+
 router.post('/:id/chapter', passport.authenticate('jwt', { session: false }), validateStoryUploader, onCreateChapter)
 
 router.put('/:id/chapter/:chapterId', passport.authenticate('jwt', { session: false }), validateStoryUploader, validateStoryChapter, onUpdateChapter)
@@ -50,7 +54,7 @@ router.get('/:id/chapter', onGetChapterList)
 
 router.get('/:id/chapter/total', onGetTotalChapterPages)
 
-router.get('/:id/chapter/:chapterId', onGetChapterDetail)
+router.get('/:slug/chapter/:chapterNumber', onGetChapterDetail)
 
 router.get('/:id', onGetStoryDetail)
 
@@ -63,6 +67,8 @@ router.post('/:id/like', passport.authenticate('jwt', { session: false }), valid
 router.post('/:id/rating', passport.authenticate('jwt', { session: false }), validateStoryExist, onRatingStory);
 
 router.post('/:id/comment', passport.authenticate('jwt', { session: false }), validateStoryExist, onCommentStory);
+
+router.get('/:id/comment', validateStoryExist, onGetStoryComment);
 
 router.get('/', onGetStory)
 

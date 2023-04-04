@@ -1,3 +1,5 @@
+import { Author } from "./author"
+
 export interface StoryTag {
     _id: string,
     name: string,
@@ -7,13 +9,7 @@ export interface StoryTag {
 export interface Story {
     _id: string,
     name: string,
-    author: {
-        _id: string,
-        name: string,
-        avatar: string,
-        description: string,
-        birthday: string,
-    },
+    author: Author,
     genre: {
         _id: string,
         name: string,

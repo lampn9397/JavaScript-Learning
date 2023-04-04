@@ -1,0 +1,20 @@
+.chapterListContainer {
+    --container-width: 850px;
+    gap: 10px;
+
+    :global {
+        .column-container {
+            gap: 10px;
+            width: var(--container-width);
+            max-width: var(--container-width);
+
+            .custom-link {
+                color: #1677ff;
+
+                &:hover {
+                    color: #69b1ff;
+                }
+            }
+        }
+    }
+}

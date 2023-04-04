@@ -78,11 +78,25 @@ module.exports.onGetStoryByAuthor = async (req, res, next) => {
     try {
         const { page, limit } = getPaginationConfig(req, 1, 10)
 
-        const stories = await Story.find({ author: req.params.id })
+        const query = { author: req.params.id }
+
+        const sort = {}
+
+        if (req.query.excludeStory) {
+            query.slug = { $ne: req.query.excludeStory } //$ne: not equal, Exclude One Specific Document
+        }
+
+        if (req.query.sort && req.query.sort === 'totalViews') {
+            sort.totalViews = -1 //1:ascending -1:descending
+        }
+
+        const stories = await Story.find(query)
+            .sort(sort)
             .populate('uploader', 'name')
             .populate("author")
             .skip((page - 1) * limit)
-            .limit(limit);
+            .limit(limit)
+            .lean({ getters: true })
 
         res.json(createResponse({
             results: stories

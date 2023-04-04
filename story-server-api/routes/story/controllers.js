@@ -260,7 +260,15 @@ module.exports.onCreateChapter = async (req, res, next) => {
 
         await StoryChapter.create(storyChapter)
 
-        await Story.updateOne({ _id: req.params.id }, { storyUpdateAt: Date.now() })
+        await Story.updateOne(
+            { _id: req.params.id },
+            {
+                storyUpdateAt: Date.now(),
+                $inc: {
+                    totalChapters: 1
+                }
+            }
+        )
 
         res.json(createResponse())
 
@@ -319,6 +327,15 @@ module.exports.onDeleteChapter = async (req, res, next) => {
             _id: req.params.chapterId
         })
 
+        await Story.updateOne(
+            { _id: req.params.id },
+            {
+                $inc: {
+                    totalChapters: -1
+                }
+            }
+        )
+
         res.json(createResponse({
             message: "Chương truyện đã xóa thành công"
         }))
@@ -371,10 +388,18 @@ module.exports.onGetChapterList = async (req, res, next) => {
 
 module.exports.onGetChapterDetail = async (req, res, next) => {
     try {
+        const story = await Story.findOne({ slug: req.params.slug })
+
+        if (!story) {
+            return res.status(404).json(createResponse({
+                message: "Truyện không tồn tại",
+            }));
+
+        }
 
         const chapterDetail = await StoryChapter.findOne({
-            story: req.params.id,
-            _id: req.params.chapterId,
+            story: story._id,
+            chapterNumber: req.params.chapterNumber,
         }).populate("uploader", "name")
 
         const isTimeValid = (Date.now() - requestedIPs[req.ip]) >= 180000 //thoi gian giua cac lan request  lon hon hoac = 3 phut
@@ -623,36 +648,112 @@ module.exports.onRatingStory = async (req, res, next) => {
         next(error)
     }
 }
+
 module.exports.onCommentStory = async (req, res, next) => {
     try {
-        const storyCommentFilter = {
-            user: req.user._id,
-            story: req.params.id,
-        }
-
-        const storyCommentModel = {
-            user: req.user._id,
-            story: req.params.id,
-            content: req.body.content,
-        }
-
-        const updateCommentModel = {
-            content: req.body.content,
-        }
-
-        const isStoryContentExist = await StoryComment.exists(storyCommentFilter)
-
         let storyComment = null;
 
-        if (!isStoryContentExist) {
-            storyComment = await StoryComment.create(storyCommentModel)
+        if (req.query.commentId) {
+            //update Comment
+            const storyCommentFilter = {
+                user: req.user._id,
+                story: req.params.id,
+                _id: req.query.commentId,
+            }
+
+            const updateCommentModel = {
+                content: req.body.content,
+            }
+
+            const isStoryContentExist = await StoryComment.exists(storyCommentFilter)
+
+            if (!isStoryContentExist) return res.status(404).json(createResponse({
+                message: "Bình luận không tồn tại"
+            }))
+
+            storyComment = await StoryComment.findOneAndUpdate(storyCommentFilter, updateCommentModel, { runValidators: true, new: true })
         } else {
-            storyComment = await StoryComment.updateOne(storyCommentFilter, updateCommentModel, { runValidators: true, new: true })
+            //create comment
+            const storyCommentModel = {
+                user: req.user._id,
+                story: req.params.id,
+                content: req.body.content,
+                parentComment: req.query.parentCommentId,
+            }
+
+            storyComment = await StoryComment.create(storyCommentModel)
+
+            if (req.query.parentCommentId) {
+                await StoryComment.updateOne({ _id: req.query.parentCommentId }, {
+                    $push: { childComments: storyComment._id }
+                })
+            }
         }
 
         res.json(createResponse({
             results: storyComment
         }))
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports.onGetStoryComment = async (req, res, next) => {
+    try {
+        const { page, limit } = getPaginationConfig(req, 1, 10)
+
+        const sort = {
+            createdAt: -1
+        }
+
+        const listComment = await StoryComment.find({
+            story: req.params.id,
+            parentComment: { $exists: false }
+        })
+            .sort(sort)
+            .populate("user", "avatar name gender")
+            .populate({
+                path: 'childComments',
+                populate: [
+                    {
+                        path: 'user',
+                        select: 'avatar name gender',
+                    },
+                ],
+            })
+            .skip((page - 1) * limit)
+            .limit(limit)
+
+        res.json(createResponse({
+            results: listComment
+        }))
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports.onLikeComment = async (req, res, next) => {
+    try {
+        await StoryComment.updateOne({ _id: req.params.commentId }, {
+            $set: {
+                likedUsers: {
+                    $cond: [
+                        { $in: [req.user._id, "$likedUsers"] }, //condition
+                        {  //if
+                            $filter: {
+                                input: "$likedUsers",
+                                cond: { $ne: ["$$this", req.user._id] } //$$this = $likedUsers
+                            }
+                        },
+                        { $concatArrays: ["$likedUsers", [req.user._id]] } //else
+                    ]
+                }
+            }
+        })
+
+        res.json(createResponse())
 
     } catch (error) {
         next(error)
