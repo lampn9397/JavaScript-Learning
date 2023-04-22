@@ -1,0 +1,18 @@
+.commentStoryInput {
+    gap: 10px;
+
+    :global {
+        .custom-but {
+            background-color: var(--mainColor);
+            color: white;
+            width: 105px;
+            height: 42px;
+            align-self: flex-end;
+
+            &:hover {
+                background-color: var(--main-color-hover);
+                color: white;
+            }
+        }
+    }
+}

@@ -49,7 +49,7 @@
 }
 
 .NewUpdatedStoryItemAuthor:hover {
-    color: #FF2E2E;
+    color: var(--likes-color);
 }
 
 .more {

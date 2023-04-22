@@ -8,6 +8,7 @@ interface FilterPageParams {
     status?: string,
     genre?: string,
     tags?: string
+    category?: string,
 }
 
 export const publicRoutes = {
@@ -55,6 +56,19 @@ export const publicRoutes = {
             component: DetailPage
         }
     },
+    UserPage: (id: string) => {
+        let path = '/ho-so/:id'
+
+        if (id) {
+            path = `/ho-so/${id}`
+        }
+
+        return {
+            path,
+            exact: true,
+            component: DetailPage
+        }
+    },
     CategoryPage: (slug: string) => {
         let path = '/the-loai/:slug'
 
@@ -72,6 +86,7 @@ export const publicRoutes = {
         ranking,
         status,
         genre,
+        category,
         tags,
     }: FilterPageParams = {}) => {
         let path = '/truyen/bo-loc'
@@ -88,6 +103,10 @@ export const publicRoutes = {
 
         if (genre) {
             searchParams.set('genre', genre)
+        }
+
+        if (category) {
+            searchParams.set('category', category)
         }
 
         if (tags) {
@@ -126,4 +145,8 @@ export const host = 'http://127.0.0.1:3001';
 export const axiosClient = axios.create({
     baseURL: `${host}`
 });
+
+export const pageLimit = 10
+
+
 

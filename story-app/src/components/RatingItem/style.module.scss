@@ -1,0 +1,52 @@
+.storyItemContainer {
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.storyItemMargin {
+    margin-top: 10px;
+    margin-left: 70px;
+}
+
+.commentItemContainer {
+    gap: 10px;
+    padding-bottom: 10px;
+    align-items: center;
+
+    :global {
+        .user-rating {
+            width: 100%;
+
+            .rating-utils-container {
+                width: 100%;
+                justify-content: space-between;
+
+                .rating-container {
+                    gap: 5px;
+
+                    .user-name {
+                        color: #1677ff;
+                        font-size: 16px;
+
+                        &:hover {
+                            color: #69b1ff;
+                        }
+                    }
+                }
+
+                .like-container {
+                    gap: 5px;
+
+                    &:hover {
+                        color: var(--likes-color);
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .feedback {
+                font-size: 16px;
+                word-break: break-all;
+            }
+        }
+    }
+}

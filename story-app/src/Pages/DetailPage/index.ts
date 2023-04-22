@@ -1,3 +1,4 @@
+import { pageLimit } from "../../constants";
 import { connect, ConnectedProps } from "react-redux";
 
 import * as ActionTypes from '../../redux/actionTypes'
@@ -14,6 +15,9 @@ const mapStateToProps = (state: any) => ({
     storyByAuthorListLoading: state.story.storyByAuthorListLoading,
     commentList: state.comment.commentList,
     commentListLoading: state.comment.commentListLoading,
+    ratingList: state.rating.ratingList,
+    ratingListLoading: state.rating.ratingListLoading,
+    user: state.auth.user,
 });
 
 const mapDispatchToProps = {
@@ -45,12 +49,21 @@ const mapDispatchToProps = {
         }
     }),
 
-    getComment: (storyId: string, page = 1, limit = 100) => ({
+    getComments: (storyId: string, page = 1, limit = pageLimit) => ({
         type: ActionTypes.GET_COMMENTS,
         payload: {
             storyId,
-            page: 1,
-            limit: 100,
+            page,
+            limit,
+        }
+    }),
+
+    getRatings: (storyId: string, page = 1, limit = pageLimit) => ({
+        type: ActionTypes.GET_RATINGS,
+        payload: {
+            storyId,
+            page,
+            limit,
         }
     })
 };

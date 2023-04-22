@@ -1,12 +1,11 @@
 import { User } from "./user";
 
-export interface Comment {
+export interface Rating {
     _id: string,
     user: User,
     story: string,
-    content: string,
-    childComments: Comment[],
-    parentComment: Comment['_id'],
+    feedback: string,
+    rating: number,
     likedUsers: User["_id"][],
     createdAt: string,
     updatedAt: string,

@@ -3,8 +3,9 @@ import { put, takeEvery } from 'redux-saga/effects';
 
 import { axiosClient } from '../../constants'
 import { apiErrorHandle } from '../../utils';
+import { ReduxAction } from '@/constants/types/redux';
 
-function* getCommentsAction({ payload }) {
+function* getRatingsAction({ payload }: ReduxAction) {
     try {
         const searchParams = new URLSearchParams()
 
@@ -12,10 +13,10 @@ function* getCommentsAction({ payload }) {
 
         searchParams.set("limit", payload.limit)
 
-        const { data } = yield axiosClient.get(`/story/${payload.storyId}/comment?${searchParams.toString()}`);
+        const { data } = yield axiosClient.get(`/story/${payload.storyId}/rating?${searchParams.toString()}`);
 
         yield put({
-            type: ActionTypes.GET_COMMENTS_SUCCESS,
+            type: ActionTypes.GET_RATINGS_SUCCESS,
             payload: {
                 results: data.results,
                 page: payload.page,
@@ -26,11 +27,11 @@ function* getCommentsAction({ payload }) {
         apiErrorHandle(error)
 
         yield put({
-            type: ActionTypes.GET_COMMENTS_FAILED,
+            type: ActionTypes.GET_RATINGS_FAILED,
         });
     }
 }
 
-export default function* comment() {
-    yield takeEvery(ActionTypes.GET_COMMENTS, getCommentsAction);
+export default function* Rating() {
+    yield takeEvery(ActionTypes.GET_RATINGS, getRatingsAction);
 }

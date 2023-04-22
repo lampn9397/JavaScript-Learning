@@ -6,6 +6,7 @@ import type { Chapter } from '@/constants/types/chapter';
 import styles from './style.module.scss'
 import { publicRoutes } from '../../constants/index';
 import AuthorCard from '../AuthorCard';
+import { getChapterSlug } from '../../utils';
 interface Props {
     story: Story,
     chapters: Chapter[],
@@ -22,14 +23,21 @@ export default function StoryIntroTab({ story, chapters, storyByAuthor }: Props)
                 <div className='other-infor flex'>
                     <div className='infor-type'>Người Đăng</div>
                     <div className='infor-detail flex'>
-                        <div className='infor-border'>{story.uploader.name}</div>
+                        <Link className='infor-border' to={publicRoutes.UserPage(story.uploader._id).path}>{story.uploader.name}</Link>
                     </div>
                 </div>
                 <div className='other-infor flex'>
                     <div className='infor-type'>Chương Mới Cập Nhật</div>
                     <div className='column infor-detail'>
                         {chapters.map((item) => (
-                            <Link className='new-chapter-color' key={item._id} to={""}>Chương {item.chapterNumber} : {item.name}</Link>
+                            <Link className='new-chapter-color' key={item._id}
+                                to={publicRoutes.ChapterPage({
+                                    chapterSlug: getChapterSlug(item.chapterNumber),
+                                    storySlug: story.slug,
+                                }).path}
+                            >
+                                Chương {item.chapterNumber} : {item.name}
+                            </Link>
                         ))}
                     </div>
                 </div>

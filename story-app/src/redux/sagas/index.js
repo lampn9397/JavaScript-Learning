@@ -5,6 +5,7 @@ import story from './story'
 import storyDetail from './storyDetail'
 import chapter from './chapter'
 import comment from './comment'
+import rating from './rating'
 
 export default function* rootSaga() {
     yield all([
@@ -13,5 +14,6 @@ export default function* rootSaga() {
         fork(storyDetail),
         fork(chapter),
         fork(comment),
+        fork(rating),
     ]);
 }

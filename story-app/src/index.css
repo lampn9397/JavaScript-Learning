@@ -6,6 +6,7 @@
 
 :root {
   --mainColor: #2798A1;
+  --main-color-hover: #077c86;
   --chapter-color: #10d43a;
   --views-color: #4497f8;
   --likes-color: #FF2E2E;
@@ -13,7 +14,6 @@
   --author-color: #309d3b;
   --status-color: #0daacc;
   --follows-color: #4330d4;
-  --main-color-hover: #077c86;
   --light-gray: #aaa;
   --border-color: #d9d9d9;
 }
@@ -79,11 +79,11 @@ a {
 }
 
 a:hover {
-  color: #FF2E2E;
+  color: var(--likes-color);
 }
 
 a:hover * {
-  color: #FF2E2E !important;
+  color: var(--likes-color) !important;
 }
 
 .long-content {

@@ -10,12 +10,15 @@ import StoryOverview from '../../components/StoryOverview';
 import styles from './style.module.css'
 import type { ReduxProps } from '.';
 import useQuery from '../../hooks/useQuery'
-import StoryComment from '../../components/StoryComment';
+import StoryCommentCard from '../../components/StoryCommentCard';
+import { pageLimit } from '../../constants';
+import RatingCard from '../../components/RatingCard';
 
-interface Props extends ReduxProps {
+export interface DetailPageProps extends ReduxProps {
 }
 
 function DetailPage({
+    user,
     getstoryDetail,
     detail,
     detailLoading,
@@ -27,11 +30,14 @@ function DetailPage({
     getStoryByAuthor,
     storyByAuthorList,
     storyByAuthorListLoading,
-    getComment,
+    getComments,
     commentList,
     commentListLoading,
+    getRatings,
+    ratingList,
+    ratingListLoading,
 
-}: Props) {
+}: DetailPageProps) {
     const { slug }: any = useParams();
 
     const query = useQuery();
@@ -117,13 +123,40 @@ function DetailPage({
             {
                 key: '3',
                 label: <div className={styles.customLabel}>Bình Luận</div>,
-                children: <StoryComment
+                children: <StoryCommentCard
                     commentList={commentList}
                     story={detail}
+                    user={user}
+                    getComments={getComments}
+                />,
+            },
+            {
+                key: '4',
+                label: <div className={styles.customLabel}>Đánh Giá</div>,
+                children: <RatingCard
+                    getRatings={getRatings}
+                    ratingList={ratingList}
+                    story={detail}
+                    user={user}
                 />,
             },
         ]
-    }, [detail, newChapters, storyByAuthorList, chapterList, pageSize, onChangePagination, currentPage, chapterListLoading, onChangeSort, commentList])
+    }, [
+        detail,
+        newChapters,
+        storyByAuthorList,
+        chapterList,
+        pageSize,
+        onChangePagination,
+        currentPage,
+        chapterListLoading,
+        onChangeSort,
+        commentList,
+        user,
+        getComments,
+        getRatings,
+        ratingList
+    ])
 
     React.useEffect(() => {
         getstoryDetail({ slug })
@@ -141,8 +174,9 @@ function DetailPage({
 
     React.useEffect(() => {
         if (!detail) return
-        getComment(detail._id, 1, 100)
-    }, [detail, getComment]);
+        getComments(detail._id, 1, pageLimit)
+        getRatings(detail._id, 1, pageLimit)
+    }, [detail, getComments, getRatings]);
 
     if (detailLoading || newChaptersLoading) return null
     return (

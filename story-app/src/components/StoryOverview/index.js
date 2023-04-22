@@ -6,20 +6,10 @@ import styles from './style.module.scss'
 import { publicRoutes } from '../../constants';
 import { getChapterSlug, getChapterStatus } from '../../utils';
 import images from '../../assets'
-import { BookOutlined, StarFilled, StarOutlined } from '@ant-design/icons';
+import { BookOutlined } from '@ant-design/icons';
+import RatingStar from '../RatingStar';
 
 function StoryOverview({ story }) {
-    const starArray = React.useMemo(() => {
-        const ratingLabel = {
-            0: "Rất Tệ",
-            1: "Không Hay Lắm",
-            2: "Bình Thường",
-            3: "Hay",
-            4: "Rất Hay",
-        }
-        return Array.from({ length: 5 }, (item, index) => ratingLabel[index])
-    }, [])
-
     const avgStoryPoint = React.useMemo(() => {
         if (story.totalRatings === 0) return story.totalRatings
         return story.totalRatingPoints / story.totalRatings
@@ -40,16 +30,24 @@ function StoryOverview({ story }) {
                 <div className='story-infor column space-between flex-fill'>
                     <div>
                         <div className='story-name'>{story.name}</div>
-                        <Link
-                            className='story-author'
-                            to={publicRoutes.AuthorPage(story.author?._id).path}
-                        >
-                            {story.author?.name}
-                        </Link>
                         <div className='story-category-container flex'>
-                            <Link className='story-category author-color'>{story.author.name}</Link>
-                            <Link className='story-category status-color'>{getChapterStatus(story.status)}</Link>
-                            <Link className='story-category category-color'>{story.category.name}</Link>
+                            <Link className='story-category author-color'
+                                to={publicRoutes.AuthorPage(story.author?._id).path}
+                            >
+                                {story.author.name}
+                            </Link>
+                            <Link
+                                className='story-category status-color'
+                                to={publicRoutes.FilterPage({ status: story.status }).path}
+                            >
+                                {getChapterStatus(story.status)}
+                            </Link>
+                            <Link
+                                className='story-category category-color'
+                                to={publicRoutes.FilterPage({ category: story.category.slug }).path}
+                            >
+                                {story.category.name}
+                            </Link>
                         </div>
                     </div>
                     <div>
@@ -91,7 +89,7 @@ function StoryOverview({ story }) {
                         </div>
                     </div>
                 </div>
-                <div className='column alignCenter'>
+                <div className='column-container column alignCenter'>
                     <div className='rating-container column center'>
                         <div className='story-total-point center'>
                             <div className='story-point'>{avgStoryPoint}</div>
@@ -99,18 +97,7 @@ function StoryOverview({ story }) {
                         </div>
                         <div className='story-number-rating center'>{story.totalRatings} Đánh Giá</div>
                     </div>
-                    <div className='star-rating-container flex'>
-                        {starArray.map((item, index) => {
-                            if (avgStoryPoint >= index + 1)
-                                return (
-                                    <StarFilled className='star-rating' title={item} key={index} />
-                                )
-
-                            return (
-                                <StarOutlined className='star-rating' title={item} key={index} />
-                            )
-                        })}
-                    </div>
+                    <RatingStar ratingNumber={avgStoryPoint} />
                 </div>
             </div>
         </div>

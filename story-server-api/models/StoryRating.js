@@ -26,7 +26,11 @@ const storyRatingSchema = new Schema({
             }
         ]
 
-    }
-}, { versionKey: false })
+    },
+    likedUsers: [{
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+    }]
+}, { timestamps: true, versionKey: false })
 
 module.exports = model('story_ratings', storyRatingSchema);

@@ -71,6 +71,7 @@ app.use((error, req, res, next) => {
     const isMongooseError = error instanceof mongoose.Error.ValidationError || error instanceof mongoose.Error.CastError;
 
     if (isMongooseError) {
+        console.log(error)
         if (error.errors) {
             const [firstErrorKey] = Object.keys(error.errors);
 

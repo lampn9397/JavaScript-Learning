@@ -22,6 +22,8 @@ const {
     onDeleteChapter,
     onLikeStory,
     onRatingStory,
+    onLikeRating,
+    onGetRating,
     onCommentStory,
     onGetStoryComment,
     onLikeComment,
@@ -42,7 +44,9 @@ router.get('/tag', onGetTag)
 
 router.post('/tag', onCreateTag)
 
-router.post('/comment/:commentId/like', passport.authenticate('jwt', { session: false }), onLikeComment);
+router.put('/rating/:ratingId/like', passport.authenticate('jwt', { session: false }), onLikeRating);
+
+router.put('/comment/:commentId/like', passport.authenticate('jwt', { session: false }), onLikeComment);
 
 router.post('/:id/chapter', passport.authenticate('jwt', { session: false }), validateStoryUploader, onCreateChapter)
 
@@ -65,6 +69,8 @@ router.post('/:id/follow', passport.authenticate('jwt', { session: false }), val
 router.post('/:id/like', passport.authenticate('jwt', { session: false }), validateStoryExist, onLikeStory);
 
 router.post('/:id/rating', passport.authenticate('jwt', { session: false }), validateStoryExist, onRatingStory);
+
+router.get('/:id/rating', validateStoryExist, onGetRating);
 
 router.post('/:id/comment', passport.authenticate('jwt', { session: false }), validateStoryExist, onCommentStory);
 

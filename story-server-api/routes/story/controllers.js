@@ -649,6 +649,57 @@ module.exports.onRatingStory = async (req, res, next) => {
     }
 }
 
+module.exports.onGetRating = async (req, res, next) => {
+    try {
+        const { page, limit } = getPaginationConfig(req, 1, 10)
+
+        const sort = {
+            createdAt: -1
+        }
+
+        const listRating = await StoryRating.find({
+            story: req.params.id,
+        })
+            .sort(sort)
+            .populate("user", "avatar name gender")
+            .skip((page - 1) * limit)
+            .limit(limit)
+
+        res.json(createResponse({
+            results: listRating
+        }))
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports.onLikeRating = async (req, res, next) => {
+    try {
+        await StoryRating.updateOne({ _id: req.params.ratingId }, [{
+            $set: {
+                likedUsers: {
+                    $cond: [
+                        { $in: [req.user._id, "$likedUsers"] }, //condition
+                        {  //if
+                            $filter: {
+                                input: "$likedUsers",
+                                cond: { $ne: ["$$this", req.user._id] } //$$this = $likedUsers
+                            }
+                        },
+                        { $concatArrays: ["$likedUsers", [req.user._id]] } //else
+                    ]
+                }
+            }
+        }])
+
+        res.json(createResponse())
+
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports.onCommentStory = async (req, res, next) => {
     try {
         let storyComment = null;
@@ -678,7 +729,7 @@ module.exports.onCommentStory = async (req, res, next) => {
                 user: req.user._id,
                 story: req.params.id,
                 content: req.body.content,
-                parentComment: req.query.parentCommentId,
+                parentComment: req.query.parentCommentId, //neu truyen parentCommentId thi dang tao reply
             }
 
             storyComment = await StoryComment.create(storyCommentModel)
@@ -736,7 +787,7 @@ module.exports.onGetStoryComment = async (req, res, next) => {
 
 module.exports.onLikeComment = async (req, res, next) => {
     try {
-        await StoryComment.updateOne({ _id: req.params.commentId }, {
+        await StoryComment.updateOne({ _id: req.params.commentId }, [{
             $set: {
                 likedUsers: {
                     $cond: [
@@ -751,7 +802,7 @@ module.exports.onLikeComment = async (req, res, next) => {
                     ]
                 }
             }
-        })
+        }])
 
         res.json(createResponse())
 

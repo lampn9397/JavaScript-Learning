@@ -96,7 +96,7 @@
                     }
 
                     &:hover {
-                        color: #FF2E2E;
+                        color: var(--likes-color);
                         transform: scale(1.1);
                         transition: 0.3s;
 
@@ -109,47 +109,40 @@
             }
         }
 
-        .rating-container {
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            height: 95px;
-            max-height: 95px;
-            width: 110px;
+        .column-container {
+            gap: 10px;
 
-            .story-total-point {
-                height: 60px;
-                width: 100%;
+            .rating-container {
+                border: 1px solid #d9d9d9;
+                border-radius: 4px;
+                height: 95px;
+                max-height: 95px;
+                width: 110px;
 
-                .story-point {
-                    color: var(--chapter-color);
-                    font-size: 38px;
-                    font-weight: bolder;
-                    margin-right: 5px;
+                .story-total-point {
+                    height: 60px;
+                    width: 100%;
+
+                    .story-point {
+                        color: var(--chapter-color);
+                        font-size: 38px;
+                        font-weight: bolder;
+                        margin-right: 5px;
+                    }
+
+                    .total-point {
+                        font-size: 14px;
+                        color: #888;
+                        margin-bottom: 17px;
+                    }
                 }
 
-                .total-point {
-                    font-size: 14px;
-                    color: #888;
-                    margin-bottom: 17px;
+                .story-number-rating {
+                    // padding: 8px 0px;
+                    background-color: #f4f4f4;
+                    flex: 1;
+                    width: 100%;
                 }
-            }
-
-            .story-number-rating {
-                // padding: 8px 0px;
-                background-color: #f4f4f4;
-                flex: 1;
-                width: 100%;
-            }
-        }
-
-        .star-rating-container {
-            gap: 4px;
-            margin-top: 10px;
-
-            .star-rating {
-                filter: invert(83%) sepia(23%) saturate(4912%) hue-rotate(340deg) brightness(100%) contrast(96%);
-                font-size: 25px;
-                cursor: pointer;
             }
         }
     }
