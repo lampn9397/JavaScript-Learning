@@ -75,3 +75,18 @@
 .marginIcon {
     margin-right: 5px;
 }
+
+.loginContainer {
+    height: 28px;
+    gap: 5px;
+    padding: 5px 14px;
+    border: 1px solid #d9d9d9;
+    transition: color .3s, background-color .3s;
+}
+
+.loginContainer:hover {
+    background-color: var(--light-red);
+    cursor: pointer;
+    color: #fff;
+    border: 1px solid var(--light-red);
+}

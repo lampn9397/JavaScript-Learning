@@ -13,6 +13,10 @@ import ngonTinh from './ngonTinh.png'
 import quanSu from './quanSu.png'
 import voHiep from './voHiep.png'
 import more from './more.png'
+import blackUser from './blackUser.png'
+import whiteUser from './whiteUser.png'
+import padLock from './padLock.png'
+import email from './email.png'
 
 const images = {
     fairytale,
@@ -30,6 +34,10 @@ const images = {
     'vo-hiep': voHiep,
     'linh-di': linhDi,
     more,
+    blackUser,
+    whiteUser,
+    padLock,
+    email,
 
 }
 

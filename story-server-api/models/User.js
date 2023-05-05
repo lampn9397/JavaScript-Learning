@@ -60,7 +60,7 @@ const userSchema = new Schema({
         type: String,
         default: ""
     },
-}, { versionKey: false })
+}, { timestamps: true, versionKey: false })
 
 userSchema.pre('save', function (next) {
 

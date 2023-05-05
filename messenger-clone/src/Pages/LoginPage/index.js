@@ -74,7 +74,8 @@ function LoginPage() {
                     helperText={state.usernameError ? i18n.t('auth.usernameError') : ""}
                     id="outlined-basic"
                     label={i18n.t('auth.username')}
-                    variant="outlined" value={state.username}
+                    variant="outlined"
+                    value={state.username}
                     onChange={onChange("username")}
                     onKeyDown={onKeyDownLogin}
                 />

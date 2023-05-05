@@ -1,5 +1,7 @@
 import { ReduxAction } from "@/constants/types/redux";
 
+import * as ActionTypes from "../actionTypes";
+
 const fakeUser = {
     "_id": "63739a2f4bb8a51963956509",
     "username": "tri145",
@@ -12,11 +14,17 @@ const fakeUser = {
 }
 
 const defaultState = {
-    user: fakeUser,
+    user: null,
+    isModalOpen: false
 }
 
 export default function authReducer(state = defaultState, action: ReduxAction) {
     switch (action.type) {
+        case ActionTypes.TOGGLE_AUTH_MODAL:
+            return {
+                ...state,
+                isModalOpen: !state.isModalOpen,
+            }
         default:
             return state;
     }

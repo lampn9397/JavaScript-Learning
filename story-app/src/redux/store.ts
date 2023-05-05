@@ -9,10 +9,14 @@ export const history = createBrowserHistory();
 
 export const sagaMiddleware = createSagaMiddleware()
 
-export default createStore(
+const store = createStore(
     createRootReducer(history),
     applyMiddleware(
         routerMiddleware(history),
         sagaMiddleware,
     )
 );
+
+export type RootState = ReturnType<typeof store.getState>;
+
+export default store;
