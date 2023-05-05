@@ -2,7 +2,6 @@ import { RootState } from '@/redux/store';
 import Modal from 'antd/es/modal/Modal';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 import styles from './style.module.scss'
 import * as ActionTypes from "../../redux/actionTypes";
@@ -26,8 +25,7 @@ export default function AuthModal({ open }: Props) {
     const onLogin = React.useCallback<LoginTabProps['onLogin']>((username, password) => {
     }, [])
 
-    const onRegister = React.useCallback<RegisterTabProps['onRegister']>((username, password, email) => {
-        console.log(email)
+    const onRegister = React.useCallback<RegisterTabProps['onRegister']>((username, password, email, name, gender) => {
     }, [])
 
     const authTab = React.useMemo(() => {
@@ -43,7 +41,7 @@ export default function AuthModal({ open }: Props) {
                 children: <RegisterTab onRegister={onRegister} />
             },
         ]
-    }, [])
+    }, [onLogin, onRegister])
 
     return (
         <Modal open={isModalOpen} onCancel={oncancel} footer={null} className={`${styles.authModalContainer}`}>

@@ -1,18 +1,22 @@
 import images from '../../assets';
-import { Button, Input } from 'antd';
+import { Button, Input, Radio, RadioChangeEvent } from 'antd';
 import React from 'react';
 
 import styles from './style.module.scss'
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Gender } from '../../constants/types/user';
+import { getGenderLabel } from '../../utils';
 
 export interface RegisterTabProps {
-    onRegister: (username: string, password: string, email: string) => void
+    onRegister: (username: string, password: string, email: string, name: string, gender: Gender) => void
 }
 
 interface State {
     username: string,
     password: string,
     email: string,
+    name: string,
+    gender: Gender,
 }
 
 export default function RegisterTab({ onRegister }: RegisterTabProps) {
@@ -21,6 +25,8 @@ export default function RegisterTab({ onRegister }: RegisterTabProps) {
         username: "",
         password: "",
         email: "",
+        name: "",
+        gender: Gender.MALE,
     },)
 
     const onChange = React.useCallback((fieldName: keyof State): React.ChangeEventHandler<HTMLInputElement> => {
@@ -29,9 +35,13 @@ export default function RegisterTab({ onRegister }: RegisterTabProps) {
         }
     }, [])
 
+    const onChangeRadioGr = React.useCallback((event: RadioChangeEvent) => {
+        setState((prevState) => ({ ...prevState, gender: event.target.value }))
+    }, [])
+
     const onClickRegister = React.useCallback(() => {
-        onRegister(state.username, state.password, state.email)
-    }, [onRegister, state.email, state.password, state.username])
+        onRegister(state.username, state.password, state.email, state.name, state.gender)
+    }, [onRegister, state.email, state.gender, state.name, state.password, state.username])
 
     return (
         <div className={`${styles.registerTabContainer} column center`}>
@@ -44,7 +54,7 @@ export default function RegisterTab({ onRegister }: RegisterTabProps) {
                     <img alt="" src={images.blackUser}
                         className='default-icon' />
                 }
-                placeholder="Tên Đăng Nhập"
+                placeholder="Tên Đăng Nhập*"
                 maxLength={50}
                 className='auth-input'
                 onChange={onChange("username")}
@@ -54,7 +64,7 @@ export default function RegisterTab({ onRegister }: RegisterTabProps) {
                     <img alt="" src={images.padLock}
                         className='default-icon' />
                 }
-                placeholder="Mật Khẩu"
+                placeholder="Mật Khẩu*"
                 maxLength={50}
                 className='auth-input'
                 onChange={onChange("password")}
@@ -65,11 +75,26 @@ export default function RegisterTab({ onRegister }: RegisterTabProps) {
                     <img alt="" src={images.email}
                         className='default-icon' />
                 }
-                placeholder="Email"
+                placeholder="Email*"
                 maxLength={50}
                 className='auth-input'
                 onChange={onChange("email")}
             />
+            <Input
+                prefix={
+                    <img alt="" src={images.fullName}
+                        className='default-icon' />
+                }
+                placeholder="Họ Và Tên"
+                maxLength={50}
+                className='auth-input'
+                onChange={onChange("name")}
+            />
+            <Radio.Group onChange={onChangeRadioGr} value={state.gender}>
+                {Object.keys(Gender).map((key) => (
+                    <Radio value={key}>{getGenderLabel(key)}</Radio>
+                ))}
+            </Radio.Group>
             <Button className='register-butt center' onClick={onClickRegister}>Đăng Kí</Button>
         </div>
     )

@@ -17,6 +17,7 @@ import blackUser from './blackUser.png'
 import whiteUser from './whiteUser.png'
 import padLock from './padLock.png'
 import email from './email.png'
+import fullName from './fullName.png'
 
 const images = {
     fairytale,
@@ -38,6 +39,7 @@ const images = {
     whiteUser,
     padLock,
     email,
+    fullName,
 
 }
 

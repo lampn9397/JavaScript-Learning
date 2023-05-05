@@ -7,3 +7,9 @@ export interface User {
     avatar: string,
     lastLogin: string,
 }
+
+export enum Gender {
+    MALE = 'MALE',
+    FEMALE = 'FEMALE',
+    OTHER = 'OTHER',
+}

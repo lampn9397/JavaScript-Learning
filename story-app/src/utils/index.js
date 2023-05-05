@@ -18,3 +18,12 @@ export const getChapterStatus = (chapterStatus) => {
     }
     return chapterStatusLabel[chapterStatus]
 }
+
+export const getGenderLabel = (gender) => {
+    const Gender = {
+        MALE: 'Nam',
+        FEMALE: 'Nữ',
+        OTHER: 'Khác',
+    }
+    return Gender[gender]
+}
