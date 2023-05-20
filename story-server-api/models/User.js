@@ -37,8 +37,8 @@ const userSchema = new Schema({
     },
     name: {
         type: String,
-        minlength: [1, 'Tên người dùng ít nhất 1 kí tự'],
         maxlength: [50, 'Tên người dùng tối đa 50 kí tự'],
+        default: "",
     },
     gender: {
         type: String,

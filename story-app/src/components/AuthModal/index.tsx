@@ -18,15 +18,27 @@ export default function AuthModal({ open }: Props) {
 
     const isModalOpen = useSelector((state: RootState) => state.auth.isModalOpen)
 
+    const user = useSelector((state: RootState) => state.auth.user)
+
+    const authLoading = useSelector((state: RootState) => state.auth.authLoading)
+
     const oncancel = React.useCallback(() => {
         dispatch({ type: ActionTypes.TOGGLE_AUTH_MODAL })
     }, [dispatch])
 
     const onLogin = React.useCallback<LoginTabProps['onLogin']>((username, password) => {
-    }, [])
+        dispatch({
+            type: ActionTypes.LOGIN,
+            payload: { username, password },
+        })
+    }, [dispatch])
 
     const onRegister = React.useCallback<RegisterTabProps['onRegister']>((username, password, email, name, gender) => {
-    }, [])
+        dispatch({
+            type: ActionTypes.REGISTER,
+            payload: { username, password, email, name, gender }
+        })
+    }, [dispatch])
 
     const authTab = React.useMemo(() => {
         return [
@@ -38,10 +50,10 @@ export default function AuthModal({ open }: Props) {
             {
                 key: '2',
                 label: <div className={styles.customLabel}>Đăng Ký</div>,
-                children: <RegisterTab onRegister={onRegister} />
+                children: <RegisterTab onRegister={onRegister} authLoading={authLoading} />
             },
         ]
-    }, [onLogin, onRegister])
+    }, [authLoading, onLogin, onRegister])
 
     return (
         <Modal open={isModalOpen} onCancel={oncancel} footer={null} className={`${styles.authModalContainer}`}>

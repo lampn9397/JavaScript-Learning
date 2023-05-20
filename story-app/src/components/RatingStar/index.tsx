@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import styles from './style.module.scss'
 import { StarFilled, StarOutlined } from '@ant-design/icons';
@@ -6,11 +7,14 @@ import { StarFilled, StarOutlined } from '@ant-design/icons';
 interface Props {
     ratingNumber: number,
     size?: number,
+    onClick?: () => void,
+    onMouseEnter?: (item: string, index: number) => void,
+    starSpacing?: number,
 }
 
 // type IndexType = 1 | 2 | 3 |4 //ket qua cua index as keyof typeof ratingLabel
 
-export default function RatingStar({ ratingNumber, size = 25 }: Props) {
+export default function RatingStar({ ratingNumber, size = 25, onClick, onMouseEnter: onMouseEnterProps, starSpacing }: Props) {
     const starArray = React.useMemo(() => {
         const ratingLabel = {
             0: "Rất Tệ",
@@ -26,18 +30,43 @@ export default function RatingStar({ ratingNumber, size = 25 }: Props) {
         fontSize: size
     }), [size])
 
-    return (
-        <div className={`${styles.starRatingContainer} flex`}>
-            {starArray.map((item, index) => {
-                if (ratingNumber >= index + 1)
-                    return (
-                        <StarFilled className='star-rating' title={item} key={index} style={starStyle} />
-                    )
+    const starSpacingStyle = React.useMemo((): React.CSSProperties => ({
+        gap: starSpacing
+    }), [starSpacing])
 
-                return (
-                    <StarOutlined className='star-rating' title={item} key={index} style={starStyle} />
-                )
+    const onMouseEnter = React.useCallback((item: string, index: number) => () => {
+        onMouseEnterProps?.(item, index)
+    }, [onMouseEnterProps])
+
+    return (
+        <div
+            className={classNames({
+                [styles.starRatingContainer]: true,
+                [styles.triggerPointer]: onClick,
             })}
-        </div>
+            onClick={onClick}
+            style={starSpacingStyle}
+        >
+            {
+                starArray.map((item, index) => {
+                    const starProps = {
+                        className: 'star-rating',
+                        title: item,
+                        key: index,
+                        style: starStyle,
+                        onMouseEnter: onMouseEnter(item, index)
+                    }
+
+                    if (ratingNumber >= index + 1)
+                        return (
+                            <StarFilled {...starProps} />
+                        )
+
+                    return (
+                        <StarOutlined {...starProps} />
+                    )
+                })
+            }
+        </div >
     )
 }

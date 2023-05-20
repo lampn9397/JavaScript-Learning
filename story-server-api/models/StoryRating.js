@@ -12,7 +12,8 @@ const storyRatingSchema = new Schema({
     feedback: {
         type: String,
         default: '',
-        maxlength: [300, 'Phản hồi truyện tối đa 500 kí tự'],
+        minlength: [10, 'Đánh giá truyện tối thiểu 10 kí tự'],
+        maxlength: [300, 'Đánh giá truyện tối đa 500 kí tự'],
     },
     rating: {
         type: Number,

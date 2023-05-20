@@ -23,6 +23,52 @@ export default function storyDetailReducer(state = defaultState, action) {
                 ...state,
                 detailLoading: false,
             };
+        case ActionTypes.RATING_STORY_SUCCESS: {
+            const ratingItem = action.payload.results
+
+            const detail = { ...state.detail }
+
+            detail.totalRatings++
+
+            detail.totalRatingPoints += ratingItem.rating
+
+            return {
+                ...state,
+                detail
+            };
+        }
+        case ActionTypes.LIKE_STORY_SUCCESS: {
+            const { isStoryLiked } = action.payload.results
+
+            const detail = { ...state.detail }
+
+            if (isStoryLiked) {
+                detail.totalLikes += 1
+            } else {
+                detail.totalLikes -= 1
+            }
+
+            return {
+                ...state,
+                detail
+            };
+        }
+        case ActionTypes.FOLLOW_STORY_SUCCESS: {
+            const { isStoryFollowed } = action.payload.results
+
+            const detail = { ...state.detail }
+
+            if (isStoryFollowed) {
+                detail.totalFollows += 1
+            } else {
+                detail.totalFollows -= 1
+            }
+
+            return {
+                ...state,
+                detail
+            };
+        }
         default:
             return state;
     }

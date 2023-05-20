@@ -27,7 +27,8 @@ const {
     onCommentStory,
     onGetStoryComment,
     onLikeComment,
-    onGetFollowStory,
+    onCheckStoryFollow,
+    onCheckStoryLike,
 } = require('./controllers');
 const { posterMulter, validateStoryUploader, validateStoryChapter, validateStoryExist } = require('./middlewares');
 const router = express.Router();
@@ -66,7 +67,11 @@ router.delete('/:id/follow', passport.authenticate('jwt', { session: false }), v
 
 router.post('/:id/follow', passport.authenticate('jwt', { session: false }), validateStoryExist, onFollowStory);
 
+router.get('/:id/follow', passport.authenticate('jwt', { session: false }), validateStoryExist, onCheckStoryFollow);
+
 router.post('/:id/like', passport.authenticate('jwt', { session: false }), validateStoryExist, onLikeStory);
+
+router.get('/:id/like', passport.authenticate('jwt', { session: false }), validateStoryExist, onCheckStoryLike);
 
 router.post('/:id/rating', passport.authenticate('jwt', { session: false }), validateStoryExist, onRatingStory);
 

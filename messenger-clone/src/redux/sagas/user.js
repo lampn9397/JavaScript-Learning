@@ -57,6 +57,7 @@ function* getUserInfo() {
         yield put({ type: ActionTypes.GET_USERINFO_FAILED });
     }
 }
+
 function* searchUser(action) {
     try {
 

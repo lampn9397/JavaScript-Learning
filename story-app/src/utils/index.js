@@ -1,7 +1,11 @@
+import { notification } from "antd";
+
 export const apiErrorHandle = (error) => {
     const errorMessage = error.response?.data?.message ?? error.message;
 
-    alert(errorMessage)
+    notification.error({
+        message: errorMessage,
+    });
 
     return errorMessage
 }
@@ -26,4 +30,8 @@ export const getGenderLabel = (gender) => {
         OTHER: 'Khác',
     }
     return Gender[gender]
+}
+
+export const getUserDisplayName = (user) => {
+    return user?.name || user?.username
 }

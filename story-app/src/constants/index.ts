@@ -146,6 +146,10 @@ export const axiosClient = axios.create({
     baseURL: `${host}`
 });
 
+export enum LocalStorageKey {
+    TOKEN = "TOKEN",
+}
+
 export const pageLimit = 10
 
 

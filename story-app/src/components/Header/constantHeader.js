@@ -2,6 +2,7 @@ import { UserOutlined, LockOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 import styles from './style.module.css'
+import { Button } from 'antd';
 
 export const items = [
     {
@@ -23,12 +24,12 @@ export const items = [
         ),
     },
     {
-        key: '3',
+        key: 'logOut',
         label: (
-            <Link to="https://www.luohanacademy.com" >
+            <div>
                 <LogoutOutlined className={styles.marginIcon} />
                 Đăng xuất
-            </Link>
+            </div>
         ),
     },
 ];

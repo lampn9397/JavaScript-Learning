@@ -4,6 +4,7 @@ import { put, takeEvery } from 'redux-saga/effects';
 import { axiosClient } from '../../constants'
 import { apiErrorHandle } from '../../utils';
 import { ReduxAction } from '@/constants/types/redux';
+import { notification } from 'antd';
 
 function* getRatingsAction({ payload }: ReduxAction) {
     try {
@@ -32,6 +33,35 @@ function* getRatingsAction({ payload }: ReduxAction) {
     }
 }
 
+function* createRatingsAction({ payload }: ReduxAction) {
+    try {
+        const { data } = yield axiosClient.post(`/story/${payload.storyId}/rating`, payload);
+
+        const success = true
+
+        payload.callback(success) //tat modal
+
+        notification.success({
+            message: 'Gửi Đánh Giá Thành Công',
+        });
+
+        yield put({
+            type: ActionTypes.RATING_STORY_SUCCESS,
+            payload: {
+                results: data.results,
+            }
+        });
+
+    } catch (error) {
+        apiErrorHandle(error)
+
+        yield put({
+            type: ActionTypes.RATING_STORY_FAILED,
+        });
+    }
+}
+
 export default function* Rating() {
     yield takeEvery(ActionTypes.GET_RATINGS, getRatingsAction);
+    yield takeEvery(ActionTypes.RATING_STORY, createRatingsAction);
 }

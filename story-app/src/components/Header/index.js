@@ -11,6 +11,7 @@ import { publicRoutes } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ActionTypes from "../../redux/actionTypes";
 import AuthModal from '../AuthModal';
+import { getUserDisplayName } from '../../utils';
 
 const { useToken } = theme;
 
@@ -31,13 +32,17 @@ function Header() {
         dispatch({ type: ActionTypes.TOGGLE_AUTH_MODAL })
     }, [dispatch])
 
+    const onClickDropdownItem = React.useCallback((item) => {
+        if (item.key === "logOut") dispatch({ type: ActionTypes.CHECK_LOG_OUT })
+    }, [dispatch])
+
     const dropDownRender = React.useCallback((menu) => {
         return (
             <div style={contentStyle} className={styles.menuContentContainer}>
 
                 <div className={styles.userInforContainer}>
                     <Avatar size={48} icon={<UserOutlined />} />
-                    <div className={styles.userInfor}>Ngo Duc Minh Tri</div>
+                    <div className={`${styles.userInfor} long-content`}>{getUserDisplayName(user)}</div>
                 </div>
                 {React.cloneElement(menu, {
                     style: {
@@ -47,7 +52,7 @@ function Header() {
                 })}
             </div>
         )
-    }, [contentStyle])
+    }, [contentStyle, user])
 
     return (
         <div className={`${styles.HeaderContainer} resolution`}>
@@ -64,8 +69,13 @@ function Header() {
             </AutoComplete>
             <div className={styles.accountContainer}>
                 {user ? (
-                    <Dropdown menu={{ items }} placement="bottomRight" arrow={true} dropdownRender={dropDownRender}>
-                        <Avatar size={48} icon={<UserOutlined />} />
+                    <Dropdown menu={{ items, onClick: onClickDropdownItem }} placement="bottomRight" arrow={true} dropdownRender={dropDownRender} trigger={["click"]}>
+                        <div className={`${styles.accountInfo} center ${styles.loginContainer}`}>
+                            <Avatar size={24} icon={<UserOutlined />} />
+                            <div className={`${styles.userNameContainer} long-content`}>
+                                {getUserDisplayName(user)}
+                            </div>
+                        </div>
                     </Dropdown>
                 ) : (
                     <div className={`${styles.loginContainer} flex center`} onClick={onClickAuthModal}>

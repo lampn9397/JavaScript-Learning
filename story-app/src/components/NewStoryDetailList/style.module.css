@@ -51,6 +51,7 @@
 }
 
 .storyItemName {
+    word-break: break-all;
     font-size: 18px;
     overflow: hidden;
     display: -webkit-box;
@@ -92,6 +93,7 @@
 }
 
 .storyItemDescriptionContainer {
+    word-break: break-all;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 6;

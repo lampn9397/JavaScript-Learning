@@ -58,6 +58,7 @@
 .userInfor {
     font-weight: bold;
     margin-left: 12px;
+    max-width: 50px;
 }
 
 .accountContainer {
@@ -89,4 +90,13 @@
     cursor: pointer;
     color: #fff;
     border: 1px solid var(--light-red);
+}
+
+.accountInfo {
+    gap: 10px;
+    max-width: 110px;
+}
+
+.userNameContainer {
+    flex: 1;
 }

@@ -4,8 +4,17 @@ import { ConnectedRouter } from 'connected-react-router'
 
 import { history } from './redux/store';
 import { publicRoutes } from './constants'
+import { useDispatch } from 'react-redux';
+import * as ActionTypes from './redux/actionTypes'
+
 
 function App() {
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch({ type: ActionTypes.CHECK_LOGIN })
+  }, [dispatch])
+
   const renderRouteItem = React.useCallback((routeArray) => (key) => {
     let route = routeArray[key];
 

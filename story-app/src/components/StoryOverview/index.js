@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 import styles from './style.module.scss'
 import { publicRoutes } from '../../constants';
@@ -8,12 +9,88 @@ import { getChapterSlug, getChapterStatus } from '../../utils';
 import images from '../../assets'
 import { BookOutlined } from '@ant-design/icons';
 import RatingStar from '../RatingStar';
-
+import { useDispatch, useSelector } from 'react-redux';
+import * as ActionTypes from "../../redux/actionTypes";
+import RatingModal from '../RatingModal';
 function StoryOverview({ story }) {
+    const dispatch = useDispatch();
+
+    const user = useSelector((state) => state.auth.user)
+
+    const isStoryLiked = useSelector((state) => state.story.isStoryLiked)
+
+    const isStoryFollowed = useSelector((state) => state.story.isStoryFollowed)
+
+    const createRatingLoading = useSelector((state) => state.rating.createRatingLoading)
+
+    const [state, setState] = React.useState({
+        isRatingModalOpen: false,
+    })
+
     const avgStoryPoint = React.useMemo(() => {
-        if (story.totalRatings === 0) return story.totalRatings
-        return story.totalRatingPoints / story.totalRatings
+        if (story.totalRatings === 0) return 0
+        return Math.round((story.totalRatingPoints / story.totalRatings) * 10) / 10
     }, [story.totalRatingPoints, story.totalRatings])
+
+    const onClickRating = React.useCallback(() => {
+        if (user) {
+            setState((prevState) => ({ ...prevState, isRatingModalOpen: !prevState.isRatingModalOpen }))
+        } else {
+            dispatch({ type: ActionTypes.TOGGLE_AUTH_MODAL })
+        }
+    }, [dispatch, user])
+
+    const onCancleRatingModal = React.useCallback(() => {
+        setState((prevState) => ({ ...prevState, isRatingModalOpen: !prevState.isRatingModalOpen }))
+    }, [])
+
+    const onSubmitRating = React.useCallback((rating, feedback) => {
+        dispatch({
+            type: ActionTypes.RATING_STORY,
+            payload: {
+                rating,
+                feedback,
+                storyId: story._id,
+                callback: (success) => {
+                    if (success) setState((prevState) => ({ ...prevState, isRatingModalOpen: false }))
+                },
+            }
+        })
+    }, [dispatch, story._id])
+
+    const onClickLikeButton = React.useCallback(() => {
+        dispatch({
+            type: ActionTypes.LIKE_STORY,
+            payload: {
+                storyId: story._id,
+            }
+        })
+    }, [dispatch, story._id])
+
+    const onClickFollowButton = React.useCallback(() => {
+        dispatch({
+            type: ActionTypes.FOLLOW_STORY,
+            payload: {
+                storyId: story._id,
+            }
+        })
+    }, [dispatch, story._id])
+
+    React.useEffect(() => {
+        const payload = {
+            storyId: story._id,
+        }
+
+        dispatch({
+            type: ActionTypes.GET_LIKE_STORY_STATUS,
+            payload
+        })
+
+        dispatch({
+            type: ActionTypes.GET_FOLLOW_STORY_STATUS,
+            payload
+        })
+    }, [dispatch, story._id])
 
     return (
         <div className={`${styles.container} flex`}>
@@ -78,11 +155,23 @@ function StoryOverview({ story }) {
                             >
                                 Đọc Từ Đầu
                             </Link>
-                            <button className='story-action center'>
+                            <button
+                                className={classNames({
+                                    "story-action center": true,
+                                    "button-like-clicked": isStoryLiked,
+                                })}
+                                onClick={onClickLikeButton}
+                            >
                                 <img className='story-action-icon' src={images['ngon-tinh']} alt='' />
                                 Yêu Thích
                             </button>
-                            <button className='story-action center'>
+                            <button
+                                className={classNames({
+                                    "story-action center follow-button": true,
+                                    "button-follow-clicked": isStoryFollowed,
+                                })}
+                                onClick={onClickFollowButton}
+                            >
                                 <BookOutlined />
                                 Theo Dõi
                             </button>
@@ -90,16 +179,25 @@ function StoryOverview({ story }) {
                     </div>
                 </div>
                 <div className='column-container column alignCenter'>
-                    <div className='rating-container column center'>
+                    <div className='rating-container column center' onClick={onClickRating}>
                         <div className='story-total-point center'>
                             <div className='story-point'>{avgStoryPoint}</div>
                             <div className='total-point'>/5</div>
+                            <div className='rating-container-hover center'>
+                                <img src={images.add} className='add-icon' alt='' />
+                            </div>
                         </div>
                         <div className='story-number-rating center'>{story.totalRatings} Đánh Giá</div>
                     </div>
-                    <RatingStar ratingNumber={avgStoryPoint} />
+                    <RatingStar ratingNumber={avgStoryPoint} onClick={onClickRating} />
                 </div>
             </div>
+            <RatingModal
+                open={state.isRatingModalOpen}
+                oncancel={onCancleRatingModal}
+                onSubmitRating={onSubmitRating}
+                ratingStoryLoading={createRatingLoading}
+            />
         </div>
     )
 }

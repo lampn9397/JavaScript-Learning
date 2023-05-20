@@ -8,6 +8,7 @@ import { Gender } from '../../constants/types/user';
 import { getGenderLabel } from '../../utils';
 
 export interface RegisterTabProps {
+    authLoading: boolean,
     onRegister: (username: string, password: string, email: string, name: string, gender: Gender) => void
 }
 
@@ -19,7 +20,7 @@ interface State {
     gender: Gender,
 }
 
-export default function RegisterTab({ onRegister }: RegisterTabProps) {
+export default function RegisterTab({ onRegister, authLoading }: RegisterTabProps) {
 
     const [state, setState] = React.useState<State>({
         username: "",
@@ -95,7 +96,7 @@ export default function RegisterTab({ onRegister }: RegisterTabProps) {
                     <Radio value={key}>{getGenderLabel(key)}</Radio>
                 ))}
             </Radio.Group>
-            <Button className='register-butt center' onClick={onClickRegister}>Đăng Kí</Button>
+            <Button className='register-butt center' onClick={onClickRegister} loading={authLoading}>Đăng Kí</Button>
         </div>
     )
 }

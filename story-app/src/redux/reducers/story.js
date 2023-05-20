@@ -17,6 +17,8 @@ const defaultState = {
     newCompleteStoryLoading: true,
     storyByAuthorList: [],
     storyByAuthorListLoading: true,
+    isStoryLiked: false,
+    isStoryFollowed: false,
 }
 
 export default function storyReducer(state = defaultState, action) {
@@ -52,6 +54,18 @@ export default function storyReducer(state = defaultState, action) {
             return {
                 ...state,
                 storyByAuthorListLoading: false,
+            };
+        case ActionTypes.LIKE_STORY_SUCCESS: //gop case dong` 57 va 58
+        case ActionTypes.GET_LIKE_STORY_STATUS_SUCCESS:
+            return {
+                ...state,
+                isStoryLiked: action.payload.results.isStoryLiked,
+            };
+        case ActionTypes.FOLLOW_STORY_SUCCESS: //gop case dong` 57 va 58
+        case ActionTypes.GET_FOLLOW_STORY_STATUS_SUCCESS:
+            return {
+                ...state,
+                isStoryFollowed: action.payload.results.isStoryFollowed,
             };
         default:
             return state;

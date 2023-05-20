@@ -81,6 +81,18 @@
                     }
                 }
 
+                .button-like-clicked {
+                    color: var(--likes-color) !important;
+
+                    .story-action-icon {
+                        filter: invert(55%) sepia(85%) saturate(6501%) hue-rotate(344deg) brightness(113%) contrast(107%) !important;
+                    }
+                }
+
+                .button-follow-clicked {
+                    color: var(--follows-color) !important;
+                }
+
                 .story-action {
                     font-size: 16px;
                     padding: 8px 15px;
@@ -89,6 +101,12 @@
                     gap: 6px;
                     background-color: white;
                     border: 1px solid #d9d9d9;
+
+                    &.follow-button {
+                        &:hover {
+                            color: var(--follows-color) !important;
+                        }
+                    }
 
                     .story-action-icon {
                         height: 20px;
@@ -102,7 +120,6 @@
 
                         .story-action-icon {
                             filter: invert(55%) sepia(85%) saturate(6501%) hue-rotate(344deg) brightness(113%) contrast(107%);
-
                         }
                     }
                 }
@@ -118,6 +135,12 @@
                 height: 95px;
                 max-height: 95px;
                 width: 110px;
+                position: relative;
+
+                &:hover .rating-container-hover {
+                    display: flex !important;
+                    cursor: pointer;
+                }
 
                 .story-total-point {
                     height: 60px;
@@ -134,6 +157,27 @@
                         font-size: 14px;
                         color: #888;
                         margin-bottom: 17px;
+                    }
+
+                    .rating-container-hover {
+                        display: none;
+                        position: absolute;
+                        z-index: 99;
+                        top: 0;
+                        bottom: 0;
+                        right: 0;
+                        left: 0;
+                        background-color: rgba(0, 0, 0, 0.1);
+                        transition: 0.3s;
+
+                        .add-icon {
+                            --icon-size: 36px;
+                            border-radius: calc(var(--icon-size)/2);
+                            height: var(--icon-size);
+                            width: var(--icon-size);
+                            background-color: white;
+
+                        }
                     }
                 }
 

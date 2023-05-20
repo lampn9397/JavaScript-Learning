@@ -520,10 +520,41 @@ module.exports.onFollowStory = async (req, res, next) => {
             }, { $inc: { totalFollows: 1 } })
 
             await Promise.all([followPromise, updatePromise])
+        } else {
+            const deletePromise = StoryFollow.deleteOne(storyFollowModel)
+
+            const updatePromise = Story.updateOne({
+                _id: req.params.id
+            }, { $inc: { totalFollows: -1 } })
+
+            await Promise.all([deletePromise, updatePromise])
         }
 
         res.json(createResponse({
             message: "Truyện đã được theo dõi",
+            results: {
+                isStoryFollowed: !isStoryFollowed
+            }
+        }))
+
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports.onCheckStoryFollow = async (req, res, next) => {
+    try {
+        const storyFollowModel = {
+            user: req.user._id,
+            story: req.params.id,
+        }
+
+        const isStoryFollowed = await StoryFollow.exists(storyFollowModel)
+
+        res.json(createResponse({
+            message: "Truyện đã được theo dõi",
+            results: {
+                isStoryFollowed: !!isStoryFollowed
+            }
         }))
 
     } catch (error) {
@@ -571,9 +602,9 @@ module.exports.onLikeStory = async (req, res, next) => {
             story: req.params.id,
         }
 
-        const isStoryLike = await StoryLike.exists(storyLikeModel)
+        const isStoryLiked = await StoryLike.exists(storyLikeModel)
 
-        if (!isStoryLike) {
+        if (!isStoryLiked) {
             const createPromise = StoryLike.create(storyLikeModel)
 
             const updatePromise = Story.updateOne({
@@ -591,14 +622,42 @@ module.exports.onLikeStory = async (req, res, next) => {
             await Promise.all([deletePromise, updatePromise])
         }
 
-        res.json(createResponse())
+        res.json(createResponse({
+            results: {
+                isStoryLiked: !isStoryLiked
+            }
+        }))
 
     } catch (error) {
         next(error)
     }
 }
+
+module.exports.onCheckStoryLike = async (req, res, next) => {
+    try {
+        const storyLikeModel = {
+            user: req.user._id,
+            story: req.params.id,
+        }
+
+        const isStoryLiked = await StoryLike.exists(storyLikeModel)
+
+        res.json(createResponse({
+            results: {
+                //!! convert boolean , ! gia tri nguoc
+                isStoryLiked: !!isStoryLiked
+            }
+        }))
+
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports.onRatingStory = async (req, res, next) => {
     try {
+        let storyRating = null
+
         const storyRatingFilter = {
             user: req.user._id,
             story: req.params.id,
@@ -620,7 +679,7 @@ module.exports.onRatingStory = async (req, res, next) => {
 
         if (!userStoryRating) {
 
-            await StoryRating.create(storyRatingModel)
+            storyRating = await (await StoryRating.create(storyRatingModel)).populate("user", "avatar name gender")
 
             await Story.updateOne({
                 _id: req.params.id
@@ -631,7 +690,11 @@ module.exports.onRatingStory = async (req, res, next) => {
                 }
             }) //$inc: tang gia tri totallike
         } else {
-            await StoryRating.updateOne(storyRatingFilter, updateRatingModel, { runValidators: true })
+            storyRating = await StoryRating.findOneAndUpdate(
+                storyRatingFilter,
+                updateRatingModel,
+                { runValidators: true, new: true }, //new:true gia tri sau update
+            ).populate("user", "avatar name gender")
 
             await Story.updateOne({
                 _id: req.params.id
@@ -642,7 +705,9 @@ module.exports.onRatingStory = async (req, res, next) => {
             }) //$inc: tang gia tri totallike
         }
 
-        res.json(createResponse())
+        res.json(createResponse({
+            results: storyRating,
+        }))
 
     } catch (error) {
         next(error)
