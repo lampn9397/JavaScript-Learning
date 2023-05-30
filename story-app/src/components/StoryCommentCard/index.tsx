@@ -10,24 +10,50 @@ import { DetailPageProps } from '@/Pages/DetailPage/DetailPage';
 import { pageLimit } from '../../constants';
 import CommentStoryInput from '../CommentStoryInput';
 import { User } from '@/constants/types/user';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 interface Props {
     story: Story,
     commentList: Comment[],
-    user: User,//TODO: chua lap API,
+    user: User,
     getComments: DetailPageProps["getComments"]
+}
+
+interface State {
+    editingCommentId: null | string
 }
 
 export default function StoryCommentCard({ story, commentList, user, getComments }: Props) {
     const currentPage = React.useRef(1)
 
+    const commentLoading = useSelector((state: RootState) => state.comment.commentLoading)
+
+    const [state, setState] = React.useState<State>({
+        editingCommentId: null
+    })
+
     const isShowLoadButton = React.useMemo(() => (
         commentList.length % 10 === 0 && commentList.length > 0
     ), [commentList.length])
 
+    const onClickEdit = React.useCallback((commentItem: Comment) => {
+        setState((prevState) => ({ ...prevState, editingCommentId: commentItem._id }))
+    }, [])
+
+    React.useEffect(() => {
+        if (!commentLoading) setState((prevState) => ({ ...prevState, editingCommentId: null }))
+    }, [commentLoading])
+
     const renderCommentItem = React.useCallback((item: Comment) => (
-        <CommentItem item={item} key={item._id} />
-    ), [])
+        <CommentItem
+            item={item}
+            key={item._id}
+            user={user}
+            editingCommentId={state.editingCommentId}
+            onClickEdit={onClickEdit}
+        />
+    ), [onClickEdit, state.editingCommentId, user])
 
     const onClickMoreComment = React.useCallback(() => (
         getComments(story._id, ++currentPage.current, pageLimit)

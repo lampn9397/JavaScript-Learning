@@ -787,7 +787,18 @@ module.exports.onCommentStory = async (req, res, next) => {
                 message: "Bình luận không tồn tại"
             }))
 
-            storyComment = await StoryComment.findOneAndUpdate(storyCommentFilter, updateCommentModel, { runValidators: true, new: true })
+            storyComment = await StoryComment
+                .findOneAndUpdate(storyCommentFilter, updateCommentModel, { runValidators: true, new: true })
+                .populate("user", "avatar name gender")
+                .populate({
+                    path: 'childComments',
+                    populate: [
+                        {
+                            path: 'user',
+                            select: 'avatar name gender',
+                        },
+                    ],
+                })
         } else {
             //create comment
             const storyCommentModel = {
@@ -797,7 +808,9 @@ module.exports.onCommentStory = async (req, res, next) => {
                 parentComment: req.query.parentCommentId, //neu truyen parentCommentId thi dang tao reply
             }
 
-            storyComment = await StoryComment.create(storyCommentModel)
+            storyComment = await (await StoryComment
+                .create(storyCommentModel))
+                .populate("user", "avatar name gender")
 
             if (req.query.parentCommentId) {
                 await StoryComment.updateOne({ _id: req.query.parentCommentId }, {
@@ -811,6 +824,7 @@ module.exports.onCommentStory = async (req, res, next) => {
         }))
 
     } catch (error) {
+        console.log(error)
         next(error)
     }
 }
@@ -852,7 +866,7 @@ module.exports.onGetStoryComment = async (req, res, next) => {
 
 module.exports.onLikeComment = async (req, res, next) => {
     try {
-        await StoryComment.updateOne({ _id: req.params.commentId }, [{
+        const storyComment = await StoryComment.findOneAndUpdate({ _id: req.params.commentId }, [{
             $set: {
                 likedUsers: {
                     $cond: [
@@ -867,9 +881,21 @@ module.exports.onLikeComment = async (req, res, next) => {
                     ]
                 }
             }
-        }])
+        }], { new: true })
+            .populate("user", "avatar name gender")
+            .populate({
+                path: 'childComments',
+                populate: [
+                    {
+                        path: 'user',
+                        select: 'avatar name gender',
+                    },
+                ],
+            })
 
-        res.json(createResponse())
+        res.json(createResponse({
+            results: storyComment
+        }))
 
     } catch (error) {
         next(error)

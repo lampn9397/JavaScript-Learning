@@ -18,8 +18,6 @@ export default function AuthModal({ open }: Props) {
 
     const isModalOpen = useSelector((state: RootState) => state.auth.isModalOpen)
 
-    const user = useSelector((state: RootState) => state.auth.user)
-
     const authLoading = useSelector((state: RootState) => state.auth.authLoading)
 
     const oncancel = React.useCallback(() => {

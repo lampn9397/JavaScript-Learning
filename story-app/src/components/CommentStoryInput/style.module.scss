@@ -1,5 +1,7 @@
 .commentStoryInput {
     gap: 10px;
+    position: relative;
+    width: 100%;
 
     :global {
         .custom-but {
@@ -14,5 +16,21 @@
                 color: white;
             }
         }
+
+        .send-icon {
+            font-size: 18px;
+            position: absolute;
+            top: calc(50% - 9px);
+            right: 15px;
+
+            &:hover {
+                color: #1677ff;
+                cursor: pointer;
+            }
+        }
     }
+}
+
+.paddingRight {
+    padding-right: 50px !important;
 }
