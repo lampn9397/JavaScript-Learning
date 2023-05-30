@@ -6,7 +6,7 @@ import styles from './style.module.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import * as ActionTypes from '../../redux/actionTypes'
 import { RootState } from '@/redux/store';
-import { SendOutlined } from '@ant-design/icons';
+import { CloseOutlined, SendOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 
 interface Props {
@@ -15,9 +15,10 @@ interface Props {
     isEditComment?: boolean,
     initialComment?: string,
     commentId?: string,
+    onClickCloseEditComment?: () => void
 }
 
-export default function CommentStoryInput({ className = "", parentCommentId, isEditComment, initialComment = "", commentId }: Props) {
+export default function CommentStoryInput({ className = "", parentCommentId, isEditComment, initialComment = "", commentId, onClickCloseEditComment }: Props) {
     const dispatch = useDispatch();
 
     const [state, setState] = React.useState({
@@ -55,7 +56,12 @@ export default function CommentStoryInput({ className = "", parentCommentId, isE
                 })}
             />
             {isEditComment ? (
-                <SendOutlined className='send-icon' onClick={onClickSendComment} />
+                <>
+                    <SendOutlined className='send-icon' onClick={onClickSendComment} />
+                    <div className='close-icon-container' onClick={onClickCloseEditComment}>
+                        <CloseOutlined className='close-icon' />
+                    </div>
+                </>
             ) : (
                 <Button className='custom-but' onClick={onClickSendComment}>Gửi Bình Luận</Button>
             )}

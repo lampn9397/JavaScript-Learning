@@ -679,7 +679,8 @@ module.exports.onRatingStory = async (req, res, next) => {
 
         if (!userStoryRating) {
 
-            storyRating = await (await StoryRating.create(storyRatingModel)).populate("user", "avatar name gender")
+            storyRating = await (await StoryRating.create(storyRatingModel))
+                .populate("user", "avatar name gender")
 
             await Story.updateOne({
                 _id: req.params.id
@@ -741,7 +742,7 @@ module.exports.onGetRating = async (req, res, next) => {
 
 module.exports.onLikeRating = async (req, res, next) => {
     try {
-        await StoryRating.updateOne({ _id: req.params.ratingId }, [{
+        const storyRating = await StoryRating.findOneAndUpdate({ _id: req.params.ratingId }, [{
             $set: {
                 likedUsers: {
                     $cond: [
@@ -756,9 +757,11 @@ module.exports.onLikeRating = async (req, res, next) => {
                     ]
                 }
             }
-        }])
+        }], { new: true }).populate("user", "avatar name gender")
 
-        res.json(createResponse())
+        res.json(createResponse({
+            results: storyRating
+        }))
 
     } catch (error) {
         next(error)

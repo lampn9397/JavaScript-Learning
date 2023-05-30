@@ -44,6 +44,7 @@ export default function ratingReducer(state = defaultState, action: ReduxAction)
                 ...state,
                 createRatingLoading: true,
             };
+        case ActionTypes.LIKE_RATING_SUCCESS:
         case ActionTypes.RATING_STORY_SUCCESS: {
             const ratingItem = action.payload.results as Rating
 

@@ -60,8 +60,28 @@ function* createRatingsAction({ payload }: ReduxAction) {
         });
     }
 }
+function* likeRatingAction({ payload }: ReduxAction) {
+    try {
+        const { data } = yield axiosClient.put(`/story/rating/${payload.ratingId}/like`);
+
+        yield put({
+            type: ActionTypes.LIKE_RATING_SUCCESS,
+            payload: {
+                results: data.results,
+            }
+        });
+
+    } catch (error) {
+        apiErrorHandle(error)
+
+        yield put({
+            type: ActionTypes.LIKE_RATING_FAILED,
+        });
+    }
+}
 
 export default function* Rating() {
     yield takeEvery(ActionTypes.GET_RATINGS, getRatingsAction);
     yield takeEvery(ActionTypes.RATING_STORY, createRatingsAction);
+    yield takeEvery(ActionTypes.LIKE_RATING, likeRatingAction);
 }

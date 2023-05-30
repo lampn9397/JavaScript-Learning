@@ -19,12 +19,13 @@ interface Props {
     user: User,
     editingCommentId?: null | string,
     onClickEdit?: (commentItem: Comment) => void
+    onClickCloseEditComment?: () => void
 }
 interface State {
     isShowReply: boolean,
 }
 
-export default function CommentItem({ item, user, editingCommentId, onClickEdit: onClickEditProps }: Props) {
+export default function CommentItem({ item, user, editingCommentId, onClickEdit: onClickEditProps, onClickCloseEditComment }: Props) {
     const dispatch = useDispatch();
 
     const [state, setState] = React.useState<State>({
@@ -67,7 +68,7 @@ export default function CommentItem({ item, user, editingCommentId, onClickEdit:
                         <Avatar size={64} src={commentItem.user.avatar} />
                     </Link>
                     {isEditing ? (
-                        <CommentStoryInput isEditComment initialComment={commentItem.content} commentId={commentItem._id} />
+                        <CommentStoryInput onClickCloseEditComment={onClickCloseEditComment} isEditComment initialComment={commentItem.content} commentId={commentItem._id} />
                     ) : (
                         <div className='user-comment column'>
                             <div className='flex'>
@@ -92,7 +93,7 @@ export default function CommentItem({ item, user, editingCommentId, onClickEdit:
                                         <div>Trả Lời</div>
                                     </div>
                                 )}
-                                <div className='time-reply'>{moment(commentItem.updatedAt).format("HH:mm DD/MM")}</div>
+                                <div className='time-reply'>{moment(commentItem.createdAt).format("HH:mm DD/MM")}</div>
                             </div>
                         </div>
                     )}
@@ -107,7 +108,7 @@ export default function CommentItem({ item, user, editingCommentId, onClickEdit:
                 }
             </div >
         )
-    }, [editingCommentId, onClickEdit, onClickLikeComment, onClickReply, state.isShowReply, user._id])
+    }, [editingCommentId, onClickCloseEditComment, onClickEdit, onClickLikeComment, onClickReply, state.isShowReply, user._id])
 
     return renderCommentItem(item)
 }

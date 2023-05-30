@@ -41,6 +41,10 @@ export default function StoryCommentCard({ story, commentList, user, getComments
         setState((prevState) => ({ ...prevState, editingCommentId: commentItem._id }))
     }, [])
 
+    const onClickCloseEditComment = React.useCallback(() => {
+        setState((prevState) => ({ ...prevState, editingCommentId: null }))
+    }, [])
+
     React.useEffect(() => {
         if (!commentLoading) setState((prevState) => ({ ...prevState, editingCommentId: null }))
     }, [commentLoading])
@@ -52,8 +56,9 @@ export default function StoryCommentCard({ story, commentList, user, getComments
             user={user}
             editingCommentId={state.editingCommentId}
             onClickEdit={onClickEdit}
+            onClickCloseEditComment={onClickCloseEditComment}
         />
-    ), [onClickEdit, state.editingCommentId, user])
+    ), [onClickCloseEditComment, onClickEdit, state.editingCommentId, user])
 
     const onClickMoreComment = React.useCallback(() => (
         getComments(story._id, ++currentPage.current, pageLimit)

@@ -9,12 +9,20 @@ import { Avatar } from 'antd';
 import { LikeOutlined } from '@ant-design/icons';
 import { Rating } from '@/constants/types/rating';
 import RatingStar from '../RatingStar';
+import { useDispatch } from 'react-redux';
+import * as ActionTypes from '../../redux/actionTypes'
 
 interface Props {
     item: Rating,
 }
 
 export default function RatingItem({ item }: Props) {
+    const dispatch = useDispatch();
+
+    const onLikeRating = React.useCallback((ratingItem: Rating) => () => {
+        dispatch({ type: ActionTypes.LIKE_RATING, payload: { ratingId: ratingItem._id } })
+    }, [dispatch])
+
     const renderCommentItem = React.useCallback((ratingItem: Rating) => {
         return (
             <div className={styles.storyItemContainer}>
@@ -34,18 +42,18 @@ export default function RatingItem({ item }: Props) {
                                 <RatingStar ratingNumber={ratingItem.rating} size={14} />
                             </div>
                             {/*TODO: chua lap API */}
-                            <div className='like-container flex center'>
+                            <div className='like-container flex center' onClick={onLikeRating(ratingItem)}>
                                 <LikeOutlined className='custom-like' />
                                 <div>{ratingItem.likedUsers.length}</div>
                             </div>
                         </div>
                         <div className='feedback'>{ratingItem.feedback}</div>
-                        <div className='time-reply'>{moment(ratingItem.updatedAt).format("HH:mm DD/MM")}</div>
+                        <div className='time-reply'>{moment(ratingItem.createdAt).format("HH:mm DD/MM")}</div>
                     </div>
                 </div>
             </div>
         )
-    }, [])
+    }, [onLikeRating])
 
     return renderCommentItem(item)
 }
