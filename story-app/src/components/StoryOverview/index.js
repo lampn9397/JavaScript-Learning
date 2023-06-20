@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 import styles from './style.module.scss'
 import { publicRoutes } from '../../constants';
-import { getChapterSlug, getChapterStatus } from '../../utils';
+import { getChapterStatus } from '../../utils';
 import images from '../../assets'
 import { BookOutlined } from '@ant-design/icons';
 import RatingStar from '../RatingStar';
@@ -17,6 +17,8 @@ function StoryOverview({ story }) {
 
     const user = useSelector((state) => state.auth.user)
 
+    const chapterList = useSelector((state) => state.chapter.chapterList)
+
     const isStoryLiked = useSelector((state) => state.story.isStoryLiked)
 
     const isStoryFollowed = useSelector((state) => state.story.isStoryFollowed)
@@ -26,6 +28,11 @@ function StoryOverview({ story }) {
     const [state, setState] = React.useState({
         isRatingModalOpen: false,
     })
+
+    const firstChapter = React.useMemo(() => {
+        const min = Math.min(...chapterList.map((chapterItem) => chapterItem.numberOrder))
+        return chapterList.find((chapterItem) => chapterItem.numberOrder === min)
+    }, [chapterList])
 
     const avgStoryPoint = React.useMemo(() => {
         if (story.totalRatings === 0) return 0
@@ -95,10 +102,7 @@ function StoryOverview({ story }) {
     return (
         <div className={`${styles.container} flex`}>
             <Link
-                to={publicRoutes.ChapterPage({
-                    storySlug: story.slug,
-                    chapterSlug: getChapterSlug(1),
-                }).path}
+                to={publicRoutes.ChapterDetail(story.slug, firstChapter?.numberOrder).path}
                 className='poster-container'
             >
                 <img src={story.poster} alt='' className='story-poster' />
@@ -148,10 +152,7 @@ function StoryOverview({ story }) {
                         </div>
                         <div className='bottom-story-reviews flex'>
                             <Link className='read-first-chapter'
-                                to={publicRoutes.ChapterPage({
-                                    storySlug: story.slug,
-                                    chapterSlug: getChapterSlug(1),
-                                }).path}
+                                to={publicRoutes.ChapterDetail(story.slug, firstChapter?.numberOrder).path}
                             >
                                 Đọc Từ Đầu
                             </Link>

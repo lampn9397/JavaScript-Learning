@@ -14,8 +14,7 @@ import StoryCommentCard from '../../components/StoryCommentCard';
 import { pageLimit } from '../../constants';
 import RatingCard from '../../components/RatingCard';
 
-export interface DetailPageProps extends ReduxProps {
-}
+export interface DetailPageProps extends ReduxProps { }
 
 function DetailPage({
     user,

@@ -68,7 +68,7 @@ export default function ChapterList({ story, chapters, page, pageSize, storyByAu
             dataIndex: 'chapterNumber',
             render: (text, item) => (
                 <Link
-                    to={publicRoutes.ChapterDetail(story.slug, item.chapterNumber).path}
+                    to={publicRoutes.ChapterDetail(story.slug, item.numberOrder).path}
                     className="custom-link"
                 >
                     Chương {text}
@@ -81,7 +81,7 @@ export default function ChapterList({ story, chapters, page, pageSize, storyByAu
             width: "410px",
             render: (text, item) => (
                 <Link
-                    to={publicRoutes.ChapterDetail(story.slug, item.chapterNumber).path}
+                    to={publicRoutes.ChapterDetail(story.slug, item.numberOrder).path}
                     className="custom-link"
                 >
                     {text}

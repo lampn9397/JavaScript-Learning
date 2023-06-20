@@ -5,6 +5,8 @@ const defaultState = {
     newChaptersLoading: true,
     chapterList: [],
     chapterListLoading: true,
+    chapterDetail: null,
+    chapterDetailLoading: true,
 }
 
 export default function chapterReducer(state = defaultState, action) {
@@ -24,6 +26,22 @@ export default function chapterReducer(state = defaultState, action) {
             return {
                 ...state,
                 [`${action.payload.stateName}Loading`]: false,
+            };
+        case ActionTypes.GET_CHAPTER_DETAIL:
+            return {
+                ...state,
+                chapterDetailLoading: true,
+            };
+        case ActionTypes.GET_CHAPTER_DETAIL_SUCCESS:
+            return {
+                ...state,
+                chapterDetail: action.payload.results,
+                chapterDetailLoading: false,
+            };
+        case ActionTypes.GET_CHAPTER_DETAIL_FAILED:
+            return {
+                ...state,
+                chapterDetailLoading: false,
             };
         default:
             return state;

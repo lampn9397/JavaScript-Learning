@@ -6,7 +6,7 @@ import type { Chapter } from '@/constants/types/chapter';
 import styles from './style.module.scss'
 import { publicRoutes } from '../../constants/index';
 import AuthorCard from '../AuthorCard';
-import { getChapterSlug } from '../../utils';
+
 interface Props {
     story: Story,
     chapters: Chapter[],
@@ -31,10 +31,7 @@ export default function StoryIntroTab({ story, chapters, storyByAuthor }: Props)
                     <div className='column infor-detail'>
                         {chapters.map((item) => (
                             <Link className='new-chapter-color' key={item._id}
-                                to={publicRoutes.ChapterPage({
-                                    chapterSlug: getChapterSlug(item.chapterNumber),
-                                    storySlug: story.slug,
-                                }).path}
+                                to={publicRoutes.ChapterDetail(story.slug, item.numberOrder).path}
                             >
                                 Chương {item.chapterNumber} : {item.name}
                             </Link>

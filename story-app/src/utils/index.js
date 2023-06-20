@@ -10,10 +10,6 @@ export const apiErrorHandle = (error) => {
     return errorMessage
 }
 
-export const getChapterSlug = (chapterNumber) => {
-    return `chuong-${chapterNumber}`
-}
-
 export const getChapterStatus = (chapterStatus) => {
     const chapterStatusLabel = {
         ON_GOING: 'Đang ra',
@@ -35,3 +31,5 @@ export const getGenderLabel = (gender) => {
 export const getUserDisplayName = (user) => {
     return user?.name || user?.username
 }
+
+

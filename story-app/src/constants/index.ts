@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import DetailPage from '../Pages/DetailPage';
 import HomePage from '../Pages/HomePage';
+import DetailChapterPage from '../Pages/DetailChapterPage';
 
 interface FilterPageParams {
     ranking?: string, // ? = not required
@@ -30,17 +31,17 @@ export const publicRoutes = {
             component: DetailPage
         }
     },
-    ChapterDetail: (storySlug: string, chapterNumber: number) => {
-        let path = '/truyen/:storySlug/:chapterSlug'
+    ChapterDetail: (storySlug: string, numberOrder: number) => {
+        let path = '/truyen/:storySlug/:numberOrder'
 
-        if (storySlug && chapterNumber) {
-            path = `/truyen/${storySlug}/chuong-${chapterNumber}`
+        if (storySlug && numberOrder) {
+            path = `/truyen/${storySlug}/chuong-${numberOrder}`
         }
 
         return {
             path,
             exact: true,
-            component: null
+            component: DetailChapterPage
         }
     },
     AuthorPage: (id: string) => {
@@ -121,19 +122,6 @@ export const publicRoutes = {
             component: HomePage
         }
     },
-    ChapterPage: ({ storySlug, chapterSlug } = { storySlug: "", chapterSlug: "" }) => {
-        let path = '/truyen/:storySlug/:chapterSlug'
-
-        if (storySlug && chapterSlug) {
-            path = `/truyen/${storySlug}/${chapterSlug}`
-        }
-
-        return {
-            path,
-            exact: true,
-            component: DetailPage
-        }
-    }
 }
 
 export const privateRoutes = {}

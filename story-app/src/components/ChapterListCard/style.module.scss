@@ -1,0 +1,75 @@
+.chapterListCardContainer {
+    width: 800px;
+    background-color: wheat;
+    position: absolute;
+    top: 0px;
+    left: 63px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .2);
+    border: 1px solid #d8d8d8;
+    padding: 10px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    max-height: 480px;
+
+    :global {
+        .close-card {
+            position: absolute;
+            right: -3px;
+            top: -13px;
+            color: rgba(0, 0, 0, 0.45);
+            cursor: pointer;
+
+            &:hover {
+                color: rgba(0, 0, 0, 0.88);
+                background-color: rgba(0, 0, 0, 0.06);
+            }
+        }
+
+        .header-container {
+            padding: 5px 20px 0px 5px;
+            margin-top: 10px;
+            font-size: 18px;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            position: relative;
+
+            .first-chapter {
+                color: rgba(0, 0, 0, 0.25);
+            }
+
+            .first-chapter-hover:hover {
+                color: red;
+            }
+        }
+
+        .content-container {
+
+            .book-number {
+                color: #4792d2;
+                border-bottom: 1px solid #ccc;
+                padding: 10px 15px
+            }
+
+            .non-border {
+                border-bottom: none !important;
+            }
+
+            .chapter-container {
+                margin-top: 10px;
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 0px 16px;
+
+                .chapter {
+                    font-size: 18px;
+                    width: calc(50% - 10px);
+                }
+
+                .selected-chapter {
+                    color: var(--likes-color) !important;
+                }
+            }
+        }
+    }
+}

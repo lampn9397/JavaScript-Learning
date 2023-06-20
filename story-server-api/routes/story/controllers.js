@@ -353,15 +353,24 @@ module.exports.onGetChapterList = async (req, res, next) => {
 
         let query
 
-        const { sortType = 1 } = req.query; //1:ascending -1:descending
+        const { sortType = 1, sort: sortQuery } = req.query; //1:ascending -1:descending
 
-        if (req.query.sort && req.query.sort === 'createdAt') {
+        if (sortQuery === 'createdAt') {
             sort.createdAt = sortType
         }
 
-        if (req.query.sort && req.query.sort === 'bookNumber') {
+        if (sortQuery === 'bookNumber') {
             sort.bookNumber = sortType
             sort.createdAt = 1
+        }
+
+        if (sortQuery === "chapterNumber") {
+            sort.bookNumber = 1
+            sort.chapterNumber = sortType
+        }
+
+        if (sortQuery === "numberOrder") {
+            sort.numberOrder = sortType
         }
 
         if (mongoose.isObjectIdOrHexString(req.params.id)) {
@@ -399,8 +408,9 @@ module.exports.onGetChapterDetail = async (req, res, next) => {
 
         const chapterDetail = await StoryChapter.findOne({
             story: story._id,
-            chapterNumber: req.params.chapterNumber,
-        }).populate("uploader", "name")
+            numberOrder: req.params.numberOrder,
+
+        }).populate("uploader", "name").populate("story", "name")
 
         const isTimeValid = (Date.now() - requestedIPs[req.ip]) >= 180000 //thoi gian giua cac lan request  lon hon hoac = 3 phut
 

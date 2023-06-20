@@ -1,0 +1,52 @@
+.DetailChapterPageContainer {
+    :global {
+        .reading-screen-container {
+            background-color: #e5e4db;
+
+            .reading-screen {
+                margin-top: 75px;
+                padding: 10px 60px;
+                border: 1px solid #d8d8d8;
+                width: 900px;
+                background-color: rgba(245, 234, 204, .8);
+
+                .chapter-header {
+                    gap: 10px;
+                    margin-bottom: 30px;
+
+                    .story-name {
+                        font-weight: 700;
+                        font-size: 24px;
+                    }
+
+                    .chapter-number {
+                        font-size: 16px;
+
+                    }
+
+                    .uploader-container {
+                        font-size: 16px;
+                        gap: 4px;
+                        align-items: flex-end;
+
+                        .uploader {
+                            font-size: 24px;
+                            color: var(--author-color);
+                            font-weight: 700;
+                            line-height: 22px;
+                        }
+                    }
+
+                    .created-at {
+                        font-size: 16px;
+                    }
+                }
+
+                .chapter-content-container {
+                    text-align: justify;
+                    white-space: pre-wrap;
+                }
+            }
+        }
+    }
+}
