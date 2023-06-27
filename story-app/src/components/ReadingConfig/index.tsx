@@ -4,6 +4,9 @@ import styles from './style.module.scss'
 import { CommentOutlined, SettingFilled, UnorderedListOutlined } from '@ant-design/icons';
 import ChapterListCard from '../ChapterListCard';
 import classNames from 'classnames';
+import ReadingSetting from '../ReadingSetting';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 interface Props {
 }
@@ -17,11 +20,13 @@ enum ConfigItem {
     Setting = "Setting",
     Comment = "Comment",
 }
-
 export default function ReadingConfig() {
     const [state, setState] = React.useState<State>({
         selectedConfigItem: null,
     })
+
+    const theme = useSelector((state: RootState) => state.readingConfig.theme)
+
 
     const onClickConfigItem = React.useCallback((item: typeof readingConfigs[0]) => () => {
         setState((prevState) => {
@@ -43,16 +48,16 @@ export default function ReadingConfig() {
         }, {
             id: ConfigItem.Setting,
             icon: <SettingFilled />,
-            content: <div></div>
+            content: <ReadingSetting onClickClose={onClickClose} />
         }, {
             id: ConfigItem.Comment,
             icon: <CommentOutlined />,
             content: <div></div>
         },]
-    }, [])
+    }, [onClickClose])
 
     return (
-        <div className={`${styles.readingConfigContainer}`}>
+        <div className={`${styles.readingConfigContainer}`} style={{ backgroundColor: theme }}>
             {readingConfigs.map((item) => {
                 const selected = state.selectedConfigItem === item.id
 
@@ -65,6 +70,7 @@ export default function ReadingConfig() {
                             "readingConfigItem": true,
                             "selectedReadingConfigItem": selected,
                         })}
+                        style={{ backgroundColor: theme }}
                     >
                         <div className='icon-container center' onClick={onClickConfigItem(item)}>
                             {item.icon}

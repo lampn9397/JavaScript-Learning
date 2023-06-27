@@ -1,17 +1,17 @@
 export enum BackgroundColor {
-    WHITE = "white",
-    EARTH = "earth",
-    GREEN = "green",
-    BLUE = "blue",
-    PINK = "pink",
-    GREY = "grey"
+    SKIN = "rgba(248,243,233)",
+    L_WHITE = "rgba(245,234,204)",
+    L_GREEN = "rgba(230,242,230)",
+    L_BLUE = "rgba(228,241,245)",
+    PINK = "rgba(245,228,228)",
+    GREY = "rgba(224,224,224)"
 }
 
 export enum Font {
     PALATINO = 'palatino',
     TNR = 'tnr',
-    ARIAL = 'Arial',
-    GEORGIA = 'Georgia'
+    ARIAL = 'Arial, Helvetica, sans-serif',
+    GEORGIA = "Georgia, 'Times New Roman', Times, serif"
 }
 
 export enum Fontsize {

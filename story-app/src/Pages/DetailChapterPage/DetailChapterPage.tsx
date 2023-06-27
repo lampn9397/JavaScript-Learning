@@ -19,9 +19,11 @@ export default function DetailChapterPage({
     getChapterList,
     chapterList,
     chapterListLoading,
+    theme,
+    font,
 }: Props) {
     const { storySlug, numberOrder }: any = useParams();
-
+    console.log(font)
     const chapterNumber = React.useMemo(() => {
         return (numberOrder as string).replace("chuong-", "")
     }, [numberOrder])
@@ -43,7 +45,7 @@ export default function DetailChapterPage({
                 <div className='reading-screen-container'>
                     <ReadingConfig />
                     <div className='resolution center'>
-                        <div className='reading-screen'>
+                        <div className='reading-screen' style={{ backgroundColor: theme, "--font": font }}>
                             <div className='chapter-header center column'>
                                 <div className='story-name'>{chapterDetail.story.name}</div>
                                 <div className='chapter-number'>Chương {chapterDetail.chapterNumber} : {chapterDetail.name}</div>

@@ -9,6 +9,8 @@ const mapStateToProps = (state: RootState) => ({
     chapterDetailLoading: state.chapterDetail.chapterDetailLoading,
     chapterList: state.chapter.chapterList,
     chapterListLoading: state.chapter.chapterListLoading,
+    theme: state.readingConfig.theme,
+    font: state.readingConfig.font,
 });
 
 const mapDispatchToProps = {

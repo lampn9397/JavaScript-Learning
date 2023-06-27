@@ -17,6 +17,8 @@ interface Props {
 export default function ChapterListCard({ onClickClose }: Props) {
     const { storySlug, numberOrder }: any = useParams();
 
+    const theme = useSelector((state: RootState) => state.readingConfig.theme)
+
     const chapterList: Chapter[] = useSelector((state: RootState) => state.chapter.chapterList)
 
     const number = React.useMemo(() => {
@@ -48,7 +50,11 @@ export default function ChapterListCard({ onClickClose }: Props) {
     }, [chapterList])
 
     return (
-        <div className={`${styles.chapterListCardContainer}`} onClick={(e) => e.preventDefault()}>
+        <div
+            className={`${styles.chapterListCardContainer}`}
+            onClick={(e) => e.preventDefault()}
+            style={{ backgroundColor: theme }}
+        >
             <div className='header-container flex'>
                 <div className={classNames({
                     "flex": true,

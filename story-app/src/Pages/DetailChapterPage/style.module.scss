@@ -8,7 +8,10 @@
                 padding: 10px 60px;
                 border: 1px solid #d8d8d8;
                 width: 900px;
-                background-color: rgba(245, 234, 204, .8);
+
+                & * {
+                    font-family: ;
+                }
 
                 .chapter-header {
                     gap: 10px;
