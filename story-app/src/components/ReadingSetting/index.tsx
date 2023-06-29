@@ -47,6 +47,32 @@ export default function ReadingSetting({ onClickClose }: Props) {
         })
     }, [dispatch])
 
+    const onClickMinus = React.useCallback(() => {
+        const currentIndex = fontSizeList.findIndex((item) => item === fontSize)
+
+        if (currentIndex === 0) return
+
+        dispatch({
+            type: ActionTypes.SET_READING_CONFIG, payload: {
+                key: "fontSize",
+                value: fontSizeList[currentIndex - 1],
+            }
+        })
+    }, [dispatch, fontSize, fontSizeList])
+
+    const onClickPlus = React.useCallback(() => {
+        const currentIndex = fontSizeList.findIndex((item) => item === fontSize)
+
+        if (currentIndex === fontSizeList.length - 1) return
+
+        dispatch({
+            type: ActionTypes.SET_READING_CONFIG, payload: {
+                key: "fontSize",
+                value: fontSizeList[currentIndex + 1],
+            }
+        })
+    }, [dispatch, fontSize, fontSizeList])
+
     return (
         <div className={`${styles.readingSettingContainer} column`} style={{ backgroundColor: theme }}>
             <div className='header-container'>
@@ -74,16 +100,18 @@ export default function ReadingSetting({ onClickClose }: Props) {
             <div className='font-container flex'>
                 <div className={styles.labelStyle}>Kiểu chữ</div>
                 <div className='font-wrap flex'>
-                    {Object.values(Font).map((item) => {
-                        const isSelected = font === item
+                    {Object.keys(Font).map((item) => {
+                        const key = item as keyof typeof Font
+
+                        const isSelected = font === Font[key]
 
                         return (
                             <div
                                 className='font'
                                 key={item}
-                                style={{ fontFamily: item }}
+                                style={{ fontFamily: Font[key] }}
                                 data-selected={isSelected}
-                                onClick={onClickFont(item)}
+                                onClick={onClickFont(Font[key])}
                             >
                                 {item}
                             </div>
@@ -94,9 +122,9 @@ export default function ReadingSetting({ onClickClose }: Props) {
             <div className='font-size-container flex'>
                 <div className={styles.labelStyle}>Cỡ chữ</div>
                 <div className='font-size-box flex center'>
-                    <div className='change-size-box'>A-</div>
-                    <div className='font-size'>1</div>
-                    <div className='change-size-box'>A+</div>
+                    <div className='change-size-box' onClick={onClickMinus}>A-</div>
+                    <div className='font-size'>{fontSize}</div>
+                    <div className='change-size-box' onClick={onClickPlus}>A+</div>
                 </div>
             </div>
         </div>

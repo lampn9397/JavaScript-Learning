@@ -8,10 +8,10 @@ export enum BackgroundColor {
 }
 
 export enum Font {
-    PALATINO = 'palatino',
-    TNR = 'tnr',
-    ARIAL = 'Arial, Helvetica, sans-serif',
-    GEORGIA = "Georgia, 'Times New Roman', Times, serif"
+    PALATINO = "Palatino Linotype, serif",
+    TNR = "Times New Roman",
+    ARIAL = 'Arial',
+    GEORGIA = "Georgia"
 }
 
 export enum Fontsize {

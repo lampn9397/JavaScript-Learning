@@ -11,6 +11,7 @@ const mapStateToProps = (state: RootState) => ({
     chapterListLoading: state.chapter.chapterListLoading,
     theme: state.readingConfig.theme,
     font: state.readingConfig.font,
+    fontSize: state.readingConfig.fontSize,
 });
 
 const mapDispatchToProps = {
