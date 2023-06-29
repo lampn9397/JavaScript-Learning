@@ -5,9 +5,11 @@ import Header from '../../components/Header';
 import { ReduxProps } from '.';
 import { Link, useParams } from 'react-router-dom';
 import { Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+import { LeftOutlined, LoadingOutlined, RightOutlined } from '@ant-design/icons';
 import { publicRoutes } from '../../constants';
 import ReadingConfig from '../../components/ReadingConfig';
+import { getChapter } from '../../utils/chapter';
+import classNames from 'classnames';
 
 
 interface Props extends ReduxProps { }
@@ -37,6 +39,15 @@ export default function DetailChapterPage({
         getChapterList(storySlug, "chapterList", 1, 999999, "chapterNumber", "1")
     }, [getChapterList, storySlug]);
 
+    const number = React.useMemo(() => {
+        return (numberOrder as string).replace("chuong-", "")
+    }, [numberOrder])
+
+    const prevChapter = getChapter(false, +number, chapterList)
+
+    const nextChapter = getChapter(true, +number, chapterList)
+
+
     return (
         <div className={`${styles.DetailChapterPageContainer} column`}>
             <Header />
@@ -62,11 +73,42 @@ export default function DetailChapterPage({
                                 {chapterDetail.content}
                             </div>
                         </div>
-
+                        <div className='control-chapter-container center' style={{ backgroundColor: theme }}>
+                            <div className={classNames({
+                                "flex": true,
+                                "first-chapter-hover": prevChapter,
+                                "first-chapter": !prevChapter,
+                                "prevChapter-container": true,
+                                "flex-fill": true,
+                            })}>
+                                <LeftOutlined />
+                                {prevChapter?.numberOrder ? (
+                                    <Link to={publicRoutes.ChapterDetail(storySlug, prevChapter?.numberOrder).path}>Chương trước</Link>
+                                ) : (
+                                    <div>Chương trước</div>
+                                )}
+                            </div>
+                            <div className='seperator'> </div>
+                            <div className={classNames({
+                                "flex": true,
+                                "first-chapter-hover": nextChapter,
+                                "first-chapter": !nextChapter,
+                                "flex-fill": true,
+                                "next-container": true,
+                            })}>
+                                {nextChapter?.numberOrder ? (
+                                    <Link to={publicRoutes.ChapterDetail(storySlug, nextChapter?.numberOrder).path}>Chương tiếp</Link>
+                                ) : (
+                                    <div>Chương tiếp</div>
+                                )}
+                                <RightOutlined />
+                            </div>
+                        </div>
                     </div>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     )
 
 }
