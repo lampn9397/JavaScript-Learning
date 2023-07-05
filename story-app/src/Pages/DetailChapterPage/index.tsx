@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from "react-redux";
 import * as ActionTypes from '../../redux/actionTypes'
 import DetailChapterPage from "./DetailChapterPage";
 import { RootState } from "@/redux/store";
+import { pageLimit } from "../../constants";
 
 const mapStateToProps = (state: RootState) => ({
     chapterDetail: state.chapterDetail.chapterDetail,
@@ -12,6 +13,11 @@ const mapStateToProps = (state: RootState) => ({
     theme: state.readingConfig.theme,
     font: state.readingConfig.font,
     fontSize: state.readingConfig.fontSize,
+    commentList: state.comment.commentList,
+    commentListLoading: state.comment.commentListLoading,
+    detail: state.storyDetail.detail,
+    detailLoading: state.storyDetail.detailLoading,
+    user: state.auth.user,
 });
 
 const mapDispatchToProps = {
@@ -32,6 +38,20 @@ const mapDispatchToProps = {
             limit,
             sort,
             sortType,
+        }
+    }),
+
+    getstoryDetail: (payload: any) => ({
+        type: ActionTypes.GET_STORY_DETAIL,
+        payload
+    }),
+
+    getComments: (storyId: string, page = 1, limit = pageLimit) => ({
+        type: ActionTypes.GET_COMMENTS,
+        payload: {
+            storyId,
+            page,
+            limit,
         }
     }),
 };

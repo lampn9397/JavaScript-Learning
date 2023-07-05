@@ -136,6 +136,7 @@ export const axiosClient = axios.create({
 
 export enum LocalStorageKey {
     TOKEN = "TOKEN",
+    READING_PROGRESS = "READING_PROGRESS",
 }
 
 export const pageLimit = 10

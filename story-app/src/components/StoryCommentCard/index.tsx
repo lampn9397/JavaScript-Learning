@@ -17,14 +17,15 @@ interface Props {
     story: Story,
     commentList: Comment[],
     user: User,
-    getComments: DetailPageProps["getComments"]
+    getComments: DetailPageProps["getComments"],
+    containerClassname?: string,
 }
 
 interface State {
     editingCommentId: null | string
 }
 
-export default function StoryCommentCard({ story, commentList, user, getComments }: Props) {
+export default function StoryCommentCard({ story, commentList, user, getComments, containerClassname }: Props) {
     const currentPage = React.useRef(1)
 
     const commentLoading = useSelector((state: RootState) => state.comment.commentLoading)
@@ -61,11 +62,11 @@ export default function StoryCommentCard({ story, commentList, user, getComments
     ), [onClickCloseEditComment, onClickEdit, state.editingCommentId, user])
 
     const onClickMoreComment = React.useCallback(() => (
-        getComments(story._id, ++currentPage.current, pageLimit)
-    ), [getComments, story._id])
+        getComments(story?._id, ++currentPage.current, pageLimit)
+    ), [getComments, story?._id])
 
     return (
-        <div className={`${styles.storyContainer} flex`}>
+        <div className={`${styles.storyContainer} flex ${containerClassname}`}>
             <div className='column-container column'>
                 <div className='header'>
                     Lời Bình Luận Từ Độc Giả

@@ -3,6 +3,7 @@
     position: fixed;
     left: 185px;
     top: 163px;
+    z-index: 9999;
 
     :global {
         .readingConfigItem {

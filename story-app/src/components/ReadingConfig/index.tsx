@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 
 interface Props {
+    onClickCommentIcon: () => void
 }
 
 interface State {
@@ -20,25 +21,30 @@ enum ConfigItem {
     Setting = "Setting",
     Comment = "Comment",
 }
-export default function ReadingConfig() {
+export default function ReadingConfig({ onClickCommentIcon }: Props) {
     const [state, setState] = React.useState<State>({
         selectedConfigItem: null,
     })
 
     const theme = useSelector((state: RootState) => state.readingConfig.theme)
 
+    const onClickClose = React.useCallback(() => {
+        setState((prevState) => ({ ...prevState, selectedConfigItem: null }))
+    }, [])
 
     const onClickConfigItem = React.useCallback((item: typeof readingConfigs[0]) => () => {
+        if (item.id === ConfigItem.Comment) {
+            onClickCommentIcon()
+            onClickClose()
+            return
+        }
+
         setState((prevState) => {
             const selectedConfigItem = prevState.selectedConfigItem === item.id ? null : item.id
 
             return { ...prevState, selectedConfigItem }
         })
-    }, [])
-
-    const onClickClose = React.useCallback(() => {
-        setState((prevState) => ({ ...prevState, selectedConfigItem: null }))
-    }, [])
+    }, [onClickClose, onClickCommentIcon])
 
     const readingConfigs = React.useMemo(() => {
         return [{

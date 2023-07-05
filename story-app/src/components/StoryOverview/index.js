@@ -12,6 +12,7 @@ import RatingStar from '../RatingStar';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ActionTypes from "../../redux/actionTypes";
 import RatingModal from '../RatingModal';
+import { getReadingProgress } from '../../utils/chapter';
 function StoryOverview({ story }) {
     const dispatch = useDispatch();
 
@@ -24,6 +25,10 @@ function StoryOverview({ story }) {
     const isStoryFollowed = useSelector((state) => state.story.isStoryFollowed)
 
     const createRatingLoading = useSelector((state) => state.rating.createRatingLoading)
+
+    const readingProgess = React.useMemo(() => {
+        return getReadingProgress(story.slug)
+    }, [story.slug])
 
     const [state, setState] = React.useState({
         isRatingModalOpen: false,
@@ -151,11 +156,19 @@ function StoryOverview({ story }) {
                             </div>
                         </div>
                         <div className='bottom-story-reviews flex'>
-                            <Link className='read-first-chapter'
-                                to={publicRoutes.ChapterDetail(story.slug, firstChapter?.numberOrder).path}
-                            >
-                                Đọc Từ Đầu
-                            </Link>
+                            {readingProgess?.progress ? (
+                                <Link className='read-first-chapter'
+                                    to={publicRoutes.ChapterDetail(story.slug, readingProgess.progress.chapterNumberOrder).path}
+                                >
+                                    Đọc Tiếp
+                                </Link>
+                            ) : (
+                                <Link className='read-first-chapter'
+                                    to={publicRoutes.ChapterDetail(story.slug, firstChapter?.numberOrder).path}
+                                >
+                                    Đọc Từ Đầu
+                                </Link>
+                            )}
                             <button
                                 className={classNames({
                                     "story-action center": true,

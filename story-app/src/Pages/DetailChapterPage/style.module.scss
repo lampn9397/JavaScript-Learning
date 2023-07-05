@@ -2,7 +2,11 @@
     :global {
         .reading-screen-container {
             background-color: #e5e4db;
-            flex-direction: column;
+
+            .containerClassname {
+                background-color: white;
+                padding: 20px;
+            }
 
             .reading-screen {
                 margin-top: 75px;
