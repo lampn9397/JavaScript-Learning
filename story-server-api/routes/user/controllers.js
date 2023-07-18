@@ -7,6 +7,7 @@ const { jwtOptions } = require('../../utils/constants');
 const { createResponse, getFilePath } = require("../../utils/helpers");
 const Story = require('../../models/Story');
 const StoryFollow = require('../../models/StoryFollow');
+const StoryLike = require('../../models/StoryLike');
 
 module.exports.onRegister = async (req, res, next) => {
     try {
@@ -263,14 +264,21 @@ module.exports.updateProfile = async (req, res, next) => {
         next(error)
     }
 }
+
 module.exports.getUserStoryList = async (req, res, next) => {
     try {
-        const myStoryList = await Story.find({
+        const userStoryList = await Story.find({
             uploader: req.params.id
         }).populate("uploader", "name")
 
+        const totalChapters = userStoryList.reduce((total, item) => total + item.totalChapter, 0)
+
         res.json(createResponse({
-            results: myStoryList,
+            results: {
+                totalStory: userStoryList.length,
+                totalChapters,
+                stories: userStoryList,
+            },
         }))
         return
 
@@ -278,6 +286,7 @@ module.exports.getUserStoryList = async (req, res, next) => {
         next(error)
     }
 }
+
 module.exports.getMyFollowStory = async (req, res, next) => {
     try {
         const myFollowStory = await StoryFollow.find({
@@ -286,6 +295,22 @@ module.exports.getMyFollowStory = async (req, res, next) => {
 
         res.json(createResponse({
             results: myFollowStory,
+        }))
+        return
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports.getMyLikedStory = async (req, res, next) => {
+    try {
+        const myLikedStory = await StoryLike.find({
+            user: req.user._id,
+        }).populate("story")
+
+        res.json(createResponse({
+            results: myLikedStory,
         }))
         return
 

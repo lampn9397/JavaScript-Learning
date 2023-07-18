@@ -5,9 +5,9 @@ import { Avatar } from 'antd';
 import { LoginOutlined, UserOutlined } from '@ant-design/icons';
 
 import images from '../../assets';
-import { items } from './constantHeader';
-import { Link } from 'react-router-dom';
 import { publicRoutes } from '../../constants';
+import { getHeaderItem } from './constantHeader';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ActionTypes from "../../redux/actionTypes";
 import AuthModal from '../AuthModal';
@@ -69,7 +69,7 @@ function Header() {
             </AutoComplete>
             <div className={styles.accountContainer}>
                 {user ? (
-                    <Dropdown menu={{ items, onClick: onClickDropdownItem }} placement="bottomRight" arrow={true} dropdownRender={dropDownRender} trigger={["click"]}>
+                    <Dropdown menu={{ items: getHeaderItem(publicRoutes), onClick: onClickDropdownItem }} placement="bottomRight" arrow={true} dropdownRender={dropDownRender} trigger={["click"]}>
                         <div className={`${styles.accountInfo} center ${styles.loginContainer}`}>
                             <Avatar size={24} icon={<UserOutlined />} />
                             <div className={`${styles.userNameContainer} long-content`}>

@@ -265,7 +265,7 @@ module.exports.onCreateChapter = async (req, res, next) => {
             {
                 storyUpdateAt: Date.now(),
                 $inc: {
-                    totalChapters: 1
+                    totalChapter: 1
                 }
             }
         )
@@ -331,7 +331,7 @@ module.exports.onDeleteChapter = async (req, res, next) => {
             { _id: req.params.id },
             {
                 $inc: {
-                    totalChapters: -1
+                    totalChapter: -1
                 }
             }
         )

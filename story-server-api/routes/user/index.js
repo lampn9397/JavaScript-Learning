@@ -11,6 +11,7 @@ const {
     updateProfile,
     getUserStoryList,
     getMyFollowStory,
+    getMyLikedStory,
 } = require('./controllers');
 const { userAvatarMulter } = require('./middlewares');
 const router = express.Router();
@@ -28,6 +29,8 @@ router.post('/verify-recovery-password-code', onVerifyRecoveryPasswordCode);
 router.post('/reset-password', resetPassword);
 
 router.get('/story/follow', passport.authenticate('jwt', { session: false }), getMyFollowStory);
+
+router.get('/story/like', passport.authenticate('jwt', { session: false }), getMyLikedStory);
 
 router.get('/:id/story', getUserStoryList);
 

@@ -10,6 +10,8 @@ const Gender = {
 }
 
 const avatarGetter = (value) => {
+    if (value.startsWith('http')) return value
+
     return `${process.env.HOST}${value}`
 }
 
@@ -18,13 +20,12 @@ const userSchema = new Schema({
         trim: true,
         type: String,
         minlength: [1, 'Tên tài khoản phải ít nhất 1 kí tự'],
-        maxlength: [50, 'Tên người dùng tối đa 50 kí tự'],
+        maxlength: [50, 'Tên tài khoản tối đa 50 kí tự'],
         required: [true, 'Tên tài khoản là bắt buộc'],
     },
     password: {
         type: String,
         minlength: [6, 'Mật khẩu tối thiểu 6 kí tự'],
-        maxlength: [50, 'Tên người dùng tối đa 50 kí tự'],
         required: [true, 'Mật khẩu là bắt buộc'],
     },
     email: {

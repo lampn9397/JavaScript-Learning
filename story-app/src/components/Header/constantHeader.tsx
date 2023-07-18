@@ -1,14 +1,14 @@
+import React from 'react';
 import { UserOutlined, LockOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 import styles from './style.module.css'
-import { Button } from 'antd';
 
-export const items = [
+export const getHeaderItem = (publicRoutes: any) => [
     {
         key: '1',
         label: (
-            <Link to="https://www.antgroup.com" >
+            <Link to={publicRoutes.AccountPage().path}>
                 <UserOutlined className={styles.marginIcon} />
                 Trang Cá Nhân
             </Link>

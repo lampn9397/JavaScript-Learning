@@ -1,0 +1,12 @@
+.accountSettingPageContainer {
+    :global {
+        .ant-tabs {
+            padding: 5px 20px;
+            border: 1px solid #e0deda;
+        }
+    }
+}
+
+.customLabel {
+    font-size: 18px;
+}

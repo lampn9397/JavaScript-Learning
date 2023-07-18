@@ -3,6 +3,8 @@ import axios from 'axios';
 import DetailPage from '../Pages/DetailPage';
 import HomePage from '../Pages/HomePage';
 import DetailChapterPage from '../Pages/DetailChapterPage';
+import AccountPage from '../Pages/AccountPage';
+import AccountSettingPage from '../Pages/AccountSettingPage';
 
 interface FilterPageParams {
     ranking?: string, // ? = not required
@@ -68,6 +70,42 @@ export const publicRoutes = {
             path,
             exact: true,
             component: DetailPage
+        }
+    },
+    AccountPage: () => {
+        const path = '/tai-khoan'
+
+        return {
+            path,
+            exact: true,
+            component: AccountPage
+        }
+    },
+    AccountSettingPage: () => {
+        const path = '/setting'
+
+        return {
+            path,
+            exact: true,
+            component: AccountSettingPage
+        }
+    },
+    MyFollowPage: () => {
+        const path = '/my-follow'
+
+        return {
+            path,
+            exact: true,
+            component: AccountPage
+        }
+    },
+    MyLikedStoryPage: () => {
+        const path = '/my-liked-story'
+
+        return {
+            path,
+            exact: true,
+            component: AccountPage
         }
     },
     CategoryPage: (slug: string) => {

@@ -19,6 +19,12 @@ import padLock from './padLock.png'
 import email from './email.png'
 import fullName from './fullName.png'
 import add from './add.png'
+import book from './book.png'
+import author from './author.png'
+import chapterUpload from './chapterUpload.png'
+import storyUpload from './storyUpload.png'
+import voHiep2 from './voHiep2.png'
+import edit from './edit.png'
 
 const images = {
     fairytale,
@@ -42,6 +48,12 @@ const images = {
     email,
     fullName,
     add,
+    book,
+    author,
+    chapterUpload,
+    storyUpload,
+    voHiep2,
+    edit,
 }
 
 export default images

@@ -122,6 +122,54 @@ function* getfollowStoryStatusAction({ payload }) {
     }
 }
 
+function* getUserStoryListAction({ payload }) {
+    try {
+        const { data } = yield axiosClient.get(`/user/${payload.storyId}/story`);
+
+        yield put({
+            type: ActionTypes.GET_USER_STORY_LIST_SUCCESS,
+            payload: { results: data.results }
+        });
+
+    } catch (error) {
+        apiErrorHandle(error)
+
+        yield put({ type: ActionTypes.GET_USER_STORY_LIST_FAILED, });
+    }
+}
+
+function* getMyFollowStoryAction() {
+    try {
+        const { data } = yield axiosClient.get(`/user/story/follow`);
+
+        yield put({
+            type: ActionTypes.GET_MY_FOLLOW_STORY_SUCCESS,
+            payload: { results: data.results }
+        });
+
+    } catch (error) {
+        apiErrorHandle(error)
+
+        yield put({ type: ActionTypes.GET_MY_FOLLOW_STORY_FAILED, });
+    }
+}
+
+function* getMtLikedStoryAction() {
+    try {
+        const { data } = yield axiosClient.get(`/user/story/like`);
+
+        yield put({
+            type: ActionTypes.GET_MY_LIKED_STORY_SUCCESS,
+            payload: { results: data.results }
+        });
+
+    } catch (error) {
+        apiErrorHandle(error)
+
+        yield put({ type: ActionTypes.GET_MY_LIKED_STORY_FAILED, });
+    }
+}
+
 export default function* category() {
     yield takeEvery(ActionTypes.GET_STORIES, getStoriesAction);
     yield takeEvery(ActionTypes.GET_STORY_BY_AUTHOR, getStoryByAuthorAction);
@@ -129,4 +177,7 @@ export default function* category() {
     yield takeEvery(ActionTypes.GET_LIKE_STORY_STATUS, getLikeStoryStatusAction);
     yield takeEvery(ActionTypes.FOLLOW_STORY, followStoryAction);
     yield takeEvery(ActionTypes.GET_FOLLOW_STORY_STATUS, getfollowStoryStatusAction);
+    yield takeEvery(ActionTypes.GET_USER_STORY_LIST, getUserStoryListAction);
+    yield takeEvery(ActionTypes.GET_MY_FOLLOW_STORY, getMyFollowStoryAction);
+    yield takeEvery(ActionTypes.GET_MY_LIKED_STORY, getMtLikedStoryAction);
 }

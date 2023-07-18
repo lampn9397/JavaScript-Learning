@@ -73,10 +73,31 @@ function* checkLogoutAction() {
 
 }
 
+function* updateProfileAction({ payload }: ReduxAction) {
+    try {
+        const formData = new FormData();
+
+        Object.keys(payload).forEach(key => {
+            formData.append(key, payload[key])
+        });
+
+        yield axiosClient.put(`/user`, formData);
+
+        yield put({ type: ActionTypes.UPDATE_PROFILE_SUCCESS, payload: payload });
+
+
+    } catch (error) {
+        apiErrorHandle(error)
+
+        yield put({ type: ActionTypes.UPDATE_PROFILE_FAILED, });
+    }
+}
+
 
 export default function* auth() {
     yield takeLeading(ActionTypes.REGISTER, registerAction);
     yield takeLeading(ActionTypes.LOGIN, loginAction);
     yield takeLeading(ActionTypes.CHECK_LOGIN, checkLoginAction);
     yield takeLeading(ActionTypes.CHECK_LOG_OUT, checkLogoutAction);
+    yield takeLeading(ActionTypes.UPDATE_PROFILE, updateProfileAction);
 }

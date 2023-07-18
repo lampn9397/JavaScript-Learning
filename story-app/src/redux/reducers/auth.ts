@@ -1,12 +1,22 @@
 import { ReduxAction } from "@/constants/types/redux";
 
 import * as ActionTypes from "../actionTypes";
+import { User } from "@/constants/types/user";
 
-const defaultState = {
+interface State {
+    user: User | null,
+    isModalOpen: boolean,
+    authLoading: boolean,
+    checkLoginLoading: boolean,
+    updateProfileLoading: boolean,
+}
+
+const defaultState: State = {
     user: null,
     isModalOpen: false,
     authLoading: false,
     checkLoginLoading: true,
+    updateProfileLoading: true,
 }
 
 export default function authReducer(state = defaultState, action: ReduxAction) {
@@ -44,6 +54,22 @@ export default function authReducer(state = defaultState, action: ReduxAction) {
                 ...state,
                 authLoading: false,
                 checkLoginLoading: false,
+            }
+        case ActionTypes.UPDATE_PROFILE:
+            return {
+                ...state,
+                updateProfileLoading: true,
+            }
+        case ActionTypes.UPDATE_PROFILE_SUCCESS:
+            return {
+                ...state,
+                updateProfileLoading: false,
+                user: { ...state.user, ...action.payload },
+            }
+        case ActionTypes.UPDATE_PROFILE_FAILED:
+            return {
+                ...state,
+                updateProfileLoading: false,
             }
         case ActionTypes.CHECK_LOGIN_DONE:
             return {

@@ -19,6 +19,12 @@ const defaultState = {
     storyByAuthorListLoading: true,
     isStoryLiked: false,
     isStoryFollowed: false,
+    userStoryList: null,
+    userStoryListLoading: true,
+    myFollowStoryList: [],
+    myFollowStoryListLoading: true,
+    myLikedStoryList: [],
+    myLikedStoryListLoading: true
 }
 
 export default function storyReducer(state = defaultState, action) {
@@ -54,6 +60,54 @@ export default function storyReducer(state = defaultState, action) {
             return {
                 ...state,
                 storyByAuthorListLoading: false,
+            };
+        case ActionTypes.GET_USER_STORY_LIST:
+            return {
+                ...state,
+                userStoryListLoading: true,
+            };
+        case ActionTypes.GET_USER_STORY_LIST_SUCCESS:
+            return {
+                ...state,
+                userStoryList: action.payload.results,
+                userStoryListLoading: false,
+            };
+        case ActionTypes.GET_USER_STORY_LIST_FAILED:
+            return {
+                ...state,
+                userStoryListLoading: false,
+            }
+        case ActionTypes.GET_MY_FOLLOW_STORY:
+            return {
+                ...state,
+                myFollowStoryListLoading: true,
+            };
+        case ActionTypes.GET_MY_FOLLOW_STORY_SUCCESS:
+            return {
+                ...state,
+                myFollowStoryList: action.payload.results,
+                myFollowStoryListLoading: false,
+            };
+        case ActionTypes.GET_MY_FOLLOW_STORY_FAILED:
+            return {
+                ...state,
+                myFollowStoryListLoading: false,
+            };
+        case ActionTypes.GET_MY_LIKED_STORY:
+            return {
+                ...state,
+                myLikedStoryListLoading: true,
+            };
+        case ActionTypes.GET_MY_LIKED_STORY_SUCCESS:
+            return {
+                ...state,
+                myLikedStoryList: action.payload.results,
+                myLikedStoryListLoading: false,
+            };
+        case ActionTypes.GET_MY_LIKED_STORY_FAILED:
+            return {
+                ...state,
+                myLikedStoryListLoading: false,
             };
         case ActionTypes.LIKE_STORY_SUCCESS: //gop case dong` 57 va 58
         case ActionTypes.GET_LIKE_STORY_STATUS_SUCCESS:
