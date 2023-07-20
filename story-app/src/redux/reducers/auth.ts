@@ -60,12 +60,21 @@ export default function authReducer(state = defaultState, action: ReduxAction) {
                 ...state,
                 updateProfileLoading: true,
             }
-        case ActionTypes.UPDATE_PROFILE_SUCCESS:
+        case ActionTypes.UPDATE_PROFILE_SUCCESS: {
+            let user = { ...state.user }
+
+            if (action.payload.avatar) {
+                user.avatar = action.payload.avatar.filePreview
+            } else {
+                user = { ...state.user, ...action.payload }
+            }
+
             return {
                 ...state,
                 updateProfileLoading: false,
-                user: { ...state.user, ...action.payload },
+                user,
             }
+        }
         case ActionTypes.UPDATE_PROFILE_FAILED:
             return {
                 ...state,

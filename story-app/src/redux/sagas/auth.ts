@@ -4,6 +4,7 @@ import { put, takeLeading } from 'redux-saga/effects';
 import { LocalStorageKey, axiosClient } from '../../constants'
 import { apiErrorHandle } from '../../utils';
 import { ReduxAction } from '@/constants/types/redux';
+import Swal from 'sweetalert2';
 
 function* registerAction({ payload }: ReduxAction) {
     try {
@@ -78,13 +79,23 @@ function* updateProfileAction({ payload }: ReduxAction) {
         const formData = new FormData();
 
         Object.keys(payload).forEach(key => {
-            formData.append(key, payload[key])
+            if (key === "avatar") {
+                formData.append(key, payload[key].fileSend)
+            } else {
+                formData.append(key, payload[key])
+            }
         });
 
         yield axiosClient.put(`/user`, formData);
 
         yield put({ type: ActionTypes.UPDATE_PROFILE_SUCCESS, payload: payload });
 
+        Swal.fire({
+            title: "Cập nhật thành công",
+            icon: "success",
+            confirmButtonText: "Xác nhận",
+            confirmButtonColor: "#00cc44"
+        })
 
     } catch (error) {
         apiErrorHandle(error)

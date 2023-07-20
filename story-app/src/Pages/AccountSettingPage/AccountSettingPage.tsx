@@ -6,6 +6,7 @@ import styles from './style.module.scss'
 import AccountLayout from '../../components/AccountLayout';
 import ChangeProfileTab from '../../components/ChangeProfileTab';
 import ChangeAvatarTab from '../../components/ChangeAvatarTab';
+import ChangePasswordTab from '../../components/ChangePasswordTab';
 
 
 
@@ -25,7 +26,7 @@ export default function AccountSettingPage() {
         {
             key: '3',
             label: <div className={`${styles.customLabel}`}>Thay đổi mật khẩu</div>,
-            children: `Content of Tab Pane 3`,
+            children: <ChangePasswordTab />,
         },
     ];
 

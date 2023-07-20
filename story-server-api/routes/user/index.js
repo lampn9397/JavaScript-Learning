@@ -28,7 +28,7 @@ router.post('/verify-recovery-password-code', onVerifyRecoveryPasswordCode);
 
 router.post('/reset-password', resetPassword);
 
-router.get('/story/follow', passport.authenticate('jwt', { session: false }), getMyFollowStory);
+router.get('/story/follow', passport.authenticate('jwt', { session: false }), getMyFollowStory); //session = false : luu tru thong tin o phua client ,true: luu o phia server
 
 router.get('/story/like', passport.authenticate('jwt', { session: false }), getMyLikedStory);
 

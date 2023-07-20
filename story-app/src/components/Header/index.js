@@ -71,7 +71,7 @@ function Header() {
                 {user ? (
                     <Dropdown menu={{ items: getHeaderItem(publicRoutes), onClick: onClickDropdownItem }} placement="bottomRight" arrow={true} dropdownRender={dropDownRender} trigger={["click"]}>
                         <div className={`${styles.accountInfo} center ${styles.loginContainer}`}>
-                            <Avatar size={24} icon={<UserOutlined />} />
+                            <Avatar size={24} icon={<img alt="" src={user.avatar} />} />
                             <div className={`${styles.userNameContainer} long-content`}>
                                 {getUserDisplayName(user)}
                             </div>
