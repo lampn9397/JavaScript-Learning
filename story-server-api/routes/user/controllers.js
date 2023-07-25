@@ -226,6 +226,13 @@ module.exports.updateProfile = async (req, res, next) => {
 
         const user = await User.findById(req.user._id)
 
+        if (req.body.currentPassword === "" || req.body.newPassword === "") {
+            res.status(400).json(createResponse({
+                message: "Mật khẩu tối thiểu phải 6 kí tự",
+            }))
+            return
+        }
+
         if (req.body.currentPassword && req.body.newPassword) {
             const currentPassword = sha256(req.body.currentPassword).toString()
 
