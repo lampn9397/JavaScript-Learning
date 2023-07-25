@@ -6,6 +6,7 @@ import { history } from './redux/store';
 import { publicRoutes } from './constants'
 import { useDispatch } from 'react-redux';
 import * as ActionTypes from './redux/actionTypes'
+import PrivateRoute from './components/PrivateRoute';
 
 
 function App() {
@@ -35,6 +36,10 @@ function App() {
     } else {
       routeProps.component = route.component; //ten component
     }
+
+    if (route.private) return (
+      <PrivateRoute {...routeProps} />
+    )
 
     return (
       <Route

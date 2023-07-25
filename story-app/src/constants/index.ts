@@ -1,4 +1,5 @@
 import axios from 'axios';
+import React from 'react';
 
 import DetailPage from '../Pages/DetailPage';
 import HomePage from '../Pages/HomePage';
@@ -14,11 +15,22 @@ interface FilterPageParams {
     category?: string,
 }
 
-export const publicRoutes = {
-    HomePage: {
-        path: '/',
-        exact: true,
-        component: HomePage
+interface PublicRoute {
+    path: string,
+    exact: boolean,
+    component: React.ComponentType,
+    private?: boolean,
+}
+
+type FunctionRoute = (...args: any) => PublicRoute
+
+export const publicRoutes: Record<string, FunctionRoute> = {
+    HomePage: () => {
+        return {
+            path: '/',
+            exact: true,
+            component: HomePage
+        }
     },
     StoryDetail: (slug: string) => {
         let path = '/truyen/:slug'
@@ -87,7 +99,8 @@ export const publicRoutes = {
         return {
             path,
             exact: true,
-            component: AccountSettingPage
+            component: AccountSettingPage,
+            private: true,
         }
     },
     MyFollowPage: () => {

@@ -56,7 +56,7 @@ function Header() {
 
     return (
         <div className={`${styles.HeaderContainer} resolution`}>
-            <Link className={styles.logoContainer} to={publicRoutes.HomePage.path}>
+            <Link className={styles.logoContainer} to={publicRoutes.HomePage().path}>
                 <div className={styles.bookOutLineContainer}>
                     <img src={images.fairytale} className={styles.bookOutLine} alt='' />
                 </div>
