@@ -6,6 +6,7 @@ import HomePage from '../Pages/HomePage';
 import DetailChapterPage from '../Pages/DetailChapterPage';
 import AccountPage from '../Pages/AccountPage';
 import AccountSettingPage from '../Pages/AccountSettingPage';
+import MyStoryManagementPage from '../Pages/MyStoryManagementPage';
 
 interface FilterPageParams {
     ranking?: string, // ? = not required
@@ -90,16 +91,27 @@ export const publicRoutes: Record<string, FunctionRoute> = {
         return {
             path,
             exact: true,
-            component: AccountPage
+            component: AccountPage,
+            private: true,
         }
     },
     AccountSettingPage: () => {
-        const path = '/setting'
+        const path = '/dieu-chinh'
 
         return {
             path,
             exact: true,
             component: AccountSettingPage,
+            private: true,
+        }
+    },
+    MyStoryManagementPage: () => {
+        const path = '/quan-ly-truyen'
+
+        return {
+            path,
+            exact: true,
+            component: MyStoryManagementPage,
             private: true,
         }
     },

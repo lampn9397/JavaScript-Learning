@@ -23,7 +23,7 @@ export default function ProfileLayout({ children }: Props) {
     },
     {
         icon: <img className='icon' alt='' src={images.book} />,
-        link: "google.com",
+        link: publicRoutes.MyStoryManagementPage().path,
         text: "Truyện của tôi",
     },
     {

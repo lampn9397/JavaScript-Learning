@@ -4,7 +4,7 @@ const nodemailer = require("nodemailer");
 
 const User = require("../../models/User");
 const { jwtOptions } = require('../../utils/constants');
-const { createResponse, getFilePath } = require("../../utils/helpers");
+const { createResponse, getFilePath, getPaginationConfig } = require("../../utils/helpers");
 const Story = require('../../models/Story');
 const StoryFollow = require('../../models/StoryFollow');
 const StoryLike = require('../../models/StoryLike');
@@ -273,10 +273,15 @@ module.exports.updateProfile = async (req, res, next) => {
 }
 
 module.exports.getUserStoryList = async (req, res, next) => {
+    const { page, limit } = getPaginationConfig(req, 1, 99999999)
+
     try {
         const userStoryList = await Story.find({
             uploader: req.params.id
-        }).populate("uploader", "name")
+        })
+            .populate("uploader", "name")
+            .skip((page - 1) * limit)
+            .limit(limit)
 
         const totalChapters = userStoryList.reduce((total, item) => total + item.totalChapter, 0)
 

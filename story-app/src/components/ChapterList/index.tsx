@@ -95,6 +95,7 @@ export default function ChapterList({ story, chapters, page, pageSize, storyByAu
             align: "center"
         },
     ];
+
     return (
         <div className={`${styles.chapterListContainer} flex`}>
             <div className='column-container'>
