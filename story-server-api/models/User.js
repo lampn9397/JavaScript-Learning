@@ -63,14 +63,12 @@ const userSchema = new Schema({
     },
 }, { timestamps: true, versionKey: false })
 
-userSchema.pre('save', function (next) {
-
+userSchema.pre('save', function (next, options) {
     if (this.isModified('password')) {
-        this.password = sha256(this.password).toString()
+        this.password = sha256(this.password).toString();
     }
 
-    next()
-
+    next();
 });
 
 userSchema.plugin(mongooseLeanGetters);
