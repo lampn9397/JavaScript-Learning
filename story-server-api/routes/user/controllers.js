@@ -11,20 +11,18 @@ const StoryLike = require('../../models/StoryLike');
 
 module.exports.onRegister = async (req, res, next) => {
     try {
-
         const isExist = await User.exists({
             $or: [
                 { username: req.body.username, },
                 { email: req.body.email, },
             ]
-        })
+        });
 
         if (isExist) {
-            res.status(400).json(createResponse({
+            return res.status(400).json(createResponse({
                 ok: false,
-                message: "UserName hoặc Email đã tồn tại",
-            }))
-            return
+                message: "Username hoặc email đã tồn tại",
+            }));
         }
 
         const user = await User.create({
@@ -33,8 +31,9 @@ module.exports.onRegister = async (req, res, next) => {
             email: req.body.email,
             name: req.body.name,
             gender: req.body.gender,
-        })
-        user.password = undefined //json chi nhan null
+        });
+
+        user.password = undefined; //json chi nhan null
 
         const payload = { id: user._id };
 
@@ -42,10 +41,9 @@ module.exports.onRegister = async (req, res, next) => {
 
         res.json(createResponse({
             results: token,
-        }))
-
+        }));
     } catch (error) {
-        next(error)
+        next(error);
     }
 };
 
@@ -226,12 +224,12 @@ module.exports.updateProfile = async (req, res, next) => {
 
         const user = await User.findById(req.user._id)
 
-        if (req.body.currentPassword === "" || req.body.newPassword === "") {
-            res.status(400).json(createResponse({
-                message: "Mật khẩu tối thiểu phải 6 kí tự",
-            }))
-            return
-        }
+        // if (req.body.currentPassword === "" || req.body.newPassword === "") {
+        //     res.status(400).json(createResponse({
+        //         message: "Mật khẩu tối thiểu phải 6 kí tự",
+        //     }))
+        //     return
+        // }
 
         if (req.body.currentPassword && req.body.newPassword) {
             const currentPassword = sha256(req.body.currentPassword).toString()
@@ -260,7 +258,7 @@ module.exports.updateProfile = async (req, res, next) => {
             user.avatar = getFilePath(req.file)
         }
 
-        await user.save()
+        await user.save({ validateBeforeSave: true })
 
         res.json(createResponse({
             message: "Tài khoản thay đổi thành công",
