@@ -231,7 +231,7 @@ module.exports.updateProfile = async (req, res, next) => {
         //     return
         // }
 
-        if (req.body.currentPassword && req.body.newPassword) {
+        if (typeof req.body.currentPassword === 'string' && typeof req.body.newPassword === 'string') {
             const currentPassword = sha256(req.body.currentPassword).toString()
 
             const isCurrentPasswordMatched = user.password === currentPassword
