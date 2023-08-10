@@ -162,7 +162,18 @@ export default function CreateStoryPage({
             state.attachFile.fileSend,
             state.description
         )
-    }, [authorOptions, createStory, state.attachFile.fileSend, state.authorLabel, state.authorValue, state.category, state.description, state.storyGenre, state.storyName, state.tags])
+    }, [
+        authorOptions,
+        createStory,
+        state.attachFile.fileSend,
+        state.authorLabel,
+        state.authorValue,
+        state.category,
+        state.description,
+        state.storyGenre,
+        state.storyName,
+        state.tags
+    ])
 
     const storyFields = [
         {

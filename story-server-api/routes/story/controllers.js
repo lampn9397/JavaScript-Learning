@@ -152,9 +152,16 @@ module.exports.onCreateStory = async (req, res, next) => {
             isPublish: true,
             slug: getSlug(`${req.body.name}-${Date.now()}`)
         }
+
         if (req.body.tags instanceof Array) {
             story.tags = [...new Set(req.body.tags)]
         }
+
+        if (req.file) {
+            story.poster = getFilePath(req.file)
+        }
+
+        await Story.validate(story, ["name", "genre", "category", "tags", "description", "isPublish", "slug", "uploader"])
 
         if (req.body.author) {
             if (mongoose.isObjectIdOrHexString(req.body.author)) {
@@ -165,10 +172,6 @@ module.exports.onCreateStory = async (req, res, next) => {
                 story.author = author._id
             }
 
-        }
-
-        if (req.file) {
-            story.poster = getFilePath(req.file)
         }
 
         await Story.create(story)
