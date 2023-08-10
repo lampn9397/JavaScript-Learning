@@ -25,6 +25,7 @@ import chapterUpload from './chapterUpload.png'
 import storyUpload from './storyUpload.png'
 import voHiep2 from './voHiep2.png'
 import edit from './edit.png'
+import writingBook from './writingBook.png'
 
 const images = {
     fairytale,
@@ -54,6 +55,7 @@ const images = {
     storyUpload,
     voHiep2,
     edit,
+    writingBook
 }
 
 export default images

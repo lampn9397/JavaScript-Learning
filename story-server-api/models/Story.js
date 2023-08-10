@@ -26,18 +26,25 @@ const storySchema = new Schema({
         minlength: [1, 'Tên truyện dùng ít nhất 1 kí tự'],
         maxlength: [50, 'Tên truyện dùng tối đa 50 kí tự'],
         required: [true, 'Tên truyện là bắt buộc'],
+        validate: {
+            message: "Tên truyện đã tồn tại",
+            validator: async (value) => {
+                const isStoryExist = await Story.exists({ name: value })
+                return !isStoryExist
+            },
+        }
     },
     author: {
         type: Schema.Types.ObjectId,
         ref: "authors",
-        default: null,
+        required: [true, 'Tác giả là bắt buộc'],
     },
     genre: {
         type: Schema.Types.ObjectId,
         ref: 'story_genres',
         required: [true, 'Thể loại là bắt buộc'],
         validate: {
-            message: "Thể loại không hợp lệ",
+            message: "Thể loại đã tồn tại",
             validator: async (value) => {
                 const isStoryGenreExist = await StoryGenre.exists({ _id: value })
                 return isStoryGenreExist

@@ -1,8 +1,10 @@
 import * as ActionTypes from '../actionTypes'
-import { put, takeEvery } from 'redux-saga/effects';
+import { put, takeEvery, takeLeading } from 'redux-saga/effects';
 
-import { axiosClient } from '../../constants'
+import { axiosClient, publicRoutes } from '../../constants'
 import { apiErrorHandle } from '../../utils';
+import Swal from 'sweetalert2';
+import { push } from 'connected-react-router';
 
 function* getStoriesAction({ payload }) {
     try {
@@ -124,7 +126,13 @@ function* getfollowStoryStatusAction({ payload }) {
 
 function* getUserStoryListAction({ payload }) {
     try {
-        const { data } = yield axiosClient.get(`/user/${payload.storyId}/story`);
+        const searchParams = new URLSearchParams()
+
+        searchParams.set("page", payload.page)
+
+        searchParams.set("limit", payload.limit)
+
+        const { data } = yield axiosClient.get(`/user/${payload.storyId}/story?${searchParams.toString()}`);
 
         yield put({
             type: ActionTypes.GET_USER_STORY_LIST_SUCCESS,
@@ -154,7 +162,7 @@ function* getMyFollowStoryAction() {
     }
 }
 
-function* getMtLikedStoryAction() {
+function* getMyLikedStoryAction() {
     try {
         const { data } = yield axiosClient.get(`/user/story/like`);
 
@@ -170,6 +178,53 @@ function* getMtLikedStoryAction() {
     }
 }
 
+function* getStoryGenreAction({ payload }) {
+    try {
+        const { data } = yield axiosClient.get(`/story/genre`);
+
+        yield put({
+            type: ActionTypes.GET_STORY_GENRE_SUCCESS,
+            payload: { results: data.results }
+        });
+
+    } catch (error) {
+        apiErrorHandle(error)
+
+        yield put({ type: ActionTypes.GET_STORY_GENRE_FAILED, });
+    }
+}
+
+function* createStoryAction({ payload }) {
+    try {
+        const formData = new FormData();
+
+        Object.keys(payload).forEach(key => {
+            formData.append(key, payload[key])
+        });
+
+        const { data } = yield axiosClient.post(`/story`, formData);
+
+        yield put({
+            type: ActionTypes.CREATE_STORY_SUCCESS,
+            payload: { results: data.results }
+        });
+
+        yield Swal.fire({
+            title: "Cập nhật thành công",
+            icon: "success",
+            confirmButtonText: "Xác nhận",
+            confirmButtonColor: "#00cc44",
+        })
+
+        yield put(push(publicRoutes.MyStoryManagementPage().path))
+
+    } catch (error) {
+        apiErrorHandle(error)
+
+        yield put({ type: ActionTypes.CREATE_STORY_FAILED, });
+    }
+}
+
 export default function* category() {
     yield takeEvery(ActionTypes.GET_STORIES, getStoriesAction);
     yield takeEvery(ActionTypes.GET_STORY_BY_AUTHOR, getStoryByAuthorAction);
@@ -179,5 +234,7 @@ export default function* category() {
     yield takeEvery(ActionTypes.GET_FOLLOW_STORY_STATUS, getfollowStoryStatusAction);
     yield takeEvery(ActionTypes.GET_USER_STORY_LIST, getUserStoryListAction);
     yield takeEvery(ActionTypes.GET_MY_FOLLOW_STORY, getMyFollowStoryAction);
-    yield takeEvery(ActionTypes.GET_MY_LIKED_STORY, getMtLikedStoryAction);
+    yield takeEvery(ActionTypes.GET_MY_LIKED_STORY, getMyLikedStoryAction);
+    yield takeEvery(ActionTypes.GET_STORY_GENRE, getStoryGenreAction);
+    yield takeLeading(ActionTypes.CREATE_STORY, createStoryAction);
 }

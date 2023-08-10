@@ -274,18 +274,24 @@ module.exports.getUserStoryList = async (req, res, next) => {
     const { page, limit } = getPaginationConfig(req, 1, 99999999)
 
     try {
-        const userStoryList = await Story.find({
+        const totalStoryQuery = Story.find({
+            uploader: req.params.id
+        })
+
+        const userStoryListQuery = Story.find({
             uploader: req.params.id
         })
             .populate("uploader", "name")
             .skip((page - 1) * limit)
             .limit(limit)
 
+        const [totalStory, userStoryList] = await Promise.all([totalStoryQuery, userStoryListQuery])
+
         const totalChapters = userStoryList.reduce((total, item) => total + item.totalChapter, 0)
 
         res.json(createResponse({
             results: {
-                totalStory: userStoryList.length,
+                totalStory: totalStory.length,
                 totalChapters,
                 stories: userStoryList,
             },

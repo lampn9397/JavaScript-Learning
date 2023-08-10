@@ -24,7 +24,10 @@ const defaultState = {
     myFollowStoryList: [],
     myFollowStoryListLoading: true,
     myLikedStoryList: [],
-    myLikedStoryListLoading: true
+    myLikedStoryListLoading: true,
+    storyGenres: [],
+    storyGenresLoading: true,
+    createStoryLoading: true,
 }
 
 export default function storyReducer(state = defaultState, action) {
@@ -120,6 +123,37 @@ export default function storyReducer(state = defaultState, action) {
             return {
                 ...state,
                 isStoryFollowed: action.payload.results.isStoryFollowed,
+            };
+        case ActionTypes.GET_STORY_GENRE:
+            return {
+                ...state,
+                storyGenresLoading: true,
+            };
+        case ActionTypes.GET_STORY_GENRE_SUCCESS:
+            return {
+                ...state,
+                storyGenres: action.payload.results,
+                storyGenreLoading: false,
+            };
+        case ActionTypes.GET_STORY_GENRE_FAILED:
+            return {
+                ...state,
+                storyGenreLoading: false,
+            };
+        case ActionTypes.CREATE_STORY:
+            return {
+                ...state,
+                createStoryLoading: true,
+            };
+        case ActionTypes.CREATE_STORY_SUCCESS:
+            return {
+                ...state,
+                createStoryLoading: false,
+            };
+        case ActionTypes.CREATE_STORY_FAILED:
+            return {
+                ...state,
+                createStoryLoading: false,
             };
         default:
             return state;

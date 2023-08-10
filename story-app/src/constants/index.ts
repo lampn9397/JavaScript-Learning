@@ -7,6 +7,8 @@ import DetailChapterPage from '../Pages/DetailChapterPage';
 import AccountPage from '../Pages/AccountPage';
 import AccountSettingPage from '../Pages/AccountSettingPage';
 import MyStoryManagementPage from '../Pages/MyStoryManagementPage';
+import { Story } from './types/story';
+import CreateStoryPage from '../Pages/CreateStoryPage';
 
 interface FilterPageParams {
     ranking?: string, // ? = not required
@@ -25,7 +27,7 @@ interface PublicRoute {
 
 type FunctionRoute = (...args: any) => PublicRoute
 
-export const publicRoutes: Record<string, FunctionRoute> = {
+export const publicRoutes = {
     HomePage: () => {
         return {
             path: '/',
@@ -107,6 +109,54 @@ export const publicRoutes: Record<string, FunctionRoute> = {
     },
     MyStoryManagementPage: () => {
         const path = '/quan-ly-truyen'
+
+        return {
+            path,
+            exact: true,
+            component: MyStoryManagementPage,
+            private: true,
+        }
+    },
+    UpdateMyStoryPage: () => {
+        const path = '/sua-truyen'
+
+        return {
+            path,
+            exact: true,
+            component: MyStoryManagementPage,
+            private: true,
+        }
+    },
+    CreateStoryPage: () => {
+        const path = '/dang-truyen'
+
+        return {
+            path,
+            exact: true,
+            component: CreateStoryPage,
+            private: true,
+        }
+    },
+    StoryChapterManagementPage: (storyId: Story["_id"]) => {
+        let path = '/danh-sach-truyen/:storyId'
+
+        if (storyId) {
+            path = `/danh-sach-truyen/${storyId}`
+        }
+
+        return {
+            path,
+            exact: true,
+            component: MyStoryManagementPage,
+            private: true,
+        }
+    },
+    CreateStoryChapter: (storyId: Story["_id"]) => {
+        let path = '/dang-chuong/:storyId'
+
+        if (storyId) {
+            path = `/dang-chuong/${storyId}`
+        }
 
         return {
             path,

@@ -28,7 +28,7 @@ export default function ProfileLayout({ children }: Props) {
     },
     {
         icon: <img className='icon' alt='' src={images.storyUpload} />,
-        link: "google.com",
+        link: publicRoutes.CreateStoryPage().path,
         text: "Đăng truyện",
     },
     {

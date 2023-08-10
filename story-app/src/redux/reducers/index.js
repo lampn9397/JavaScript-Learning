@@ -10,6 +10,8 @@ import ratingReducer from './rating'
 import authReducer from './auth'
 import chapterDetailReducer from './chapterDetail'
 import readingConfigReducer from './readingConfig'
+import tagReducer from './tag'
+import authorReducer from './author'
 
 const createRootReducer = (history) => combineReducers({
     router: connectRouter(history),
@@ -21,7 +23,9 @@ const createRootReducer = (history) => combineReducers({
     rating: ratingReducer,
     auth: authReducer,
     chapterDetail: chapterDetailReducer,
-    readingConfig: readingConfigReducer
+    readingConfig: readingConfigReducer,
+    tag: tagReducer,
+    author: authorReducer,
 });
 
 export default createRootReducer;

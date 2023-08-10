@@ -5,16 +5,17 @@ export interface StoryTag {
     name: string,
     slug: string,
 }
+export interface Genre {
+    _id: string,
+    name: string,
+    slug: string,
+}
 
 export interface Story {
     _id: string,
     name: string,
     author: Author,
-    genre: {
-        _id: string,
-        name: string,
-        slug: string,
-    },
+    genre: Genre,
     category: {
         _id: string,
         name: string,

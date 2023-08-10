@@ -13,8 +13,10 @@ export default function PrivateRoute({ component: Component, ...props }: RoutePr
 
     const user = useSelector((state: RootState) => state.auth.user)
 
+    const checkLoginLoading = useSelector((state: RootState) => state.auth.checkLoginLoading)
+
     return (
-        <Route {...props} component={user ? Component : HomePageRedirect} />
+        <Route {...props} component={user || checkLoginLoading ? Component : HomePageRedirect} />
     )
 
 }

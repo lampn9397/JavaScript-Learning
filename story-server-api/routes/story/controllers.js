@@ -740,6 +740,7 @@ module.exports.onGetRating = async (req, res, next) => {
             .populate("user", "avatar name gender")
             .skip((page - 1) * limit)
             .limit(limit)
+            .lean({ getters: true })
 
         res.json(createResponse({
             results: listRating
@@ -867,6 +868,7 @@ module.exports.onGetStoryComment = async (req, res, next) => {
             })
             .skip((page - 1) * limit)
             .limit(limit)
+            .lean({ getters: true })
 
         res.json(createResponse({
             results: listComment
