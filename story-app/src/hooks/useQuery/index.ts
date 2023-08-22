@@ -6,4 +6,3 @@ export default function useQuery() {
 
     return React.useMemo(() => new URLSearchParams(search), [search]);
 }
-

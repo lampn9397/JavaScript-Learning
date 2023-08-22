@@ -9,6 +9,9 @@ import AccountSettingPage from '../Pages/AccountSettingPage';
 import MyStoryManagementPage from '../Pages/MyStoryManagementPage';
 import { Story } from './types/story';
 import CreateStoryPage from '../Pages/CreateStoryPage';
+import CreateStoryChapterPage from '../Pages/CreateStoryChapterPage';
+import StoryChapterManagementPage from '../Pages/StoryChapterManagementPage';
+import { Chapter } from './types/chapter';
 
 interface FilterPageParams {
     ranking?: string, // ? = not required
@@ -147,21 +150,35 @@ export const publicRoutes = {
         return {
             path,
             exact: true,
-            component: MyStoryManagementPage,
+            component: StoryChapterManagementPage,
             private: true,
         }
     },
-    CreateStoryChapter: (storyId: Story["_id"]) => {
+    CreateStoryChapter: (storyId?: Story["_id"]) => {
         let path = '/dang-chuong/:storyId'
 
-        if (storyId) {
+        if (typeof storyId === 'string') {
             path = `/dang-chuong/${storyId}`
         }
 
         return {
             path,
             exact: true,
-            component: MyStoryManagementPage,
+            component: CreateStoryChapterPage,
+            private: true,
+        }
+    },
+    UpdateStoryChapter: (storyId?: Story["_id"], chapterId?: Chapter["_id"]) => {
+        let path = 'truyen/:storyId/sua-chuong/:chapterId'
+
+        if (storyId && chapterId) {
+            path = `truyen/${storyId}/sua-chuong/${chapterId}`
+        }
+
+        return {
+            path,
+            exact: true,
+            component: CreateStoryChapterPage,
             private: true,
         }
     },

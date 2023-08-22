@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './style.module.scss'
 import Header from '../Header';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { publicRoutes } from '../../constants';
 import { UserOutlined } from '@ant-design/icons';
 import images from '../../assets';
@@ -15,6 +15,8 @@ interface Props {
 export default function ProfileLayout({ children }: Props) {
 
     const location = useLocation()
+
+    const { storyId }: any = useParams();
 
     const items = React.useMemo(() => [{
         icon: <UserOutlined style={{ fontSize: "24px" }} />,
@@ -33,7 +35,7 @@ export default function ProfileLayout({ children }: Props) {
     },
     {
         icon: <img className='icon' alt='' src={images.chapterUpload} />,
-        link: "google.com",
+        link: publicRoutes.CreateStoryChapter("").path,
         text: "Đăng chương",
     },
     {
@@ -49,7 +51,17 @@ export default function ProfileLayout({ children }: Props) {
             <div className='body-container flex'>
                 <div className='menu-list column'>
                     {items.map((item) => {
-                        const isSelected = location.pathname === item.link
+                        let isSelected = location.pathname.includes(item.link)
+
+                        let to = item.link
+
+                        if (to === publicRoutes.CreateStoryChapter("").path) {
+                            to = publicRoutes.MyStoryManagementPage().path
+                        }
+
+                        if (item.link === publicRoutes.MyStoryManagementPage().path && location.pathname.includes(publicRoutes.StoryChapterManagementPage(storyId).path)) {
+                            isSelected = true
+                        }
 
                         return (
                             <Link
@@ -57,7 +69,7 @@ export default function ProfileLayout({ children }: Props) {
                                     "menu-item-container": true,
                                     "isSelected": isSelected,
                                 })}
-                                to={item.link}
+                                to={to}
                                 key={item.text}
                             >
                                 {item.icon}

@@ -90,6 +90,21 @@ const storyChapterSchema = new Schema({
         type: String,
         minlength: [1, 'Tên quyển dùng ít nhất 1 kí tự'],
         maxlength: [50, 'Tên quyển dùng tối đa 50 kí tự'],
+        validate: [
+            {
+                message: "Trùng số quyển không được tạo mới tên quyển",
+                validator: async function (value) {
+                    const chapterWithSameBookNumber = await StoryChapter.findOne({
+                        story: this.story,
+                        bookNumber: this.bookNumber,
+                    })
+
+                    if (!chapterWithSameBookNumber) return true
+
+                    return chapterWithSameBookNumber.bookName === value
+                },
+            }
+        ]
     },
     content: {
         type: String,

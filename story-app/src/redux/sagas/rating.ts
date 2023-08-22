@@ -60,6 +60,7 @@ function* createRatingsAction({ payload }: ReduxAction) {
         });
     }
 }
+
 function* likeRatingAction({ payload }: ReduxAction) {
     try {
         const { data } = yield axiosClient.put(`/story/rating/${payload.ratingId}/like`);

@@ -105,6 +105,7 @@ export default function ChapterList({ story, chapters, page, pageSize, storyByAu
                     loading={loading}
                     rowKey={(item) => item._id}
                     title={renderTableTitle}
+                    pagination={false}
                 />
             </div>
             <AuthorCard author={story.author} storyByAuthor={storyByAuthor} />

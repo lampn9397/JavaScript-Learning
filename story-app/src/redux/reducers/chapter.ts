@@ -1,15 +1,28 @@
+import { Chapter } from "@/constants/types/chapter";
 import * as ActionTypes from "../actionTypes";
+import { ReduxAction } from "@/constants/types/redux";
 
-const defaultState = {
+interface DefaultState {
+    newChapters: Chapter[],
+    newChaptersLoading: boolean,
+    chapterList: Chapter[],
+    chapterListLoading: boolean,
+    chapterDetail: Chapter | null,
+    chapterDetailLoading: boolean,
+    createStoryChapterLoading: boolean,
+}
+
+const defaultState: DefaultState = {
     newChapters: [],
     newChaptersLoading: true,
     chapterList: [],
     chapterListLoading: true,
     chapterDetail: null,
     chapterDetailLoading: true,
+    createStoryChapterLoading: false,
 }
 
-export default function chapterReducer(state = defaultState, action) {
+export default function chapterReducer(state = defaultState, action: ReduxAction) {
     switch (action.type) {
         case ActionTypes.GET_CHAPTERS:
             return {
@@ -42,6 +55,21 @@ export default function chapterReducer(state = defaultState, action) {
             return {
                 ...state,
                 chapterDetailLoading: false,
+            };
+        case ActionTypes.CREATE_STORY_CHAPTER:
+            return {
+                ...state,
+                createStoryChapterLoading: true,
+            };
+        case ActionTypes.CREATE_STORY_CHAPTER_SUCCESS:
+            return {
+                ...state,
+                createStoryChapterLoading: false,
+            };
+        case ActionTypes.CREATE_STORY_CHAPTER_FAILED:
+            return {
+                ...state,
+                createStoryChapterLoading: false,
             };
         default:
             return state;

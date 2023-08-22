@@ -1,0 +1,59 @@
+.createStoryChapterPageContainer {
+    border: 1px solid #e0deda;
+    padding: 25px;
+    flex: 1;
+
+    :global {
+        .header-container {
+            gap: 20px;
+            font-size: 30px;
+            border-bottom: 1px solid #eeeeee;
+            width: 100%;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+
+            .writing-book-icon {
+                height: 50px;
+                width: 45px;
+            }
+
+            .header-label {
+                margin-top: 12px;
+            }
+        }
+
+        .body-container {
+            gap: 20px;
+
+            .item-container {
+                gap: 20px;
+
+                &[data-label*="Nội dung"] {
+                    align-items: unset;
+                }
+
+                .item-label {
+                    width: 110px;
+                }
+
+                .component-container {
+                    flex: 1;
+
+                    .custon-select {
+                        width: 100% !important;
+                    }
+                }
+            }
+        }
+
+        .submit-button-container {
+            margin-top: 20px;
+            height: 35px;
+            width: 115px;
+            font-size: 16px;
+            align-self: center;
+            padding: 0px 65px;
+        }
+    }
+
+}
