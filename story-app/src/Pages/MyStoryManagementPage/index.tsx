@@ -12,6 +12,7 @@ import { publicRoutes } from '../../constants';
 import { PlusOutlined } from '@ant-design/icons';
 import useQuery from '../../hooks/useQuery';
 import ProfileLayout from '../../components/ProfileLayout';
+import { getQueryStringValue, updateQueryString } from '../../utils/query';
 
 export default function MyStoryManagementPage() {
 
@@ -29,48 +30,19 @@ export default function MyStoryManagementPage() {
 
     const stories = userStoryList?.stories ?? []
 
-    const updateQueryString = React.useCallback((params: any) => {
-        for (const key in params) {
-            query.set(key, `${params[key]}`)
-        }
-
-        history.push({
-            pathname: location.pathname,
-            search: `?${query.toString()}`
-        })
-    }, [history, location.pathname, query])
-
     const currentPage = React.useMemo(() => {
-        let currentPageValue: number | string = query.get("page") || 1
-
-        if (currentPageValue) {
-            currentPageValue = +currentPageValue
-
-            if (isNaN(currentPageValue)) {
-                currentPageValue = 1
-            }
-        }
-
-        return currentPageValue as number
+        return getQueryStringValue(query, "page", 1)
     }, [query])
+
 
     const pageSize = React.useMemo(() => {
-        let pageSizeValue: number | string = query.get("limit") || 50
-
-        if (pageSizeValue) {
-            pageSizeValue = +pageSizeValue
-
-            if (isNaN(pageSizeValue)) {
-                pageSizeValue = 50
-            }
-        }
-
-        return pageSizeValue as number
+        return getQueryStringValue(query, "limit", 50)
     }, [query])
 
+
     const onChangePagination = React.useCallback((page: number, pageSize: number) => {
-        updateQueryString({ page, limit: pageSize })
-    }, [updateQueryString])
+        updateQueryString(query, history, location, { page, limit: pageSize })
+    }, [history, location, query])
 
     React.useEffect(() => {
         if (user) {

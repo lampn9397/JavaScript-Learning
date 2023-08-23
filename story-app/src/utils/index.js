@@ -1,6 +1,4 @@
-import useQuery from "@/hooks/useQuery";
 import { notification } from "antd";
-import { useHistory, useLocation } from "react-router-dom";
 
 export const apiErrorHandle = (error) => {
     const errorMessage = error.response?.data?.message ?? error.message;

@@ -9,7 +9,7 @@ import useQuery from '../../hooks/useQuery';
 import Table, { ColumnsType } from 'antd/es/table';
 import { Chapter } from '../../constants/types/chapter';
 import { publicRoutes } from '../../constants';
-import { getQueryStringValue } from '@/utils/query';
+import { getQueryStringValue, updateQueryString } from '../../utils/query';
 
 interface Props extends ReduxProps { }
 
@@ -31,58 +31,22 @@ export default function ChapterManagementPage({
 
     const location = useLocation();
 
-    const updateQueryString = React.useCallback((params: any) => {
-        for (const key in params) {
-            query.set(key, `${params[key]}`)
-        }
-
-        history.push({
-            pathname: location.pathname,
-            search: `?${query.toString()}`
-        })
-    }, [history, location.pathname, query])
-
     const createdAtSort = React.useMemo(() => {
-        let createdAtSortValue: string = query.get("createdAt") || "-1"
-
-        return createdAtSortValue
+        return getQueryStringValue(query, "createdAt", "-1")
     }, [query])
 
     const currentPage = React.useMemo(() => {
-        let currentPageValue: number | string = query.get("page") || 1
-
-        if (currentPageValue) {
-            currentPageValue = +currentPageValue
-
-            if (isNaN(currentPageValue)) {
-                currentPageValue = 1
-            }
-        }
-
-        return currentPageValue as number
+        return getQueryStringValue(query, "page", 1)
     }, [query])
+
 
     const pageSize = React.useMemo(() => {
-        let pageSizeValue: number | string = query.get("limit") || 50
-
-        if (pageSizeValue) {
-            pageSizeValue = +pageSizeValue
-
-            if (isNaN(pageSizeValue)) {
-                pageSizeValue = 50
-            }
-        }
-
-        return pageSizeValue as number
+        return getQueryStringValue(query, "limit", 50)
     }, [query])
 
-    // const pageSize = React.useMemo(() => {
-    //     return getQueryStringValue(query, "limit", 50)
-    // }, [query])
-
     const onChangePagination = React.useCallback((page: number, pageSize: number) => {
-        updateQueryString({ page, limit: pageSize })
-    }, [updateQueryString])
+        updateQueryString(query, history, location, { page, limit: pageSize })
+    }, [history, location, query])
 
     const columns: ColumnsType<Chapter> = [
         {
