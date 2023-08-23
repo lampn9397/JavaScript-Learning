@@ -33,64 +33,122 @@ const {
 const { posterMulter, validateStoryUploader, validateStoryChapter, validateStoryExist } = require('./middlewares');
 const router = express.Router();
 
-router.get('/category', onGetCategory)
+router.get('/category', onGetCategory);
 
-router.post('/category', onCreateCategory)
+router.post('/category', onCreateCategory);
 
-router.get('/genre', onGetGenre)
+router.get('/genre', onGetGenre);
 
-router.post('/genre', onCreateGenre)
+router.post('/genre', onCreateGenre);
 
-router.get('/tag', onGetTag)
+router.get('/tag', onGetTag);
 
-router.post('/tag', onCreateTag)
+router.post('/tag', onCreateTag);
 
-router.put('/rating/:ratingId/like', passport.authenticate('jwt', { session: false }), onLikeRating);
+router.put('/rating/:ratingId/like',
+    passport.authenticate('jwt', { session: false }),
+    onLikeRating,
+);
 
-router.put('/comment/:commentId/like', passport.authenticate('jwt', { session: false }), onLikeComment);
+router.put('/comment/:commentId/like',
+    passport.authenticate('jwt', { session: false }),
+    onLikeComment,
+);
 
-router.post('/:id/chapter', passport.authenticate('jwt', { session: false }), validateStoryUploader, onCreateChapter)
+router.post('/:id/chapter',
+    passport.authenticate('jwt', { session: false }),
+    validateStoryUploader,
+    onCreateChapter,
+);
 
-router.put('/:id/chapter/:chapterId', passport.authenticate('jwt', { session: false }), validateStoryUploader, validateStoryChapter, onUpdateChapter)
+router.put('/:id/chapter/:chapterId',
+    passport.authenticate('jwt', { session: false }),
+    validateStoryUploader,
+    validateStoryChapter,
+    onUpdateChapter,
+);
 
-router.delete('/:id/chapter/:chapterId', passport.authenticate('jwt', { session: false }), validateStoryUploader, validateStoryChapter, onDeleteChapter)
+router.delete('/:id/chapter/:chapterId',
+    passport.authenticate('jwt', { session: false }),
+    validateStoryUploader,
+    validateStoryChapter,
+    onDeleteChapter,
+);
 
-router.get('/:id/chapter', onGetChapterList)
+router.get('/:id/chapter', onGetChapterList);
 
-router.get('/:id/chapter/total', onGetTotalChapterPages)
+router.get('/:id/chapter/total', onGetTotalChapterPages);
 
-router.get('/:slug/chapter/:numberOrder', onGetChapterDetail)
+router.get('/:slug/chapter/:numberOrder', onGetChapterDetail);
 
-router.get('/:id', onGetStoryDetail)
+router.get('/:id', onGetStoryDetail);
 
-router.delete('/:id/follow', passport.authenticate('jwt', { session: false }), validateStoryExist, onUnfollowStory);
+router.delete('/:id/follow',
+    passport.authenticate('jwt', { session: false }),
+    validateStoryExist,
+    onUnfollowStory,
+);
 
-router.post('/:id/follow', passport.authenticate('jwt', { session: false }), validateStoryExist, onFollowStory);
+router.post('/:id/follow',
+    passport.authenticate('jwt', { session: false }),
+    validateStoryExist,
+    onFollowStory,
+);
 
-router.get('/:id/follow', passport.authenticate('jwt', { session: false }), validateStoryExist, onCheckStoryFollow);
+router.get('/:id/follow',
+    passport.authenticate('jwt', { session: false }),
+    validateStoryExist,
+    onCheckStoryFollow,
+);
 
-router.post('/:id/like', passport.authenticate('jwt', { session: false }), validateStoryExist, onLikeStory);
+router.post('/:id/like',
+    passport.authenticate('jwt', { session: false }),
+    validateStoryExist,
+    onLikeStory,
+);
 
-router.get('/:id/like', passport.authenticate('jwt', { session: false }), validateStoryExist, onCheckStoryLike);
+router.get('/:id/like',
+    passport.authenticate('jwt', { session: false }),
+    validateStoryExist,
+    onCheckStoryLike,
+);
 
-router.post('/:id/rating', passport.authenticate('jwt', { session: false }), validateStoryExist, onRatingStory);
+router.post('/:id/rating',
+    passport.authenticate('jwt', { session: false }),
+    validateStoryExist,
+    onRatingStory,
+);
 
-router.get('/:id/rating', validateStoryExist, onGetRating);
+router.get('/:id/rating',
+    validateStoryExist,
+    onGetRating,
+);
 
-router.post('/:id/comment', passport.authenticate('jwt', { session: false }), validateStoryExist, onCommentStory);
+router.post('/:id/comment',
+    passport.authenticate('jwt', { session: false }),
+    validateStoryExist,
+    onCommentStory,
+);
 
-router.get('/:id/comment', validateStoryExist, onGetStoryComment);
+router.get('/:id/comment',
+    validateStoryExist,
+    onGetStoryComment,
+);
 
-router.get('/', onGetStory)
+router.get('/', onGetStory);
 
 router.put('/:id',
     passport.authenticate('jwt', { session: false }),
     validateStoryUploader,
     posterMulter.single("poster"),
-    onUpdateStory
-)
+    onUpdateStory,
+);
 
-router.post('/', passport.authenticate('jwt', { session: false }), posterMulter.single("poster"), onCreateStory)
+router.post('/',
+    passport.authenticate('jwt', { session: false }),
+    posterMulter.single("poster"),
+    onCreateStory,
+)
 
 
 module.exports = router;
