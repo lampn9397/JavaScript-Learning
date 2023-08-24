@@ -12,6 +12,7 @@ import CreateStoryPage from '../Pages/CreateStoryPage';
 import CreateStoryChapterPage from '../Pages/CreateStoryChapterPage';
 import StoryChapterManagementPage from '../Pages/StoryChapterManagementPage';
 import { Chapter } from './types/chapter';
+import UpdateMyStoryPage from '../Pages/UpdateMyStoryPage';
 
 interface FilterPageParams {
     ranking?: string, // ? = not required
@@ -120,13 +121,17 @@ export const publicRoutes = {
             private: true,
         }
     },
-    UpdateMyStoryPage: () => {
-        const path = '/sua-truyen'
+    UpdateMyStoryPage: (storyId: Story["_id"]) => {
+        let path = '/sua-truyen/:storyId'
+
+        if (storyId) {
+            path = `/sua-truyen/${storyId}`
+        }
 
         return {
             path,
             exact: true,
-            component: MyStoryManagementPage,
+            component: UpdateMyStoryPage,
             private: true,
         }
     },

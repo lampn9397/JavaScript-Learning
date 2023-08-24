@@ -64,7 +64,7 @@ export default function MyStoryManagementPage() {
         },
         {
             title: <div className='center'>Sửa</div>,
-            render: () => <Link className={`${styles.clickAble} center`} to={publicRoutes.UpdateMyStoryPage().path}>Sửa</Link>
+            render: (text, item, index) => <Link className={`${styles.clickAble} center`} to={publicRoutes.UpdateMyStoryPage(item._id).path}>Sửa</Link>
         },
         {
             title: <div className='center'>Quản lý chương</div>,
