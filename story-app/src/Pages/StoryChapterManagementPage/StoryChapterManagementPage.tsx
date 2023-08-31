@@ -69,7 +69,7 @@ export default function ChapterManagementPage({
         },
         {
             title: <div className='center'>Sửa</div>,
-            render: (text, item, index) => <Link className={`${styles.clickAble} center`} to={publicRoutes.UpdateStoryChapter(storyId, item._id).path}>Sửa</Link>
+            render: (text, item, index) => <Link className={`${styles.clickAble} center`} to={publicRoutes.UpdateStoryChapter(storyId, item.numberOrder).path}>Sửa</Link>
         },
     ];
 

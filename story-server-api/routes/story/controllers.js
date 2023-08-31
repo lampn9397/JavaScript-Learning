@@ -308,13 +308,23 @@ module.exports.onUpdateChapter = async (req, res, next) => {
             storyChapter.content = req.body.content
         }
 
-        await StoryChapter.findOneAndUpdate({
+        const chapter = await StoryChapter.findOneAndUpdate({
             story: req.params.id,
             _id: req.params.chapterId,
         },
             storyChapter,
             { runValidators: true }
         )
+
+        if (req.body.bookName && chapter) {
+            await StoryChapter.updateMany({
+                story: req.params.id,
+                bookNumber: chapter.bookNumber,
+            }, {
+                bookName: req.body.bookName
+            })
+        }
+
         res.json(createResponse({
             message: "Chương truyện đã cập nhật thành công"
         }))
@@ -323,6 +333,7 @@ module.exports.onUpdateChapter = async (req, res, next) => {
         next(error)
     }
 };
+
 module.exports.onDeleteChapter = async (req, res, next) => {
     try {
         await StoryChapter.deleteOne({
@@ -400,7 +411,13 @@ module.exports.onGetChapterList = async (req, res, next) => {
 
 module.exports.onGetChapterDetail = async (req, res, next) => {
     try {
-        const story = await Story.findOne({ slug: req.params.slug })
+        let story
+
+        if (mongoose.isObjectIdOrHexString(req.params.id)) {
+            story = await Story.findById(req.params.id);
+        } else {
+            story = await Story.findOne({ slug: req.params.id })
+        }
 
         if (!story) {
             return res.status(404).json(createResponse({

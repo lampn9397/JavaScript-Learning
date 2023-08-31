@@ -10,6 +10,7 @@ interface DefaultState {
     chapterDetail: Chapter | null,
     chapterDetailLoading: boolean,
     createStoryChapterLoading: boolean,
+    updateStoryChapterLoading: boolean,
 }
 
 const defaultState: DefaultState = {
@@ -20,6 +21,7 @@ const defaultState: DefaultState = {
     chapterDetail: null,
     chapterDetailLoading: true,
     createStoryChapterLoading: false,
+    updateStoryChapterLoading: false,
 }
 
 export default function chapterReducer(state = defaultState, action: ReduxAction) {
@@ -70,6 +72,21 @@ export default function chapterReducer(state = defaultState, action: ReduxAction
             return {
                 ...state,
                 createStoryChapterLoading: false,
+            };
+        case ActionTypes.UPDATE_STORY_CHAPTER:
+            return {
+                ...state,
+                updateStoryChapterLoading: true,
+            };
+        case ActionTypes.UPDATE_STORY_CHAPTER_SUCCESS:
+            return {
+                ...state,
+                updateStoryChapterLoading: false,
+            };
+        case ActionTypes.UPDATE_STORY_CHAPTER_FAILED:
+            return {
+                ...state,
+                updateStoryChapterLoading: false,
             };
         default:
             return state;

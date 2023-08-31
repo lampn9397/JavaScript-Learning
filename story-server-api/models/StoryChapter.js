@@ -94,6 +94,8 @@ const storyChapterSchema = new Schema({
             {
                 message: "Trùng số quyển không được tạo mới tên quyển",
                 validator: async function (value) {
+                    if (!this.story) return true
+
                     const chapterWithSameBookNumber = await StoryChapter.findOne({
                         story: this.story,
                         bookNumber: this.bookNumber,

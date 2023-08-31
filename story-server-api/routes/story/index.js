@@ -79,7 +79,7 @@ router.get('/:id/chapter', onGetChapterList);
 
 router.get('/:id/chapter/total', onGetTotalChapterPages);
 
-router.get('/:slug/chapter/:numberOrder', onGetChapterDetail);
+router.get('/:id/chapter/:numberOrder', onGetChapterDetail);
 
 router.get('/:id', onGetStoryDetail);
 

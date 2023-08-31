@@ -63,6 +63,25 @@ const mapDispatchToProps = {
             description
         }
     }),
+
+    updateStory: (
+        storyId: Story["_id"],
+        author: Story["author"]["name"],
+        category: Story["category"]["_id"],
+        tags: Story["tags"][0]["_id"][],
+        poster: ImageFile["fileSend"],
+        description: Story["description"]
+    ) => ({
+        type: ActionTypes.UPDATE_STORY,
+        payload: {
+            storyId,
+            author,
+            category,
+            tags,
+            poster,
+            description
+        }
+    }),
 };
 
 

@@ -17,11 +17,13 @@ interface State {
 interface Props {
     onChange: (image: ImageFile) => void
     className?: string,
+    value?: string,
 }
 
 export default function ImageFilePreview({
     onChange,
-    className
+    className,
+    value,
 }: Props) {
 
     const [state, setState] = React.useState<State>({
@@ -59,6 +61,17 @@ export default function ImageFilePreview({
         }
 
     }, [onChange])
+
+    React.useEffect(() => {
+        if (value) {
+            setState((prevState) => ({
+                ...prevState, attachFile: {
+                    filePreview: value,
+                    fileSend: null, // ?? lay ve ben phai khi ben trai chi undefine hoac null
+                }
+            }))
+        }
+    }, [value])
 
     return (
         <div className={`${styles.imageFilePreviewContainer} ${className} center column`} onClick={onClickAttackFileIcon}>

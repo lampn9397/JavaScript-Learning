@@ -31,6 +31,7 @@ export default function UpdateMyStoryPage({
     tags,
     getTags,
     createStory,
+    updateStory,
     getAuthors,
     authors,
     getstoryDetail,
@@ -47,6 +48,17 @@ export default function UpdateMyStoryPage({
         description: "",
         attachFile: { filePreview: null, fileSend: null },
     })
+
+    React.useEffect(() => {
+        if (!detail) return
+        setState((prevState) => ({
+            ...prevState,
+            authorLabel: detail.author.name,
+            tags: detail.tags.map((item: StoryTag) => item._id),
+            description: detail.description,
+            attachFile: { filePreview: detail.poster, fileSend: detail.poster }
+        }))
+    }, [detail])
 
     React.useEffect(() => {
         getStoryGenre()
@@ -144,38 +156,26 @@ export default function UpdateMyStoryPage({
         getAuthors(value)
     };
 
-    // const onClickPostStory = React.useCallback(() => {
-    //     let authorSendingValue = state.authorValue || state.authorLabel
+    const onClickUpdateStory = React.useCallback(() => {
+        let authorSendingValue = state.authorValue || state.authorLabel
 
-    //     if (state.authorLabel && !state.authorValue) {
-    //         const author = authorOptions.find((item: any) => item.label === state.authorLabel)
+        if (state.authorLabel && !state.authorValue) {
+            const author = authorOptions.find((item: any) => item.label === state.authorLabel)
 
-    //         if (author) {
-    //             authorSendingValue = author.value
-    //         }
-    //     }
+            if (author) {
+                authorSendingValue = author.value
+            }
+        }
 
-    //     createStory(
-    //         state.storyName,
-    //         authorSendingValue,
-    //         state.storyGenre,
-    //         state.category,
-    //         state.tags,
-    //         state.attachFile.fileSend,
-    //         state.description
-    //     )
-    // }, [
-    //     authorOptions,
-    //     createStory,
-    //     state.attachFile.fileSend,
-    //     state.authorLabel,
-    //     state.authorValue,
-    //     state.category,
-    //     state.description,
-    //     state.storyGenre,
-    //     state.storyName,
-    //     state.tags
-    // ])
+        updateStory(
+            storyId,
+            authorSendingValue,
+            state.category,
+            state.tags,
+            state.attachFile.fileSend,
+            state.description
+        )
+    }, [authorOptions, state.attachFile.fileSend, state.authorLabel, state.authorValue, state.category, state.description, state.tags, storyId, updateStory])
 
     const storyFields = [
         {
@@ -224,6 +224,7 @@ export default function UpdateMyStoryPage({
                     <Checkbox.Group
                         options={tagOptions}
                         onChange={onChangeTagCheckBox}
+                        value={state.tags}
                     />
                 </div>
             )
@@ -241,7 +242,11 @@ export default function UpdateMyStoryPage({
         },
         {
             label: "Bìa truyện",
-            component: <ImageFilePreview onChange={onChangeImage} className={`${styles.customImageFile}`} />
+            component: <ImageFilePreview
+                onChange={onChangeImage}
+                className={`${styles.customImageFile}`}
+                value={state.attachFile.filePreview ?? ""}
+            />
         },
     ]
 
@@ -250,7 +255,7 @@ export default function UpdateMyStoryPage({
             <div className={`${styles.updateMyStoryPageContainer} column`}>
                 <div className='header-container flex'>
                     <img alt="" className='writing-book-icon' src={images.writingBook} />
-                    <div className='header-label'>Đăng truyện</div>
+                    <div className='header-label'>Sửa truyện</div>
                 </div>
                 <div className='body-container column'>
                     {storyFields.map((item) => (
@@ -262,7 +267,7 @@ export default function UpdateMyStoryPage({
                         </div>
                     ))}
                 </div>
-                <Button className='submit-button-container center' type='primary' >Đăng truyện</Button>
+                <Button className='submit-button-container center' type='primary' onClick={onClickUpdateStory}>Cập nhật</Button>
             </div >
         </ProfileLayout>
     )

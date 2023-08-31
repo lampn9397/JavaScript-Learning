@@ -28,6 +28,7 @@ const defaultState = {
     storyGenres: [],
     storyGenresLoading: true,
     createStoryLoading: true,
+    updateStoryLoading: true,
 }
 
 export default function storyReducer(state = defaultState, action) {
@@ -154,6 +155,21 @@ export default function storyReducer(state = defaultState, action) {
             return {
                 ...state,
                 createStoryLoading: false,
+            };
+        case ActionTypes.UPDATE_STORY:
+            return {
+                ...state,
+                updateStoryLoading: true,
+            };
+        case ActionTypes.UPDATE_STORY_SUCCESS:
+            return {
+                ...state,
+                updateStoryLoading: false,
+            };
+        case ActionTypes.UPDATE_STORY_FAILED:
+            return {
+                ...state,
+                updateStoryLoading: false,
             };
         default:
             return state;

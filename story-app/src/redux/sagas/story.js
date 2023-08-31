@@ -199,7 +199,13 @@ function* createStoryAction({ payload }) {
         const formData = new FormData();
 
         Object.keys(payload).forEach(key => {
-            formData.append(key, payload[key])
+            if (payload[key] instanceof Array) {
+                payload[key].forEach(item => {
+                    formData.append(key, item)
+                })
+            } else {
+                formData.append(key, payload[key])
+            }
         });
 
         const { data } = yield axiosClient.post(`/story`, formData);
@@ -224,6 +230,42 @@ function* createStoryAction({ payload }) {
         yield put({ type: ActionTypes.CREATE_STORY_FAILED, });
     }
 }
+function* updateStoryAction({ payload }) {
+    try {
+        const formData = new FormData();
+
+        Object.keys(payload).forEach(key => {
+            if (payload[key] instanceof Array) {
+                payload[key].forEach(item => {
+                    formData.append(key, item)
+                })
+            } else {
+                formData.append(key, payload[key])
+            }
+        });
+
+        const { data } = yield axiosClient.put(`/story/${payload.storyId}`, formData);
+
+        yield put({
+            type: ActionTypes.UPDATE_STORY_SUCCESS,
+            payload: { results: data.results }
+        });
+
+        yield Swal.fire({
+            title: "Cập nhật thành công",
+            icon: "success",
+            confirmButtonText: "Xác nhận",
+            confirmButtonColor: "#00cc44",
+        })
+
+        yield put(push(publicRoutes.MyStoryManagementPage().path))
+
+    } catch (error) {
+        apiErrorHandle(error)
+
+        yield put({ type: ActionTypes.UPDATE_STORY_FAILED, });
+    }
+}
 
 export default function* category() {
     yield takeEvery(ActionTypes.GET_STORIES, getStoriesAction);
@@ -237,4 +279,5 @@ export default function* category() {
     yield takeEvery(ActionTypes.GET_MY_LIKED_STORY, getMyLikedStoryAction);
     yield takeEvery(ActionTypes.GET_STORY_GENRE, getStoryGenreAction);
     yield takeLeading(ActionTypes.CREATE_STORY, createStoryAction);
+    yield takeLeading(ActionTypes.UPDATE_STORY, updateStoryAction);
 }
