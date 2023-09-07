@@ -1,0 +1,55 @@
+.myStoryAuthorPageContainer {
+    :global {
+        flex: 1;
+
+        .header-container {
+            border-bottom: 1px solid #d2cfcf;
+            width: 100%;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+
+            .title {
+                font-size: 30px;
+            }
+        }
+
+        .body-container {
+            gap: 20px;
+
+            .item-container {
+                gap: 20px;
+                padding-bottom: 20px;
+                border-bottom: 1px solid #d2cfcf;
+
+                .poster {
+                    height: 120px;
+                    width: 100px;
+                }
+
+                .infor {
+                    gap: 15px;
+                    flex: 1;
+
+                    .name {
+                        font-size: 24px;
+                    }
+
+                    .description {
+                        font-size: 15px;
+                        -webkit-line-clamp: 4 !important;
+                    }
+                }
+
+
+                .action-container {
+                    gap: 15px;
+                    align-items: flex-end;
+
+                    .detail-button {}
+
+                    .edit-infor-button {}
+                }
+            }
+        }
+    }
+}

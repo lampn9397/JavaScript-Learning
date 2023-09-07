@@ -15,8 +15,16 @@ export default function PrivateRoute({ component: Component, ...props }: RoutePr
 
     const checkLoginLoading = useSelector((state: RootState) => state.auth.checkLoginLoading)
 
+    const component = React.useMemo(() => {
+        if (checkLoginLoading) return undefined
+
+        if (user) return Component
+
+        return HomePageRedirect
+    }, [Component, checkLoginLoading, user])
+
     return (
-        <Route {...props} component={user || checkLoginLoading ? Component : HomePageRedirect} />
+        <Route {...props} component={component} />
     )
 
 }

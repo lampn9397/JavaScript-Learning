@@ -5,11 +5,15 @@ import { Author } from "@/constants/types/author";
 interface DefaultState {
     authorList: Author[],
     authorListLoading: boolean,
+    myStoryAuthorList: Author[],
+    myStoryAuthorListLoading: boolean,
 }
 
 const defaultState: DefaultState = {
     authorList: [],
     authorListLoading: true,
+    myStoryAuthorList: [],
+    myStoryAuthorListLoading: true,
 }
 
 export default function authorReducer(state = defaultState, action: ReduxAction) {
@@ -29,6 +33,22 @@ export default function authorReducer(state = defaultState, action: ReduxAction)
             return {
                 ...state,
                 authorListLoading: false,
+            };
+        case ActionTypes.GET_MY_STORY_AUTHORS:
+            return {
+                ...state,
+                myStoryAuthorListLoading: true,
+            };
+        case ActionTypes.GET_MY_STORY_AUTHORS_SUCCESS:
+            return {
+                ...state,
+                myStoryAuthorListLoading: false,
+                myStoryAuthorList: action.payload.results
+            }
+        case ActionTypes.GET_MY_STORY_AUTHORS_FAILED:
+            return {
+                ...state,
+                myStoryAuthorListLoading: false,
             };
         default:
             return state;

@@ -40,7 +40,7 @@ export default function ProfileLayout({ children }: Props) {
     },
     {
         icon: <img className='icon' alt='' src={images.author} />,
-        link: "google.com",
+        link: publicRoutes.MyStoryAuthorPage().path,
         text: "Tác giả",
     },
     ], [])

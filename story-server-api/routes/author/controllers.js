@@ -23,6 +23,7 @@ module.exports.onCreateAuthor = async (req, res, next) => {
         next(error)
     }
 };
+
 module.exports.onGetAuthorList = async (req, res, next) => {
     try {
         const filter = {};
@@ -54,6 +55,34 @@ module.exports.onGetAuthorList = async (req, res, next) => {
 
         res.json(createResponse({
             results: authorList
+        }))
+
+    } catch (error) {
+        next(error)
+    }
+};
+
+module.exports.onGetMyStoryAuthors = async (req, res, next) => {
+    try {
+        const { page, limit } = getPaginationConfig(req, 1, 10)
+
+        const myStories = await Story.find({
+            uploader: req.user._id
+        })
+            .populate("author")
+            .skip((page - 1) * limit)
+            .limit(limit)
+
+        const authors = myStories.reduce((authorList, story) => {
+            const isExist = authorList.some((item) => item._id === story.author._id)
+
+            if (!isExist) authorList.push(story.author)
+
+            return authorList
+        }, [])
+
+        res.json(createResponse({
+            results: authors
         }))
 
     } catch (error) {

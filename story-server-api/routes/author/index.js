@@ -5,9 +5,16 @@ const {
     onGetAuthorList,
     onGetAuthorDetail,
     onGetStoryByAuthor,
+    onGetMyStoryAuthors,
 } = require('./controllers');
 const { posterMulter, validateStoryUploader } = require('./middlewares');
+const passport = require('passport');
 const router = express.Router();
+
+router.get('/my-story-authors',
+    passport.authenticate('jwt', { session: false }),
+    onGetMyStoryAuthors,
+);
 
 router.get('/:id/story', onGetStoryByAuthor);
 

@@ -14,6 +14,7 @@ import StoryChapterManagementPage from '../Pages/StoryChapterManagementPage';
 import { Chapter } from './types/chapter';
 import UpdateMyStoryPage from '../Pages/UpdateMyStoryPage';
 import UpdateStoryChapterPage from '../Pages/UpdateStoryChapterPage';
+import MyStoryAuthorPage from '../Pages/MyStoryAuthorPage';
 
 interface FilterPageParams {
     ranking?: string, // ? = not required
@@ -119,6 +120,16 @@ export const publicRoutes = {
             path,
             exact: true,
             component: MyStoryManagementPage,
+            private: true,
+        }
+    },
+    MyStoryAuthorPage: () => {
+        const path = '/danh-sach-tac-gia-cua-toi'
+
+        return {
+            path,
+            exact: true,
+            component: MyStoryAuthorPage,
             private: true,
         }
     },
