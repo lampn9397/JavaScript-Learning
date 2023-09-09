@@ -15,6 +15,7 @@ import { Chapter } from './types/chapter';
 import UpdateMyStoryPage from '../Pages/UpdateMyStoryPage';
 import UpdateStoryChapterPage from '../Pages/UpdateStoryChapterPage';
 import MyStoryAuthorPage from '../Pages/MyStoryAuthorPage';
+import MyStoryPage from '../Pages/MyStoryPage';
 
 interface FilterPageParams {
     ranking?: string, // ? = not required
@@ -199,22 +200,28 @@ export const publicRoutes = {
             private: true,
         }
     },
-    MyFollowPage: () => {
-        const path = '/my-follow'
+    MyStoryPage: (type?: 'yeu-thich' | 'theo-doi') => {
+        let path = `/truyen-cua-toi`
+
+        if (type) {
+            path = `${path}?type=${type}`
+        }
 
         return {
             path,
             exact: true,
-            component: AccountPage
+            component: MyStoryPage,
+            private: true,
         }
     },
     MyLikedStoryPage: () => {
-        const path = '/my-liked-story'
+        const path = '/truyen-yeu-thich'
 
         return {
             path,
             exact: true,
-            component: AccountPage
+            component: AccountPage,
+            private: true,
         }
     },
     CategoryPage: (slug: string) => {
@@ -284,6 +291,12 @@ export const axiosClient = axios.create({
 export enum LocalStorageKey {
     TOKEN = "TOKEN",
     READING_PROGRESS = "READING_PROGRESS",
+}
+
+export enum StoryStatusLabel {
+    ON_GOING = 'Đang ra',
+    COMPLETED = 'Đã hoàn thành',
+    DROP = 'Đã hủy',
 }
 
 export const pageLimit = 10

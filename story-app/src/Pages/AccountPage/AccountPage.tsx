@@ -32,12 +32,12 @@ export default function AccountPage({
         {
             label: "Truyện theo dõi",
             quantity: myFollowStoryList.length,
-            link: publicRoutes.MyFollowPage().path,
+            link: publicRoutes.MyStoryPage('theo-doi').path,
         },
         {
             label: "Truyện đã thích",
             quantity: myLikedStoryList.length,
-            link: publicRoutes.MyLikedStoryPage().path,
+            link: publicRoutes.MyStoryPage('yeu-thich').path,
         },
     ], [myFollowStoryList.length, myLikedStoryList.length])
 

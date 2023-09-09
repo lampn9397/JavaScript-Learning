@@ -3,15 +3,10 @@ import React from 'react';
 import styles from './style.module.scss'
 import { ReduxProps } from '.';
 import ProfileLayout from '../../components/ProfileLayout';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
 import { Author } from '@/constants/types/author';
 import { Button } from 'antd';
 
 interface Props extends ReduxProps { }
-
-interface State {
-}
 
 export default function MyStoryAuthorPage({
     getMyStoryAuthors,

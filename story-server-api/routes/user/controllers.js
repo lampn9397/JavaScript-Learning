@@ -307,7 +307,9 @@ module.exports.getMyFollowStory = async (req, res, next) => {
     try {
         const myFollowStory = await StoryFollow.find({
             user: req.user._id,
-        }).populate("story")
+        })
+            .populate("story")
+            .lean({ getters: true })
 
         res.json(createResponse({
             results: myFollowStory,
@@ -323,7 +325,9 @@ module.exports.getMyLikedStory = async (req, res, next) => {
     try {
         const myLikedStory = await StoryLike.find({
             user: req.user._id,
-        }).populate("story")
+        })
+            .populate("story")
+            .lean({ getters: true })
 
         res.json(createResponse({
             results: myLikedStory,

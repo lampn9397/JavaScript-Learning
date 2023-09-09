@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 import styles from './style.module.scss'
 import { publicRoutes } from '../../constants';
-import { getChapterStatus } from '../../utils';
+import { getStoryStatusLabel } from '../../utils';
 import images from '../../assets'
 import { BookOutlined } from '@ant-design/icons';
 import RatingStar from '../RatingStar';
@@ -126,7 +126,7 @@ function StoryOverview({ story }) {
                                 className='story-category status-color'
                                 to={publicRoutes.FilterPage({ status: story.status }).path}
                             >
-                                {getChapterStatus(story.status)}
+                                {getStoryStatusLabel(story.status)}
                             </Link>
                             <Link
                                 className='story-category category-color'

@@ -11,6 +11,8 @@ import TextArea from 'antd/es/input/TextArea';
 import ImageFilePreview, { ImageFile } from '../../components/ImageFilePreview';
 import { Author } from '@/constants/types/author';
 import { useParams } from 'react-router-dom';
+import { StoryStatusLabel } from '../../constants';
+import { getStoryStatusLabel } from '../../utils';
 
 interface Props extends ReduxProps { }
 
@@ -20,7 +22,8 @@ interface State {
     category: string,
     tags: StoryTag["_id"][],
     description: string,
-    attachFile: ImageFile
+    attachFile: ImageFile,
+    status: Story["status"],
 }
 
 export default function UpdateMyStoryPage({
@@ -30,7 +33,6 @@ export default function UpdateMyStoryPage({
     getStoryCategories,
     tags,
     getTags,
-    createStory,
     updateStory,
     getAuthors,
     authors,
@@ -47,6 +49,7 @@ export default function UpdateMyStoryPage({
         tags: [],
         description: "",
         attachFile: { filePreview: null, fileSend: null },
+        status: "",
     })
 
     React.useEffect(() => {
@@ -56,7 +59,8 @@ export default function UpdateMyStoryPage({
             authorLabel: detail.author.name,
             tags: detail.tags.map((item: StoryTag) => item._id),
             description: detail.description,
-            attachFile: { filePreview: detail.poster, fileSend: detail.poster }
+            attachFile: { filePreview: detail.poster, fileSend: detail.poster },
+            status: getStoryStatusLabel(detail.status),
         }))
     }, [detail])
 
@@ -95,6 +99,15 @@ export default function UpdateMyStoryPage({
         });
     }, [storyGenres]);
 
+    const statusOptions: SelectProps['options'] = React.useMemo(() => {
+        return Object.keys(StoryStatusLabel).map((key) => {
+            return {
+                label: StoryStatusLabel[key as keyof typeof StoryStatusLabel],
+                value: key,
+            }
+        });
+    }, []);
+
     const categoryOptions: SelectProps['options'] = React.useMemo(() => {
         return categories.map((category: Story["genre"]) => {
             return {
@@ -122,8 +135,8 @@ export default function UpdateMyStoryPage({
         });
     }, [authors]);
 
-    const onChangeGenreSelect = (value: string) => {
-        setState((prevState) => ({ ...prevState, storyGenre: value }))
+    const onChangeStatusSelect = (value: string) => {
+        setState((prevState) => ({ ...prevState, status: value }))
     };
 
     const onChangeCategorySelect = (value: string) => {
@@ -173,9 +186,10 @@ export default function UpdateMyStoryPage({
             state.category,
             state.tags,
             state.attachFile.fileSend,
-            state.description
+            state.description,
+            state.status,
         )
-    }, [authorOptions, state.attachFile.fileSend, state.authorLabel, state.authorValue, state.category, state.description, state.tags, storyId, updateStory])
+    }, [authorOptions, state.attachFile.fileSend, state.authorLabel, state.authorValue, state.category, state.description, state.status, state.tags, storyId, updateStory])
 
     const storyFields = [
         {
@@ -200,7 +214,6 @@ export default function UpdateMyStoryPage({
                 <Select
                     style={{ width: '100%' }}
                     value={detail?.genre.name}
-                    onChange={onChangeGenreSelect}
                     options={genreOptions}
                     disabled
                 />
@@ -247,6 +260,17 @@ export default function UpdateMyStoryPage({
                 className={`${styles.customImageFile}`}
                 value={state.attachFile.filePreview ?? ""}
             />
+        },
+        {
+            label: "Trạng thái",
+            component: (
+                <Select
+                    style={{ width: '100%' }}
+                    value={state.status}
+                    onChange={onChangeStatusSelect}
+                    options={statusOptions}
+                />
+            )
         },
     ]
 

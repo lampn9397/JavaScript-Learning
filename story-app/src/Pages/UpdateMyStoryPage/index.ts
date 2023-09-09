@@ -1,7 +1,7 @@
 import { connect, ConnectedProps } from "react-redux";
 
 import * as ActionTypes from '../../redux/actionTypes'
-import CreateStoryPage from "./UpdateMyStoryPage";
+import UpdateMyStoryPage from "./UpdateMyStoryPage";
 import { RootState } from "@/redux/store";
 import { Story } from "@/constants/types/story";
 import { ImageFile } from "@/components/ImageFilePreview";
@@ -43,34 +43,14 @@ const mapDispatchToProps = {
         }
     }),
 
-    createStory: (
-        name: Story["name"],
-        author: Story["author"]["name"],
-        genre: Story["genre"]["_id"],
-        category: Story["category"]["_id"],
-        tags: Story["tags"][0]["_id"][],
-        poster: ImageFile["fileSend"],
-        description: Story["description"]
-    ) => ({
-        type: ActionTypes.CREATE_STORY,
-        payload: {
-            name,
-            author,
-            genre,
-            category,
-            tags,
-            poster,
-            description
-        }
-    }),
-
     updateStory: (
         storyId: Story["_id"],
         author: Story["author"]["name"],
         category: Story["category"]["_id"],
         tags: Story["tags"][0]["_id"][],
         poster: ImageFile["fileSend"],
-        description: Story["description"]
+        description: Story["description"],
+        status?: Story['status'],
     ) => ({
         type: ActionTypes.UPDATE_STORY,
         payload: {
@@ -79,7 +59,8 @@ const mapDispatchToProps = {
             category,
             tags,
             poster,
-            description
+            description,
+            status,
         }
     }),
 };
@@ -89,4 +70,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export type ReduxProps = ConnectedProps<typeof connector>;
 
-export default connector(CreateStoryPage)
+export default connector(UpdateMyStoryPage)

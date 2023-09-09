@@ -1,4 +1,4 @@
-.myStoryAuthorPageContainer {
+.myStoryPageContainer {
     :global {
         flex: 1;
 
@@ -22,29 +22,18 @@
                 border-bottom: 1px solid #d2cfcf;
 
                 .poster {
-                    height: 120px;
+                    height: 100%;
                     width: 100px;
                 }
 
                 .infor {
                     gap: 15px;
                     flex: 1;
+                    font-size: 15px;
 
                     .name {
-                        font-size: 24px;
+                        font-size: 24px !important;
                     }
-
-                    .description {
-                        font-size: 15px;
-                        -webkit-line-clamp: 4 !important;
-                    }
-                }
-
-
-                .action-container {
-                    gap: 15px;
-                    align-items: flex-end;
-
                 }
             }
         }

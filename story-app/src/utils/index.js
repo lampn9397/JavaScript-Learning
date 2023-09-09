@@ -1,3 +1,4 @@
+import { StoryStatusLabel } from "../constants";
 import { notification } from "antd";
 
 export const apiErrorHandle = (error) => {
@@ -10,13 +11,8 @@ export const apiErrorHandle = (error) => {
     return errorMessage
 }
 
-export const getChapterStatus = (chapterStatus) => {
-    const chapterStatusLabel = {
-        ON_GOING: 'Đang ra',
-        COMPLETED: 'Đã hoàn thành',
-        DROP: 'Đã hủy',
-    }
-    return chapterStatusLabel[chapterStatus]
+export const getStoryStatusLabel = (storyStatus) => {
+    return StoryStatusLabel[storyStatus]
 }
 
 export const getGenderLabel = (gender) => {
