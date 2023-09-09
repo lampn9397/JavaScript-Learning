@@ -16,7 +16,7 @@ export default function ProfileLayout({ children }: Props) {
 
     const location = useLocation()
 
-    const { storyId }: any = useParams();
+    const { storyId, numberOrder }: any = useParams();
 
     const items = React.useMemo(() => [{
         icon: <UserOutlined style={{ fontSize: "24px" }} />,
@@ -59,7 +59,33 @@ export default function ProfileLayout({ children }: Props) {
                             to = publicRoutes.MyStoryManagementPage().path
                         }
 
-                        if (item.link === publicRoutes.MyStoryManagementPage().path && location.pathname.includes(publicRoutes.StoryChapterManagementPage(storyId).path)) {
+                        if (item.link === publicRoutes.MyStoryManagementPage().path
+                            && location.pathname.includes(publicRoutes.StoryChapterManagementPage(storyId).path)
+                        ) {
+                            isSelected = true
+                        }
+
+                        if (item.link === publicRoutes.MyStoryManagementPage().path
+                            && location.pathname.includes(publicRoutes.UpdateMyStoryPage(storyId).path)
+                        ) {
+                            isSelected = true
+                        }
+
+                        if (item.link === publicRoutes.CreateStoryChapter("").path
+                            && location.pathname.includes(publicRoutes.UpdateStoryChapter(storyId, numberOrder).path)
+                        ) {
+                            isSelected = true
+                        }
+
+                        if (item.link === publicRoutes.AccountPage().path
+                            && location.pathname.includes(publicRoutes.MyStoryPage().path)
+                        ) {
+                            isSelected = true
+                        }
+
+                        if (item.link === publicRoutes.AccountPage().path
+                            && location.pathname.includes(publicRoutes.AccountSettingPage().path)
+                        ) {
                             isSelected = true
                         }
 
