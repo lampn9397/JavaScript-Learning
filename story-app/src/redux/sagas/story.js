@@ -10,13 +10,11 @@ function* getStoriesAction({ payload }) {
     try {
         const searchParams = new URLSearchParams()
 
-        searchParams.set("page", payload.page)
-
-        searchParams.set("limit", payload.limit)
-
-        searchParams.set("sort", payload.sort)
-
-        searchParams.set("status", payload.status)
+        Object.keys(payload).forEach((key) => {
+            if (payload[key]) {
+                searchParams.set(key, payload[key])
+            }
+        })
 
         const { data } = yield axiosClient.get(`/story?${searchParams.toString()}`);
 

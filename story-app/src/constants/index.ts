@@ -17,6 +17,7 @@ import UpdateStoryChapterPage from '../Pages/UpdateStoryChapterPage';
 import MyStoryAuthorPage from '../Pages/MyStoryAuthorPage';
 import MyStoryPage from '../Pages/MyStoryPage';
 import AuthorPage from '../Pages/AuthorPage';
+import CategoryPage from '../Pages/CategoryPage';
 
 interface FilterPageParams {
     ranking?: string, // ? = not required
@@ -252,39 +253,21 @@ export const publicRoutes = {
         return {
             path,
             exact: true,
-            component: DetailPage
+            component: CategoryPage
         }
     },
-    FilterPage: ({
-        ranking,
-        status,
-        genre,
-        category,
-        tags,
-    }: FilterPageParams = {}) => {
+    FilterPage: (filter: FilterPageParams = {}) => {
         let path = '/truyen/bo-loc'
 
         const searchParams = new URLSearchParams()
 
-        if (ranking) {
-            searchParams.set('ranking', ranking)
-        }
+        Object.keys(filter).forEach((key) => {
+            const filterKey = key as keyof typeof filter
 
-        if (status) {
-            searchParams.set('status', status)
-        }
-
-        if (genre) {
-            searchParams.set('genre', genre)
-        }
-
-        if (category) {
-            searchParams.set('category', category)
-        }
-
-        if (tags) {
-            searchParams.set('tags', tags)
-        }
+            if (filter[filterKey]) {
+                searchParams.set(key, filter[filterKey] as string)
+            }
+        })
 
         path = `${path}?${searchParams.toString()}`
 

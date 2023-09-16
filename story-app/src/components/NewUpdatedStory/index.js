@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import { publicRoutes } from '../../constants';
 
 
-function NewUpdatedStory({ stories }) {
+function NewUpdatedStory({ stories, sort = "", category = undefined }) {
 
     return (
         <div className={styles.NewUpdatedStoryContainer}>
@@ -27,7 +27,7 @@ function NewUpdatedStory({ stories }) {
                     </Link>
                 </div>
             ))}
-            <Link className='flex' to={`/truyen/truyen-moi-cap-nhat`}>
+            <Link className='flex' to={publicRoutes.FilterPage({ sort, category }).path}>
                 <div className={styles.more}>Xem Thêm </div>
                 <ArrowRightOutlined className={styles.righArrow} />
             </Link>

@@ -48,7 +48,7 @@ function HomePage({
                     <CreateStoryCard />
                 </div>
                 <div className='flex'>
-                    <NewUpdatedStory stories={newStories} />
+                    <NewUpdatedStory stories={newStories} sort={"storyUpdateAt"} />
                     <NewStoryDetailList stories={newStoryList} />
                 </div>
                 <div className={`${styles.storyRankingSectionContainer} flex`}>

@@ -123,7 +123,13 @@ module.exports.onGetStory = async (req, res, next) => {
         }
 
         if (req.query.category) {
-            filter.category = req.query.category
+            if (mongoose.isObjectIdOrHexString(req.query.category)) {
+                filter.category = req.query.category
+            } else {
+                const category = await StoryCategory.findOne({ slug: req.query.category })
+
+                filter.category = category._id
+            }
         }
 
         const story = await Story.find(filter)

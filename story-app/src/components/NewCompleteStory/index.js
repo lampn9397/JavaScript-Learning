@@ -6,13 +6,13 @@ import { Link } from 'react-router-dom';
 import { publicRoutes } from '../../constants';
 
 
-function NewCompleteStory({ stories }) {
+function NewCompleteStory({ stories, category = undefined }) {
 
     return (
         <div className={styles.NewCompleteStoryContainer}>
             <div className={`${styles.newCompleteStoryTitleContainer} flex`}>
                 <div className={styles.newCompleteStoryTitle}>Truyện Đã Hoàn Thành</div>
-                <Link className={styles.more} to={publicRoutes.FilterPage({ status: "COMPLETED" }).path}>Tất Cả</Link>
+                <Link className={styles.more} to={publicRoutes.FilterPage({ status: "COMPLETED", category }).path}>Tất Cả</Link>
             </div>
             <div className='flex'>
                 <div className={`${styles.lastestCompleteStoryContainer} column`}>

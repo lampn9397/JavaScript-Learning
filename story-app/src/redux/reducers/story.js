@@ -3,6 +3,10 @@ import * as ActionTypes from "../actionTypes";
 const defaultState = {
     topFiveStories: [],
     topFiveStoriesLoading: true,
+    updatedStoriesByCategory: [],
+    updatedStoriesByCategoryLoading: true,
+    updatedStoriesByCategoryList: [],
+    updatedStoriesByCategoryListLoading: true,
     newStories: [],
     newStoriesLoading: true,
     newStoryList: [],
