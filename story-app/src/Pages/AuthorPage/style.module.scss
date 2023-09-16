@@ -1,0 +1,100 @@
+.authorPageContainer {
+    :global {
+        gap: 30px;
+
+        .author-container {
+            width: 216px;
+            background: #f7f6f2;
+            gap: 15px;
+            padding: 15px 15px;
+            align-items: center;
+            height: 275px;
+
+            .author-avatar {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+
+            }
+
+            .author-name {
+                color: #262626;
+            }
+
+            .author-descrip {
+                padding-top: 15px;
+                border-top: 1px solid #e5e5e5;
+                -webkit-line-clamp: 5 !important;
+            }
+        }
+
+        .story-container {
+            flex: 1;
+
+            .header-container {
+                border-bottom: 1px solid #d2cfcf;
+                width: 100%;
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+
+                .title {
+                    font-size: 30px;
+                }
+            }
+
+            .body-container {
+                gap: 20px;
+
+                .item-container {
+                    gap: 20px;
+                    padding-bottom: 20px;
+                    border-bottom: 1px solid #d2cfcf;
+
+                    .poster {
+                        height: 100%;
+                        width: 120px;
+                    }
+
+                    .infor {
+                        gap: 15px;
+                        flex: 1;
+
+                        .name {
+                            font-size: 24px;
+                        }
+
+                        .more-infor {
+                            gap: 10px;
+
+                            &:hover .hover {
+                                color: var(--likes-color) !important;
+                            }
+
+                            .more-infor-item {
+                                padding-right: 10px;
+                                color: #a6a6a6 !important;
+                                border-right: 1px solid #a6a6a6;
+                            }
+
+                            .no-border {
+                                border-right: none !important;
+                            }
+                        }
+
+                        .description {
+                            font-size: 15px;
+                            -webkit-line-clamp: 2 !important;
+                        }
+                    }
+
+
+                    .action-container {
+                        gap: 15px;
+                        align-items: flex-end;
+
+                    }
+                }
+            }
+        }
+    }
+}

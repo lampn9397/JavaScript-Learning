@@ -123,6 +123,7 @@ module.exports.onGetStoryByAuthor = async (req, res, next) => {
             .sort(sort)
             .populate('uploader', 'name')
             .populate("author")
+            .populate("category")
             .skip((page - 1) * limit)
             .limit(limit)
             .lean({ getters: true })

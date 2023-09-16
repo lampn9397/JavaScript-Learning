@@ -5,6 +5,8 @@ import { Author } from "@/constants/types/author";
 interface DefaultState {
     authorList: Author[],
     authorListLoading: boolean,
+    authorDetail: Author | null,
+    authorDetailLoading: boolean,
     myStoryAuthorList: Author[],
     myStoryAuthorListLoading: boolean,
 }
@@ -12,6 +14,8 @@ interface DefaultState {
 const defaultState: DefaultState = {
     authorList: [],
     authorListLoading: true,
+    authorDetail: null,
+    authorDetailLoading: true,
     myStoryAuthorList: [],
     myStoryAuthorListLoading: true,
 }
@@ -33,6 +37,22 @@ export default function authorReducer(state = defaultState, action: ReduxAction)
             return {
                 ...state,
                 authorListLoading: false,
+            };
+        case ActionTypes.GET_AUTHOR_DETAIL:
+            return {
+                ...state,
+                authorDetailLoading: true,
+            };
+        case ActionTypes.GET_AUTHOR_DETAIL_SUCCESS:
+            return {
+                ...state,
+                authorDetailLoading: false,
+                authorDetail: action.payload.results
+            }
+        case ActionTypes.GET_AUTHOR_DETAIL_FAILED:
+            return {
+                ...state,
+                authorDetailLoading: false,
             };
         case ActionTypes.GET_MY_STORY_AUTHORS:
             return {

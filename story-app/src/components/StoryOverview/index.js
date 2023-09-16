@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as ActionTypes from "../../redux/actionTypes";
 import RatingModal from '../RatingModal';
 import { getReadingProgress } from '../../utils/chapter';
+import { Button } from 'antd';
 function StoryOverview({ story }) {
     const dispatch = useDispatch();
 
@@ -25,6 +26,10 @@ function StoryOverview({ story }) {
     const isStoryFollowed = useSelector((state) => state.story.isStoryFollowed)
 
     const createRatingLoading = useSelector((state) => state.rating.createRatingLoading)
+
+    const isDisabled = React.useMemo(() => {
+        return chapterList.length === 0
+    }, [chapterList.length])
 
     const readingProgess = React.useMemo(() => {
         return getReadingProgress(story.slug)
@@ -163,11 +168,15 @@ function StoryOverview({ story }) {
                                     Đọc Tiếp
                                 </Link>
                             ) : (
-                                <Link className='read-first-chapter'
-                                    to={publicRoutes.ChapterDetail(story.slug, firstChapter?.numberOrder).path}
-                                >
-                                    Đọc Từ Đầu
-                                </Link>
+                                isDisabled ? (
+                                    <button disabled className='disabled-button'>Đọc Từ Đầu</button>
+                                ) : (
+                                    <Link className='read-first-chapter'
+                                        to={publicRoutes.ChapterDetail(story.slug, firstChapter?.numberOrder).path}
+                                    >
+                                        Đọc Từ Đầu
+                                    </Link>
+                                )
                             )}
                             <button
                                 className={classNames({

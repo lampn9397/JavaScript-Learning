@@ -17,7 +17,7 @@ export const getHeaderItem = (publicRoutes: any) => [
     {
         key: '2',
         label: (
-            <Link to="https://www.aliyun.com" >
+            <Link to={publicRoutes.AccountSettingPage("3").path} >
                 <LockOutlined className={styles.marginIcon} />
                 Đổi Mật Khẩu
             </Link>

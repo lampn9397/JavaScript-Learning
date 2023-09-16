@@ -16,6 +16,7 @@ import UpdateMyStoryPage from '../Pages/UpdateMyStoryPage';
 import UpdateStoryChapterPage from '../Pages/UpdateStoryChapterPage';
 import MyStoryAuthorPage from '../Pages/MyStoryAuthorPage';
 import MyStoryPage from '../Pages/MyStoryPage';
+import AuthorPage from '../Pages/AuthorPage';
 
 interface FilterPageParams {
     ranking?: string, // ? = not required
@@ -78,7 +79,20 @@ export const publicRoutes = {
         return {
             path,
             exact: true,
-            component: DetailPage
+            component: AuthorPage
+        }
+    },
+    UpdateAuthorPage: (id: string) => {
+        let path = '/sua-thong-tin-tac-gia/:id'
+
+        if (id) {
+            path = `/sua-thong-tin-tac-gia/${id}`
+        }
+
+        return {
+            path,
+            exact: true,
+            component: AuthorPage
         }
     },
     UserPage: (id: string) => {
@@ -104,8 +118,12 @@ export const publicRoutes = {
             private: true,
         }
     },
-    AccountSettingPage: () => {
-        const path = '/dieu-chinh'
+    AccountSettingPage: (tabKey?: string) => {
+        let path = '/dieu-chinh'
+
+        if (tabKey) {
+            path = `${path}?tabKey=${tabKey}`
+        }
 
         return {
             path,

@@ -31,6 +31,24 @@ function* getAuthorAction({ payload }: ReduxAction) {
     }
 }
 
+function* getAuthorDetailAction({ payload }: ReduxAction) {
+    try {
+        const { data } = yield axiosClient.get(`/author/${payload.id}`);
+
+        yield put({
+            type: ActionTypes.GET_AUTHOR_DETAIL_SUCCESS,
+            payload: data,
+        });
+
+    } catch (error) {
+        apiErrorHandle(error)
+
+        yield put({
+            type: ActionTypes.GET_AUTHOR_DETAIL_FAILED,
+        });
+    }
+}
+
 function* getMyStoryAuthorAction({ payload }: ReduxAction) {
     try {
         const searchParams = new URLSearchParams()
@@ -57,5 +75,6 @@ function* getMyStoryAuthorAction({ payload }: ReduxAction) {
 
 export default function* author() {
     yield takeEvery(ActionTypes.GET_AUTHORS, getAuthorAction);
+    yield takeEvery(ActionTypes.GET_AUTHOR_DETAIL, getAuthorDetailAction);
     yield takeEvery(ActionTypes.GET_MY_STORY_AUTHORS, getMyStoryAuthorAction);
 }

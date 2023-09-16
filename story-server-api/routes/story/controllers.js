@@ -122,6 +122,10 @@ module.exports.onGetStory = async (req, res, next) => {
             sort.storyUpdateAt = -1 //1:ascending -1:descending
         }
 
+        if (req.query.category) {
+            filter.category = req.query.category
+        }
+
         const story = await Story.find(filter)
             .sort(sort)
             .populate('uploader', 'name')
@@ -413,10 +417,16 @@ module.exports.onGetChapterDetail = async (req, res, next) => {
     try {
         let story
 
+        const updatedTotalViewsFilter = {}
+
         if (mongoose.isObjectIdOrHexString(req.params.id)) {
             story = await Story.findById(req.params.id);
+
+            updatedTotalViewsFilter._id = req.params.id
         } else {
             story = await Story.findOne({ slug: req.params.id })
+
+            updatedTotalViewsFilter.slug = req.params.id
         }
 
         if (!story) {
@@ -437,9 +447,7 @@ module.exports.onGetChapterDetail = async (req, res, next) => {
         if (!requestedIPs[req.ip] || isTimeValid) {
             requestedIPs[req.ip] = Date.now()
 
-            await Story.updateOne({
-                _id: req.params.id
-            }, {
+            await Story.updateOne(updatedTotalViewsFilter, {
                 $inc: { totalViews: 1 }
             })
         }

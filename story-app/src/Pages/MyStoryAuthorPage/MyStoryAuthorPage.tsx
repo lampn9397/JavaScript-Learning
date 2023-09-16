@@ -5,6 +5,8 @@ import { ReduxProps } from '.';
 import ProfileLayout from '../../components/ProfileLayout';
 import { Author } from '@/constants/types/author';
 import { Button } from 'antd';
+import { publicRoutes } from '../../constants';
+import { Link } from 'react-router-dom';
 
 interface Props extends ReduxProps { }
 
@@ -31,8 +33,12 @@ export default function MyStoryAuthorPage({
                                 <div className='description long-content'>{item.description}</div>
                             </div>
                             <div className='action-container flex'>
-                                <Button className='detail-button'>Chi tiết</Button>
-                                <Button className='edit-infor-button'>Sửa thông tin</Button>
+                                <Link to={publicRoutes.AuthorPage(item._id).path}>
+                                    <Button className='detail-button'>Chi tiết</Button>
+                                </Link>
+                                <Link to={publicRoutes.UpdateAuthorPage(item._id).path}>
+                                    <Button className='edit-infor-button'>Sửa thông tin</Button>
+                                </Link>
                             </div>
                         </div>
                     ))}

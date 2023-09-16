@@ -7,10 +7,17 @@ import AccountLayout from '../../components/AccountLayout';
 import ChangeProfileTab from '../../components/ChangeProfileTab';
 import ChangeAvatarTab from '../../components/ChangeAvatarTab';
 import ChangePasswordTab from '../../components/ChangePasswordTab';
+import useQuery from '../../hooks/useQuery';
 
 
 
 export default function AccountSettingPage() {
+
+    const query = useQuery()
+
+    const tabKey = React.useMemo(() => {
+        return query.get("tabKey") ?? undefined
+    }, [query])
 
     const items: TabsProps['items'] = [
         {
@@ -33,7 +40,7 @@ export default function AccountSettingPage() {
     return (
         <AccountLayout>
             <div className={`${styles.accountSettingPageContainer} column`}>
-                <Tabs defaultActiveKey="1" items={items} />
+                <Tabs items={items} defaultActiveKey={tabKey} />
             </div >
         </AccountLayout >
     )
