@@ -47,6 +47,7 @@ module.exports.onCreateCategory = async (req, res, next) => {
         next(error)
     }
 };
+
 module.exports.onGetGenre = async (req, res, next) => {
     try {
         const storyGenre = await StoryGenre.find({})

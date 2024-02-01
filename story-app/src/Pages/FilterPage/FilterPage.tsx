@@ -13,34 +13,37 @@ import Header from '../../components/Header';
 
 interface Props extends ReduxProps { }
 
-export default function AuthorPage({
-    authorDetail,
-    getAuthorDetail,
-    getStoryByAuthor,
-    storyByAuthorList,
+export default function FilterPage({
+    categories,
+    getCategories,
+    getStories,
 }: Props) {
     const { id }: any = useParams()
 
     React.useEffect(() => {
-        getAuthorDetail(id)
-        getStoryByAuthor(id)
-    }, [getAuthorDetail, getStoryByAuthor, id])
+        getCategories()
+    }, [getCategories])
 
     return (
         <>
             <Header />
-            <div className={`${styles.authorPageContainer} flex resolution`}>
+            <div className={`${styles.filterPageContainer} flex resolution`}>
                 <div className='author-container column'>
-                    <img alt="" src={authorDetail?.avatar} className='author-avatar' />
-                    <div className='author-name long-content'>{authorDetail?.name}</div>
-                    <div className='author-descrip long-content'>{authorDetail?.description}</div>
+                    <img alt="" src={""} className='author-avatar' />
+                    <div className='author-name long-content'>{""}</div>
+                    <div className='author-descrip long-content'>{""}</div>
                 </div>
                 <div className='story-container column'>
                     <div className='header-container'>
-                        <div className='title'>Tác giả : {authorDetail?.name}</div>
+                        <div className='title'>Bộ lọc</div>
+                    </div>
+                    <div className='category-container flex'>
+                        {categories.map((item: Story["category"]) => (
+                            <Link className='category' key={item._id} to={publicRoutes.FilterPage({ category: item.slug }).path}>{item.name}</Link>
+                        ))}
                     </div>
                     <div className='body-container column'>
-                        {storyByAuthorList.map((item: Story) => (
+                        {[].map((item: Story) => (
                             <div className='item-container flex' key={item._id}>
                                 <img alt='' src={item.poster} className='poster' />
                                 <div className='infor column'>

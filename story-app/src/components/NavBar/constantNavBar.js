@@ -6,18 +6,18 @@ import styles from './style.module.css'
 export const items = [
     {
         label: 'Thể Loại',
-        key: '0',
+        key: 'Thể Loại',
         icon: <MenuOutlined />,
         className: styles.itemCategoryContainer
     },
     {
         label: 'Bộ Lọc',
-        key: '1',
+        key: 'Bộ Lọc',
         className: styles.itemContainer
     },
     {
         label: 'Bảng Xếp Hạng',
-        key: '2',
+        key: 'Bảng Xếp Hạng',
         className: styles.itemContainer
     },
 ];

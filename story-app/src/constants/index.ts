@@ -18,6 +18,7 @@ import MyStoryAuthorPage from '../Pages/MyStoryAuthorPage';
 import MyStoryPage from '../Pages/MyStoryPage';
 import AuthorPage from '../Pages/AuthorPage';
 import CategoryPage from '../Pages/CategoryPage';
+import FilterPage from '../Pages/FilterPage';
 
 interface FilterPageParams {
     ranking?: string, // ? = not required
@@ -42,6 +43,31 @@ export const publicRoutes = {
             path: '/',
             exact: true,
             component: HomePage
+        }
+    },
+    FilterPage: (filter: FilterPageParams = {}) => {
+        let path = '/bo-loc'
+
+        const searchParams = new URLSearchParams()
+
+        const keys = Object.keys(filter)
+
+        if (keys.length) {
+            keys.forEach((key) => {
+                const filterKey = key as keyof typeof filter
+
+                if (filter[filterKey]) {
+                    searchParams.set(key, filter[filterKey] as string)
+                }
+            })
+
+            path = `${path}?${searchParams.toString()}`
+        }
+
+        return {
+            path,
+            exact: true,
+            component: FilterPage
         }
     },
     StoryDetail: (slug: string) => {
@@ -254,27 +280,6 @@ export const publicRoutes = {
             path,
             exact: true,
             component: CategoryPage
-        }
-    },
-    FilterPage: (filter: FilterPageParams = {}) => {
-        let path = '/truyen/bo-loc'
-
-        const searchParams = new URLSearchParams()
-
-        Object.keys(filter).forEach((key) => {
-            const filterKey = key as keyof typeof filter
-
-            if (filter[filterKey]) {
-                searchParams.set(key, filter[filterKey] as string)
-            }
-        })
-
-        path = `${path}?${searchParams.toString()}`
-
-        return {
-            path,
-            exact: true,
-            component: HomePage
         }
     },
 }
