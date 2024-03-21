@@ -18,29 +18,49 @@ export default function NavBar() {
         isOpen: false
     })
 
+    const testData = [{
+        label: 'namfffffffffffffffffffffffff ffffffffffffffffffnamfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffs',
+        value: 'nam'
+    }, {
+        label: 'tri',
+        value: 'tri'
+    }, {
+        label: 'tuan',
+        value: 'tuan'
+    },]
+
     const onClickSearch = React.useCallback(() => {
         setState((prevState) => ({ ...prevState, isOpen: true }))
+    }, [])
+
+    const onClickClose = React.useCallback(() => {
+        setState((prevState) => ({ ...prevState, isOpen: false }))
     }, [])
 
     const onChangeText = React.useCallback(() => { }, [])
 
     return (
-        <nav className="bg-[#231f20] flex items-center px-2 xs:px-4 gap-3 relative">
-            <Image alt='' className='w-32' src={images.logo} />
+        <nav className="bg-[#231f20] flex items-center px-2 xs:px-4 gap-3 relative h-24">
+            {!state.isOpen && (<Image alt='' className='w-32' src={images.logo} />)}
 
-            <AutoComplete onChangeText={onChangeText} className={classNames({
-                "h-10 xs:flex": true,
-                "hidden": !state.isOpen,
-                "flex absolute inset-x-3 top-7": state.isOpen
-            })} />
+            <AutoComplete
+                data={testData}
+                isShowCloseIcon={state.isOpen}
+                onChangeText={onChangeText}
+                onClickClose={onClickClose}
+                className={classNames({
+                    "h-10 xs:flex": true,
+                    "hidden": !state.isOpen,
+                })}
+            />
 
-            <div className="flex-1 xs:hidden" />
+            {!state.isOpen && (<div className="flex-1 xs:hidden" />)}
 
-            <MagnifyingGlassCircleIcon className="w-8 min-w-8 text-white xs:hidden" onClick={onClickSearch} />
+            {!state.isOpen && (<MagnifyingGlassCircleIcon className="w-8 min-w-8 text-white xs:hidden" onClick={onClickSearch} />)}
 
-            <UserCircleIcon className="w-8 min-w-8 text-white" />
+            {!state.isOpen && (<UserCircleIcon className="w-8 min-w-8 text-white" />)}
 
-            <ShoppingCartIcon className="w-8 min-w-8 text-white" />
+            {!state.isOpen && (<ShoppingCartIcon className="w-8 min-w-8 text-white" />)}
         </nav>
     )
 }
